@@ -1,8 +1,23 @@
 # RedUx
 
-An experiment of using Swift's async await in a Redux pattern.
+A super simple Swift implementation of the redux pattern making use of Swift 5.5's new async await API's. 
 
-## Example
+## Requirements
+
+- iOS 15.0+
+- macOS 12.0+
+
+## Installation
+
+### Swift Package Manager
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/reddavis/Redux", from: "0.9.0")
+]
+```
+
+## Usage
 
 ### Store definition
 
@@ -161,15 +176,6 @@ struct RootScreen_ContentView_Previews: PreviewProvider
 }
 
 ```
-
-## Requirements
-
-- iOS 15.0+
-- macOS 12.0+
-
-## Installation
-
-Don't
 
 ## License
 
