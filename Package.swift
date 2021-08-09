@@ -19,7 +19,7 @@ let package = Package(
         .target(
             name: "RedUx",
             path: "RedUx",
-            exclude: ["Supporting Files/Info.plist"]),
+            exclude: ["Supporting Files/RedUx.docc"]),
         .testTarget(
             name: "RedUxTests",
             dependencies: ["RedUx"],
