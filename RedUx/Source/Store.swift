@@ -2,38 +2,46 @@ import Foundation
 import SwiftUI
 
 
+@MainActor
 @dynamicMemberLookup
 public final class Store<State, Event, Environment>: ObservableObject
 {
-    // Public
-    @Published public var state: State
+    /// The state of the store.
+    @Published private(set) public var state: State
+    
+    /// The environment.
     public let environment: Environment
     
     // Private
-    private let reducer: (inout State, Event) -> Effect<Event>?
+    private let reducer: (inout State, Event) -> AsyncStream<Event>?
     
     // MARK: Initialization
     
+    /// Construct a Store with state, reducer and environment.
+    /// - Parameters:
+    ///   - state: An initial state.
+    ///   - reducer: A reducer.
+    ///   - environment: An environment.
     public convenience init(
-        initialState: State,
+        state: State,
         reducer: Reducer<State, Event, Environment>,
         environment: Environment
     )
     {
         self.init(
-            initialState: initialState,
+            state: state,
             reducer: { reducer.execute(state: &$0, event: $1, environment: environment) },
             environment: environment
         )
     }
     
     private init(
-        initialState: State,
-        reducer: @escaping (inout State, Event) -> Effect<Event>?,
+        state: State,
+        reducer: @escaping (inout State, Event) -> AsyncStream<Event>?,
         environment: Environment
     )
     {
-        self.state = initialState
+        self.state = state
         self.reducer = reducer
         self.environment = environment
     }
@@ -44,31 +52,24 @@ public final class Store<State, Event, Environment>: ObservableObject
     {
         self.state[keyPath: keyPath]
     }
-}
-
-// MARK: Events
-
-extension Store
-{
-    @MainActor
-    public func send(_ event: Event) async
-    {
-        guard let effect = self.reducer(&self.state, event) else { return }
-        
-        let event = await effect.closure()
-        await self.send(event)
-    }
     
-    func sendSyncronously(_ event: Event)
+    // MARK: Events
+    
+    /// Send an event through the store's reducer.
+    /// - Parameter event: The event.
+    public func send(_ event: Event)
     {
-        guard let effect = self.reducer(&self.state, event) else { return }
+        guard let stream = self.reducer(&self.state, event) else { return }
         
-        async {
-            let event = await effect.closure()
-            await self.send(event)
+        Task {
+            for await event in stream
+            {
+                self.send(event)
+            }
         }
     }
 }
+
 
 // MARK: Binding
 
@@ -84,13 +85,13 @@ extension Store
             set: { scopedState, transaction in
                 guard transaction.animation == nil else
                 {
-                    SwiftUI.withTransaction(transaction) {
-                        self.sendSyncronously(event(scopedState))
+                    _ = SwiftUI.withTransaction(transaction) {
+                        self.send(event(scopedState))
                     }
                     return
                 }
                 
-                self.sendSyncronously(event(scopedState))
+                self.send(event(scopedState))
             }
         )
     }

@@ -6,24 +6,26 @@ enum RootScreen
 {
     typealias Store = RedUx.Store<State, Event, Environment>
     
+    @MainActor
     static func make() -> some View
     {
         ContentView(
             store: Store(
-                initialState: .init(),
+                state: .init(),
                 reducer: self.reducer,
                 environment: .init()
             )
         )
     }
     
+    @MainActor
     static func mock(
         state: State
     ) -> some View
     {
         ContentView(
             store: Store(
-                initialState: state,
+                state: state,
                 reducer: .empty(),
                 environment: .init()
             )
@@ -47,15 +49,11 @@ extension RootScreen
             state.count -= 1
             return .none
         case .incrementWithDelay:
-            return .init {
-                // Really taxing shiz...
-                // await Task.sleep(2 * 1_000_000_000) // This crashes
-                let handle = async {
-                    for x in 0...1000000 { }
-                }
-                
-                await handle.get()
-                return .increment
+            return .init { continuation in
+                // Really taxing shiz
+                await Task.sleep(2 * 1_000_000_000)
+                continuation.yield(.increment)
+                continuation.finish()
             }
         }
     }
