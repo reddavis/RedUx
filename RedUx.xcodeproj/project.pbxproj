@@ -12,7 +12,6 @@
 		A47E64B3267A1054005E265C /* RedUx.h in Headers */ = {isa = PBXBuildFile; fileRef = A47E64A5267A1054005E265C /* RedUx.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A47E64C1267A10E4005E265C /* Reducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47E64BE267A10E4005E265C /* Reducer.swift */; };
 		A47E64C2267A10E4005E265C /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47E64BF267A10E4005E265C /* Store.swift */; };
-		A47E64C3267A10E4005E265C /* Effect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47E64C0267A10E4005E265C /* Effect.swift */; };
 		A47E64C5267A10F3005E265C /* StoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47E64C4267A10F3005E265C /* StoreTests.swift */; };
 		A47E64CD267A4AF7005E265C /* ExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47E64CC267A4AF7005E265C /* ExampleApp.swift */; };
 		A47E64CF267A4AF7005E265C /* RootScreen.ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47E64CE267A4AF7005E265C /* RootScreen.ContentView.swift */; };
@@ -21,6 +20,9 @@
 		A47E64D9267A4B07005E265C /* RedUx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A47E64A2267A1054005E265C /* RedUx.framework */; };
 		A47E64DA267A4B07005E265C /* RedUx.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A47E64A2267A1054005E265C /* RedUx.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A47E64DF267A4B1E005E265C /* RootScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47E64DE267A4B1E005E265C /* RootScreen.swift */; };
+		A4A1D67426B5917C00CFBD2B /* AsyncStream+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A1D67326B5917C00CFBD2B /* AsyncStream+Extension.swift */; };
+		A4D2CFA026C0FC34008D25DE /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D2CF9F26C0FC34008D25DE /* View+Extension.swift */; };
+		A4D2CFA226C13B31008D25DE /* Assertion.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D2CFA126C13B31008D25DE /* Assertion.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,7 +63,6 @@
 		A47E64AC267A1054005E265C /* RedUxTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RedUxTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A47E64BE267A10E4005E265C /* Reducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reducer.swift; sourceTree = "<group>"; };
 		A47E64BF267A10E4005E265C /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
-		A47E64C0267A10E4005E265C /* Effect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Effect.swift; sourceTree = "<group>"; };
 		A47E64C4267A10F3005E265C /* StoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreTests.swift; sourceTree = "<group>"; };
 		A47E64CA267A4AF7005E265C /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A47E64CC267A4AF7005E265C /* ExampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleApp.swift; sourceTree = "<group>"; };
@@ -70,6 +71,10 @@
 		A47E64D3267A4AF8005E265C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A47E64DE267A4B1E005E265C /* RootScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScreen.swift; sourceTree = "<group>"; };
 		A47E64E1267B0A6C005E265C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		A4A1D67326B5917C00CFBD2B /* AsyncStream+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AsyncStream+Extension.swift"; sourceTree = "<group>"; };
+		A4D2CF9F26C0FC34008D25DE /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
+		A4D2CFA126C13B31008D25DE /* Assertion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assertion.swift; sourceTree = "<group>"; };
+		A4D2CFA526C16A69008D25DE /* Package.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +107,7 @@
 		A47E6498267A1054005E265C = {
 			isa = PBXGroup;
 			children = (
+				A4D2CFA426C16A5E008D25DE /* Deployment */,
 				A47E64E0267A8F1A005E265C /* Documentation */,
 				A47E64A4267A1054005E265C /* RedUx */,
 				A47E64B0267A1054005E265C /* RedUxTests */,
@@ -133,7 +139,8 @@
 		A47E64B0267A1054005E265C /* RedUxTests */ = {
 			isa = PBXGroup;
 			children = (
-				A47E64C4267A10F3005E265C /* StoreTests.swift */,
+				A4D2CFA326C1486E008D25DE /* Tests */,
+				A4D2CFA126C13B31008D25DE /* Assertion.swift */,
 			);
 			path = RedUxTests;
 			sourceTree = "<group>";
@@ -150,7 +157,7 @@
 		A47E64BD267A10CB005E265C /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				A47E64C0267A10E4005E265C /* Effect.swift */,
+				A4D2CF9E26C0FC1F008D25DE /* Extensions */,
 				A47E64BE267A10E4005E265C /* Reducer.swift */,
 				A47E64BF267A10E4005E265C /* Store.swift */,
 			);
@@ -190,6 +197,31 @@
 				A47E64E1267B0A6C005E265C /* README.md */,
 			);
 			name = Documentation;
+			sourceTree = "<group>";
+		};
+		A4D2CF9E26C0FC1F008D25DE /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				A4A1D67326B5917C00CFBD2B /* AsyncStream+Extension.swift */,
+				A4D2CF9F26C0FC34008D25DE /* View+Extension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		A4D2CFA326C1486E008D25DE /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				A47E64C4267A10F3005E265C /* StoreTests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		A4D2CFA426C16A5E008D25DE /* Deployment */ = {
+			isa = PBXGroup;
+			children = (
+				A4D2CFA526C16A69008D25DE /* Package.swift */,
+			);
+			name = Deployment;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -333,8 +365,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A47E64C3267A10E4005E265C /* Effect.swift in Sources */,
+				A4A1D67426B5917C00CFBD2B /* AsyncStream+Extension.swift in Sources */,
 				A47E64C2267A10E4005E265C /* Store.swift in Sources */,
+				A4D2CFA026C0FC34008D25DE /* View+Extension.swift in Sources */,
 				A47E64C1267A10E4005E265C /* Reducer.swift in Sources */,
 				A47E64A7267A1054005E265C /* RedUx.docc in Sources */,
 			);
@@ -344,6 +377,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A4D2CFA226C13B31008D25DE /* Assertion.swift in Sources */,
 				A47E64C5267A10F3005E265C /* StoreTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

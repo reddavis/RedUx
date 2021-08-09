@@ -2,9 +2,9 @@
 
 An experiment of using Swift's async await in a Redux pattern.
 
-Branches:
-- `main` - Has effects.
-- `no-effect` - Removes effects and makes the reducer async. 
+## Example
+
+### Store definition
 
 ```swift
 import RedUx
@@ -15,24 +15,26 @@ enum RootScreen
 {
     typealias Store = RedUx.Store<State, Event, Environment>
     
+    @MainActor
     static func make() -> some View
     {
         ContentView(
             store: Store(
-                initialState: .init(),
+                state: .init(),
                 reducer: self.reducer,
                 environment: .init()
             )
         )
     }
     
+    @MainActor
     static func mock(
         state: State
     ) -> some View
     {
         ContentView(
             store: Store(
-                initialState: state,
+                state: state,
                 reducer: .empty(),
                 environment: .init()
             )
@@ -56,15 +58,11 @@ extension RootScreen
             state.count -= 1
             return .none
         case .incrementWithDelay:
-            return .init {
-                // Really taxing shiz...
-                // await Task.sleep(2 * 1_000_000_000) // This crashes
-                let handle = async {
-                    for x in 0...1000000 { }
-                }
-                
-                await handle.get()
-                return .increment
+            return .init { continuation in
+                // Really taxing shiz
+                await Task.sleep(2 * 1_000_000_000)
+                continuation.yield(.increment)
+                continuation.finish()
             }
         }
     }
@@ -103,6 +101,63 @@ extension RootScreen
 extension RootScreen
 {
     struct Environment { }
+}
+
+```
+
+### View
+
+```swift
+import SwiftUI
+
+
+extension RootScreen
+{
+    struct ContentView: View
+    {
+        @StateObject var store: Store
+        
+        // MARK: Body
+        
+        var body: some View {
+            VStack(alignment: .center) {
+                Text(verbatim: .init(self.store.count))
+                    .font(.largeTitle)
+                
+                HStack {
+                    Button("Decrement") {
+                        self.store.send(.decrement)
+                    }
+                    .buttonStyle(.bordered)
+                    
+                    Button("Increment") {
+                        self.store.send(.increment)
+                    }
+                    .buttonStyle(.bordered)
+                    
+                    Button("Delayed increment") {
+                        self.store.send(.incrementWithDelay)
+                    }
+                    .buttonStyle(.bordered)
+                }
+            }
+        }
+    }
+}
+
+
+
+// MARK: Preview
+
+struct RootScreen_ContentView_Previews: PreviewProvider
+{
+    static var previews: some View {
+        RootScreen.mock(
+            state: .init(
+                count: 0
+            )
+        )
+    }
 }
 
 ```

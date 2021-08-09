@@ -2,6 +2,7 @@ import XCTest
 @testable import RedUx
 
 
+@MainActor
 final class StoreTests: XCTestCase
 {
     // Private
@@ -9,10 +10,11 @@ final class StoreTests: XCTestCase
     
     // MARK: Setup
     
+    @MainActor
     override func setUpWithError() throws
     {
         self.store = .init(
-            initialState: .init(),
+            state: .init(),
             reducer: reducer,
             environment: .init()
         )
@@ -23,7 +25,7 @@ final class StoreTests: XCTestCase
     func testSendingEventWithNoEffect() async
     {
         XCTAssertNil(self.store.state.value)
-        await self.store.send(.setValue("a"))
+        self.store.send(.setValue("a"))
         XCTAssertEqual(self.store.state.value, "a")
         XCTAssertEqual(self.store.state.eventsReceived, [.setValue("a")])
     }
@@ -31,13 +33,20 @@ final class StoreTests: XCTestCase
     func testSendingEventWithEffect() async
     {
         XCTAssertNil(self.store.state.value)
-        await self.store.send(.setValueByEffect("a"))
-
-        XCTAssertEqual(self.store.state.value, "a")
-        XCTAssertEqual(self.store.state.eventsReceived, [.setValueByEffect("a"), .setValue("a")])
+        self.store.send(.setValueByEffect("a"))
+        
+        await XCTAssertEventuallyEqual(
+            { self.store.state.value },
+            { "a" }
+        )
+        
+        await XCTAssertEventuallyEqual(
+            { self.store.state.eventsReceived },
+            { [.setValueByEffect("a"), .setValue("a")] }
+        )
     }
-
-    func testBinding()
+    
+    func testBindingWithValue()
     {
         let binding = self.store.binding(
             value: \.value,
@@ -48,6 +57,27 @@ final class StoreTests: XCTestCase
         binding.wrappedValue = "a"
         XCTAssertEqual(self.store.state.value, "a")
         XCTAssertEqual(self.store.state.eventsReceived, [.setValue("a")])
+    }
+    
+    func testBinding() async
+    {
+        let binding = self.store.binding(
+            value: \.value,
+            event: .setValueToA
+        )
+
+        XCTAssertNil(self.store.state.value)
+        binding.wrappedValue = "whatever"
+        
+        await XCTAssertEventuallyEqual(
+            { self.store.state.value },
+            { "a" }
+        )
+        
+        await XCTAssertEventuallyEqual(
+            { self.store.state.eventsReceived },
+            { [.setValueToA, .setValue("a")] }
+        )
     }
 }
 
@@ -64,20 +94,9 @@ fileprivate let reducer: Reducer<TestState, TestEvent, TestEnvironment> = .init 
         state.value = value
         return .none
     case .setValueByEffect(let value):
-        return .init {
-            .setValue(value)
-        }
-    case .scopedEvent(let scopedEvent):
-        switch scopedEvent
-        {
-        case .setScopedValue(let value):
-            state.value = value
-            return .none
-        case .setScopedValueByEffect(let value):
-            return .init {
-                .setValue(value)
-            }
-        }
+        return .just(.setValue(value))
+    case .setValueToA:
+        return .just(.setValue("a"))
     }
 }
 
@@ -89,15 +108,7 @@ fileprivate enum TestEvent: Equatable
 {
     case setValue(String)
     case setValueByEffect(String)
-    case scopedEvent(ScopedEvent)
-}
-
-// MARK: Scoped event
-
-fileprivate enum ScopedEvent: Equatable
-{
-    case setScopedValue(String)
-    case setScopedValueByEffect(String)
+    case setValueToA
 }
 
 

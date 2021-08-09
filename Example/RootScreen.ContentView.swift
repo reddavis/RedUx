@@ -15,18 +15,18 @@ extension RootScreen
                     .font(.largeTitle)
                 
                 HStack {
-                    Button("Decrement", role: nil) {
-                        await self.store.send(.decrement)
+                    Button("Decrement") {
+                        self.store.send(.decrement)
                     }
                     .buttonStyle(.bordered)
                     
-                    Button("Increment", role: nil) {
-                        await self.store.send(.increment)
+                    Button("Increment") {
+                        self.store.send(.increment)
                     }
                     .buttonStyle(.bordered)
                     
-                    Button("Delayed increment", role: nil) {
-                        await self.store.send(.incrementWithDelay)
+                    Button("Delayed increment") {
+                        self.store.send(.incrementWithDelay)
                     }
                     .buttonStyle(.bordered)
                 }
