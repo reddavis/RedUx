@@ -28,8 +28,8 @@ let package = Package(
         ),
         .target(
             name: "RedUxTestUtilities",
-            path: "RedUxTestUtilities",
-            dependencies: ["RedUx"]
+            dependencies: ["RedUx"],
+            path: "RedUxTestUtilities"
         ),
         .testTarget(
             name: "RedUxTests",
