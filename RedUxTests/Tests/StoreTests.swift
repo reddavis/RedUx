@@ -46,7 +46,7 @@ final class StoreTests: XCTestCase
         )
     }
     
-    func testBindingWithValue()
+    func testBindingWithValue() async
     {
         let binding = self.store.binding(
             value: \.value,
@@ -55,8 +55,16 @@ final class StoreTests: XCTestCase
 
         XCTAssertNil(self.store.state.value)
         binding.wrappedValue = "a"
-        XCTAssertEqual(self.store.state.value, "a")
-        XCTAssertEqual(self.store.state.eventsReceived, [.setValue("a")])
+
+        await XCTAssertEventuallyEqual(
+            { self.store.state.value },
+            { "a" }
+        )
+        
+        await XCTAssertEventuallyEqual(
+            { self.store.state.eventsReceived },
+            { [.setValue("a")] }
+        )
     }
     
     func testBinding() async

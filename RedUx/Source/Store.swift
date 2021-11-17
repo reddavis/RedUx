@@ -2,7 +2,6 @@ import Foundation
 import SwiftUI
 
 
-@MainActor
 @dynamicMemberLookup
 public final class Store<State, Event, Environment>: ObservableObject
 {
@@ -57,14 +56,15 @@ public final class Store<State, Event, Environment>: ObservableObject
     
     /// Send an event through the store's reducer.
     /// - Parameter event: The event.
+    @MainActor
     public func send(_ event: Event)
     {
         guard let stream = self.reducer(&self.state, event) else { return }
         
-        Task {
+        Task.detached {
             for await event in stream
             {
-                self.send(event)
+                await self.send(event)
             }
         }
     }
@@ -86,12 +86,20 @@ extension Store
                 guard transaction.animation == nil else
                 {
                     _ = SwiftUI.withTransaction(transaction) {
-                        self.send(event(scopedState))
+                        Task.detached {
+                            await MainActor.run {
+                                self.send(event(scopedState))
+                            }
+                        }
                     }
                     return
                 }
                 
-                self.send(event(scopedState))
+                Task.detached {
+                    await MainActor.run {
+                        self.send(event(scopedState))
+                    }
+                }
             }
         )
     }

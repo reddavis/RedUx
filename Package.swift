@@ -13,16 +13,28 @@ let package = Package(
     products: [
         .library(
             name: "RedUx",
-            targets: ["RedUx"]),
+            targets: ["RedUx"]
+        ),
+        .library(
+            name: "RedUxTestUtilities",
+            targets: ["RedUxTestUtilities"]
+        )
     ],
     targets: [
         .target(
             name: "RedUx",
             path: "RedUx",
-            exclude: ["Supporting Files/RedUx.docc"]),
+            exclude: ["Supporting Files/RedUx.docc"]
+        ),
+        .target(
+            name: "RedUxTestUtilities",
+            dependencies: ["RedUx"],
+            path: "RedUxTestUtilities"
+        ),
         .testTarget(
             name: "RedUxTests",
             dependencies: ["RedUx"],
-            path: "RedUxTests"),
+            path: "RedUxTests"
+        )
     ]
 )

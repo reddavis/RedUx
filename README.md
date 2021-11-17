@@ -11,11 +11,16 @@ A super simple Swift implementation of the redux pattern making use of Swift 5.5
 
 ### Swift Package Manager
 
-```swift
-dependencies: [
-    .package(url: "https://github.com/reddavis/Redux", from: "0.9.0")
-]
-```
+In Xcode:
+
+1. Click `Project`.
+2. Click `Package Dependencies`.
+3. Click `+`.
+4. Enter package URL: `https://github.com/reddavis/Redux`.
+5. Add `RedUx` to your app target.
+6. If you want the test utilities, add `RedUxTestUtilities` to your test target.
+
+![Example screenshot of Xcode](./Documentation Resources/Installation.png)
 
 ## Usage
 
@@ -30,7 +35,6 @@ enum RootScreen
 {
     typealias Store = RedUx.Store<State, Event, Environment>
     
-    @MainActor
     static func make() -> some View
     {
         ContentView(
@@ -42,7 +46,6 @@ enum RootScreen
         )
     }
     
-    @MainActor
     static func mock(
         state: State
     ) -> some View
@@ -174,6 +177,45 @@ struct RootScreen_ContentView_Previews: PreviewProvider
         )
     }
 }
+
+```
+
+### Tests
+
+```swift
+import XCTest
+import RedUxTestUtilities
+@testable import Example
+
+
+class RootScreenTests: XCTestCase
+{
+    @MainActor
+    func testStateChange() async
+    {
+        let store = RootScreen.Store(
+            state: .init(),
+            reducer: RootScreen.reducer,
+            environment: .init()
+        )
+        
+        await XCTAssertStateChange(
+            store: store,
+            events: [
+                .increment,
+                .decrement,
+                .incrementWithDelay
+            ],
+            matches: [
+                .init(),
+                .init(count: 1),
+                .init(count: 0),
+                .init(count: 1)
+            ]
+        )
+    }
+}
+
 
 ```
 
