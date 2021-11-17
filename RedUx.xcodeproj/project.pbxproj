@@ -20,6 +20,11 @@
 		A47E64D9267A4B07005E265C /* RedUx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A47E64A2267A1054005E265C /* RedUx.framework */; };
 		A47E64DA267A4B07005E265C /* RedUx.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A47E64A2267A1054005E265C /* RedUx.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A47E64DF267A4B1E005E265C /* RootScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47E64DE267A4B1E005E265C /* RootScreen.swift */; };
+		A48E08652743D463008090E5 /* RootScreenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48E08642743D463008090E5 /* RootScreenTests.swift */; };
+		A48E08852743F1DB008090E5 /* RedUxTestUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = A48E08842743F1DB008090E5 /* RedUxTestUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A48E08892743F1EB008090E5 /* Assertions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48E085C2743D1FE008090E5 /* Assertions.swift */; };
+		A48E088A2743F4B4008090E5 /* RedUxTestUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A48E08822743F1DB008090E5 /* RedUxTestUtilities.framework */; };
+		A48E088C2743F4EE008090E5 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A48E088B2743F4EE008090E5 /* XCTest.framework */; };
 		A4A1D67426B5917C00CFBD2B /* AsyncStream+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A1D67326B5917C00CFBD2B /* AsyncStream+Extension.swift */; };
 		A4D2CFA026C0FC34008D25DE /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D2CF9F26C0FC34008D25DE /* View+Extension.swift */; };
 		A4D2CFA226C13B31008D25DE /* Assertion.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D2CFA126C13B31008D25DE /* Assertion.swift */; };
@@ -34,6 +39,20 @@
 			remoteInfo = RedUx;
 		};
 		A47E64DB267A4B07005E265C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A47E6499267A1054005E265C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A47E64A1267A1054005E265C;
+			remoteInfo = RedUx;
+		};
+		A48E08662743D463008090E5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A47E6499267A1054005E265C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A47E64C9267A4AF7005E265C;
+			remoteInfo = Example;
+		};
+		A48E088D2743F51A008090E5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A47E6499267A1054005E265C /* Project object */;
 			proxyType = 1;
@@ -71,6 +90,12 @@
 		A47E64D3267A4AF8005E265C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A47E64DE267A4B1E005E265C /* RootScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScreen.swift; sourceTree = "<group>"; };
 		A47E64E1267B0A6C005E265C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		A48E085C2743D1FE008090E5 /* Assertions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assertions.swift; sourceTree = "<group>"; };
+		A48E08622743D463008090E5 /* ExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A48E08642743D463008090E5 /* RootScreenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScreenTests.swift; sourceTree = "<group>"; };
+		A48E08822743F1DB008090E5 /* RedUxTestUtilities.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RedUxTestUtilities.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A48E08842743F1DB008090E5 /* RedUxTestUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RedUxTestUtilities.h; sourceTree = "<group>"; };
+		A48E088B2743F4EE008090E5 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		A4A1D67326B5917C00CFBD2B /* AsyncStream+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AsyncStream+Extension.swift"; sourceTree = "<group>"; };
 		A4D2CF9F26C0FC34008D25DE /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
 		A4D2CFA126C13B31008D25DE /* Assertion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assertion.swift; sourceTree = "<group>"; };
@@ -101,6 +126,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A48E085F2743D463008090E5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A48E088A2743F4B4008090E5 /* RedUxTestUtilities.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A48E087F2743F1DB008090E5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A48E088C2743F4EE008090E5 /* XCTest.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -111,7 +152,9 @@
 				A47E64E0267A8F1A005E265C /* Documentation */,
 				A47E64A4267A1054005E265C /* RedUx */,
 				A47E64B0267A1054005E265C /* RedUxTests */,
+				A48E08832743F1DB008090E5 /* RedUxTestUtilities */,
 				A47E64CB267A4AF7005E265C /* Example */,
+				A48E08632743D463008090E5 /* ExampleTests */,
 				A47E64A3267A1054005E265C /* Products */,
 				A47E64D8267A4B07005E265C /* Frameworks */,
 			);
@@ -123,6 +166,8 @@
 				A47E64A2267A1054005E265C /* RedUx.framework */,
 				A47E64AC267A1054005E265C /* RedUxTests.xctest */,
 				A47E64CA267A4AF7005E265C /* Example.app */,
+				A48E08622743D463008090E5 /* ExampleTests.xctest */,
+				A48E08822743F1DB008090E5 /* RedUxTestUtilities.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -187,6 +232,7 @@
 		A47E64D8267A4B07005E265C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A48E088B2743F4EE008090E5 /* XCTest.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -197,6 +243,23 @@
 				A47E64E1267B0A6C005E265C /* README.md */,
 			);
 			name = Documentation;
+			sourceTree = "<group>";
+		};
+		A48E08632743D463008090E5 /* ExampleTests */ = {
+			isa = PBXGroup;
+			children = (
+				A48E08642743D463008090E5 /* RootScreenTests.swift */,
+			);
+			path = ExampleTests;
+			sourceTree = "<group>";
+		};
+		A48E08832743F1DB008090E5 /* RedUxTestUtilities */ = {
+			isa = PBXGroup;
+			children = (
+				A48E085C2743D1FE008090E5 /* Assertions.swift */,
+				A48E08842743F1DB008090E5 /* RedUxTestUtilities.h */,
+			);
+			path = RedUxTestUtilities;
 			sourceTree = "<group>";
 		};
 		A4D2CF9E26C0FC1F008D25DE /* Extensions */ = {
@@ -232,6 +295,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				A47E64B3267A1054005E265C /* RedUx.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A48E087D2743F1DB008090E5 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A48E08852743F1DB008090E5 /* RedUxTestUtilities.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -293,6 +364,43 @@
 			productReference = A47E64CA267A4AF7005E265C /* Example.app */;
 			productType = "com.apple.product-type.application";
 		};
+		A48E08612743D463008090E5 /* ExampleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A48E08682743D463008090E5 /* Build configuration list for PBXNativeTarget "ExampleTests" */;
+			buildPhases = (
+				A48E085E2743D463008090E5 /* Sources */,
+				A48E085F2743D463008090E5 /* Frameworks */,
+				A48E08602743D463008090E5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A48E08672743D463008090E5 /* PBXTargetDependency */,
+			);
+			name = ExampleTests;
+			productName = ExampleTests;
+			productReference = A48E08622743D463008090E5 /* ExampleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		A48E08812743F1DB008090E5 /* RedUxTestUtilities */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A48E08862743F1DB008090E5 /* Build configuration list for PBXNativeTarget "RedUxTestUtilities" */;
+			buildPhases = (
+				A48E087D2743F1DB008090E5 /* Headers */,
+				A48E087E2743F1DB008090E5 /* Sources */,
+				A48E087F2743F1DB008090E5 /* Frameworks */,
+				A48E08802743F1DB008090E5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A48E088E2743F51A008090E5 /* PBXTargetDependency */,
+			);
+			name = RedUxTestUtilities;
+			productName = RedUxTestUtilities;
+			productReference = A48E08822743F1DB008090E5 /* RedUxTestUtilities.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -300,7 +408,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1300;
+				LastSwiftUpdateCheck = 1310;
 				LastUpgradeCheck = 1300;
 				TargetAttributes = {
 					A47E64A1267A1054005E265C = {
@@ -311,6 +419,13 @@
 					};
 					A47E64C9267A4AF7005E265C = {
 						CreatedOnToolsVersion = 13.0;
+					};
+					A48E08612743D463008090E5 = {
+						CreatedOnToolsVersion = 13.1;
+						TestTargetID = A47E64C9267A4AF7005E265C;
+					};
+					A48E08812743F1DB008090E5 = {
+						CreatedOnToolsVersion = 13.1;
 					};
 				};
 			};
@@ -328,8 +443,10 @@
 			projectRoot = "";
 			targets = (
 				A47E64A1267A1054005E265C /* RedUx */,
+				A48E08812743F1DB008090E5 /* RedUxTestUtilities */,
 				A47E64AB267A1054005E265C /* RedUxTests */,
 				A47E64C9267A4AF7005E265C /* Example */,
+				A48E08612743D463008090E5 /* ExampleTests */,
 			);
 		};
 /* End PBXProject section */
@@ -355,6 +472,20 @@
 			files = (
 				A47E64D4267A4AF8005E265C /* Preview Assets.xcassets in Resources */,
 				A47E64D1267A4AF8005E265C /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A48E08602743D463008090E5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A48E08802743F1DB008090E5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,6 +523,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A48E085E2743D463008090E5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A48E08652743D463008090E5 /* RootScreenTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A48E087E2743F1DB008090E5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A48E08892743F1EB008090E5 /* Assertions.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -404,6 +551,16 @@
 			isa = PBXTargetDependency;
 			target = A47E64A1267A1054005E265C /* RedUx */;
 			targetProxy = A47E64DB267A4B07005E265C /* PBXContainerItemProxy */;
+		};
+		A48E08672743D463008090E5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A47E64C9267A4AF7005E265C /* Example */;
+			targetProxy = A48E08662743D463008090E5 /* PBXContainerItemProxy */;
+		};
+		A48E088E2743F51A008090E5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A47E64A1267A1054005E265C /* RedUx */;
+			targetProxy = A48E088D2743F51A008090E5 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -690,6 +847,112 @@
 			};
 			name = Release;
 		};
+		A48E08692743D463008090E5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CF43K35J9C;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.reddavis.ExampleTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Example.app/Example";
+			};
+			name = Debug;
+		};
+		A48E086A2743D463008090E5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CF43K35J9C;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.reddavis.ExampleTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Example.app/Example";
+			};
+			name = Release;
+		};
+		A48E08872743F1DB008090E5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = CF43K35J9C;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.reddavis.RedUxTestUtilities;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A48E08882743F1DB008090E5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = CF43K35J9C;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.reddavis.RedUxTestUtilities;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -725,6 +988,24 @@
 			buildConfigurations = (
 				A47E64D6267A4AF8005E265C /* Debug */,
 				A47E64D7267A4AF8005E265C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A48E08682743D463008090E5 /* Build configuration list for PBXNativeTarget "ExampleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A48E08692743D463008090E5 /* Debug */,
+				A48E086A2743D463008090E5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A48E08862743F1DB008090E5 /* Build configuration list for PBXNativeTarget "RedUxTestUtilities" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A48E08872743F1DB008090E5 /* Debug */,
+				A48E08882743F1DB008090E5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
