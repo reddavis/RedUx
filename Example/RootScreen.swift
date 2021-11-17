@@ -6,7 +6,6 @@ enum RootScreen
 {
     typealias Store = RedUx.Store<State, Event, Environment>
     
-    @MainActor
     static func make() -> some View
     {
         ContentView(
@@ -18,7 +17,6 @@ enum RootScreen
         )
     }
     
-    @MainActor
     static func mock(
         state: State
     ) -> some View
