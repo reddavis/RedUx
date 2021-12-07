@@ -28,6 +28,7 @@
 		A4A1D67426B5917C00CFBD2B /* AsyncStream+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A1D67326B5917C00CFBD2B /* AsyncStream+Extension.swift */; };
 		A4D2CFA026C0FC34008D25DE /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D2CF9F26C0FC34008D25DE /* View+Extension.swift */; };
 		A4D2CFA226C13B31008D25DE /* Assertion.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D2CFA126C13B31008D25DE /* Assertion.swift */; };
+		A4EE8D32275E213900BE7F55 /* Store+Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4EE8D31275E213900BE7F55 /* Store+Binding.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,6 +101,7 @@
 		A4D2CF9F26C0FC34008D25DE /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
 		A4D2CFA126C13B31008D25DE /* Assertion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assertion.swift; sourceTree = "<group>"; };
 		A4D2CFA526C16A69008D25DE /* Package.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		A4EE8D31275E213900BE7F55 /* Store+Binding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Store+Binding.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -203,8 +205,8 @@
 			isa = PBXGroup;
 			children = (
 				A4D2CF9E26C0FC1F008D25DE /* Extensions */,
+				A4EE8D30275E212200BE7F55 /* Store */,
 				A47E64BE267A10E4005E265C /* Reducer.swift */,
-				A47E64BF267A10E4005E265C /* Store.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -285,6 +287,15 @@
 				A4D2CFA526C16A69008D25DE /* Package.swift */,
 			);
 			name = Deployment;
+			sourceTree = "<group>";
+		};
+		A4EE8D30275E212200BE7F55 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				A47E64BF267A10E4005E265C /* Store.swift */,
+				A4EE8D31275E213900BE7F55 /* Store+Binding.swift */,
+			);
+			path = Store;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -501,6 +512,7 @@
 				A4D2CFA026C0FC34008D25DE /* View+Extension.swift in Sources */,
 				A47E64C1267A10E4005E265C /* Reducer.swift in Sources */,
 				A47E64A7267A1054005E265C /* RedUx.docc in Sources */,
+				A4EE8D32275E213900BE7F55 /* Store+Binding.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

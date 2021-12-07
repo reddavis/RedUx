@@ -52,7 +52,45 @@ public extension AsyncStream
     }
 }
 
+// MARK: Merging
 
+extension AsyncStream
+{
+    public func merge(with a: Self) -> Self
+    {
+        .init { continuation in
+            let handler: (_ stream: AsyncStream, _ continuation: AsyncStream.Continuation) async -> Void = { stream, continuation in
+                for await event in stream
+                {
+                    continuation.yield(event)
+                }
+            }
+            
+            async let resultA: () = handler(self, continuation)
+            async let resultB: () = handler(a, continuation)
+            
+            _ = await [resultA, resultB]
+            continuation.finish()
+        }
+    }
+}
+
+// MARK: Map
+
+extension AsyncStream
+{
+    public func map<T>(_ transform: @escaping (Element) -> T) -> AsyncStream<T>
+    {
+        .init { continuation in
+            for await element in self
+            {
+                continuation.yield(transform(element))
+            }
+            
+            continuation.finish()
+        }
+    }
+}
 
 // MARK: AsyncStream.Continuation
 
