@@ -53,7 +53,7 @@ enum RootScreen
         ContentView(
             store: Store(
                 state: state,
-                reducer: .empty(),
+                reducer: .empty,
                 environment: .init()
             )
         )
