@@ -3,16 +3,10 @@ import RedUxTestUtilities
 @testable import Example
 
 
-class RootScreenTests: XCTestCase
-{
+class RootScreenTests: XCTestCase {
     @MainActor
-    func testStateChange() async
-    {
-        let store = RootScreen.Store(
-            state: .init(),
-            reducer: RootScreen.reducer,
-            environment: .init()
-        )
+    func testStateChange() async {
+        let store = RootScreen.Store.make()
         
         await XCTAssertStateChange(
             store: store,

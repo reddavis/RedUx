@@ -1,10 +1,10 @@
+import Combine
 import Foundation
 import SwiftUI
 
 
 @dynamicMemberLookup
-public final class Store<State, Event, Environment>: ObservableObject
-{
+public final class Store<State, Event, Environment>: ObservableObject {
     /// The state of the store.
     @Published private(set) public var state: State
     
@@ -13,6 +13,7 @@ public final class Store<State, Event, Environment>: ObservableObject
     
     // Private
     private let reducer: (inout State, Event) -> AsyncStream<Event>?
+    private var parentStatePropagationCancellable: AnyCancellable?
     
     // MARK: Initialization
     
@@ -25,8 +26,7 @@ public final class Store<State, Event, Environment>: ObservableObject
         state: State,
         reducer: Reducer<State, Event, Environment>,
         environment: Environment
-    )
-    {
+    ) {
         self.init(
             state: state,
             reducer: { reducer.execute(state: &$0, event: $1, environment: environment) },
@@ -38,8 +38,7 @@ public final class Store<State, Event, Environment>: ObservableObject
         state: State,
         reducer: @escaping (inout State, Event) -> AsyncStream<Event>?,
         environment: Environment
-    )
-    {
+    ) {
         self.state = state
         self.reducer = reducer
         self.environment = environment
@@ -47,8 +46,7 @@ public final class Store<State, Event, Environment>: ObservableObject
     
     // MARK: State
     
-    public subscript<U>(dynamicMember keyPath: KeyPath<State, U>) -> U
-    {
+    public subscript<U>(dynamicMember keyPath: KeyPath<State, U>) -> U {
         self.state[keyPath: keyPath]
     }
     
@@ -57,61 +55,47 @@ public final class Store<State, Event, Environment>: ObservableObject
     /// Send an event through the store's reducer.
     /// - Parameter event: The event.
     @MainActor
-    public func send(_ event: Event)
-    {
+    public func send(_ event: Event) {
         guard let stream = self.reducer(&self.state, event) else { return }
         
         Task.detached {
-            for await event in stream
-            {
+            for await event in stream {
                 await self.send(event)
             }
         }
     }
 }
 
-
-// MARK: Binding
+// MARK: Scope
 
 extension Store
 {
-    public func binding<ScopedState>(
-        value: @escaping (State) -> ScopedState,
-        event: @escaping (ScopedState) -> Event
-    ) -> Binding<ScopedState>
-    {
-        Binding(
-            get: { value(self.state) },
-            set: { scopedState, transaction in
-                guard transaction.animation == nil else
-                {
-                    _ = SwiftUI.withTransaction(transaction) {
-                        Task.detached {
-                            await MainActor.run {
-                                self.send(event(scopedState))
-                            }
-                        }
-                    }
-                    return
-                }
-                
+    public func scope<ScopedState, ScopedEvent, ScopedEnvironment>(
+        state toScopedState: @escaping (_ state: State) -> ScopedState,
+        event fromScopedEvent: @escaping (_ event: ScopedEvent) -> Event,
+        environment toScopedEnvironment: (_ environment: Environment) -> ScopedEnvironment
+    ) -> Store<ScopedState, ScopedEvent, ScopedEnvironment> {
+        let scopedStore = Store<ScopedState, ScopedEvent, ScopedEnvironment>(
+            state: toScopedState(self.state),
+            reducer: .init { state, event, environment in
                 Task.detached {
                     await MainActor.run {
-                        self.send(event(scopedState))
+                        self.send(fromScopedEvent(event))
                     }
                 }
+
+                return .none
+            },
+            environment: toScopedEnvironment(self.environment)
+        )
+        
+        // Propagate changes to state to scoped store.
+        scopedStore.parentStatePropagationCancellable = self.$state
+            .dropFirst()
+            .sink { [weak scopedStore] state in
+                scopedStore?.state = toScopedState(state)
             }
-        )
-    }
-    
-    public func binding<ScopedState>(
-        value: @escaping (State) -> ScopedState,
-        event: Event
-    ) -> Binding<ScopedState>
-    {
-        self.binding(
-            value: value,
-            event: { _ in event }
-        )
+        
+        return scopedStore
     }
 }

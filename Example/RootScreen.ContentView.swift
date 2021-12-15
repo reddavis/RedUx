@@ -1,10 +1,8 @@
 import SwiftUI
 
 
-extension RootScreen
-{
-    struct ContentView: View
-    {
+extension RootScreen {
+    struct ContentView: View {
         @StateObject var store: Store
         
         // MARK: Body
@@ -39,8 +37,7 @@ extension RootScreen
 
 // MARK: Preview
 
-struct RootScreen_ContentView_Previews: PreviewProvider
-{
+struct RootScreen_ContentView_Previews: PreviewProvider {
     static var previews: some View {
         RootScreen.mock(
             state: .init(
