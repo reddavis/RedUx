@@ -6,7 +6,7 @@ import XCTest
 final class StoreTests: XCTestCase
 {
     // Private
-    private var store: Store<TestState, TestEvent, TestEnvironment>!
+    private var store: Store<State, Event, Environment>!
     
     // MARK: Setup
     
@@ -87,50 +87,33 @@ final class StoreTests: XCTestCase
             { [.setValueToA, .setValue("a")] }
         )
     }
-}
-
- 
-
-// MARK: Test reducer
-
-fileprivate let reducer: Reducer<TestState, TestEvent, TestEnvironment> = .init { state, event, environment in
-    state.eventsReceived.append(event)
     
-    switch event
+    func testScopedStore() async
     {
-    case .setValue(let value):
-        state.value = value
-        return .none
-    case .setValueByEffect(let value):
-        return .just(.setValue(value))
-    case .setValueToA:
-        return .just(.setValue("a"))
+        let scopedStore = self.store.scope(
+            state: \.subState,
+            event: Event.subEvent,
+            environment: { $0 }
+        )
+        
+        scopedStore.send(.setValue("a"))
+        
+        // Check scoped store's value changes
+        await XCTAssertEventuallyEqual(
+            { scopedStore.state.value },
+            { "a" }
+        )
+        
+        // Check scoped store's received event
+        await XCTAssertEventuallyEqual(
+            { scopedStore.state.eventsReceived },
+            { [.setValue("a")] }
+        )
+        
+        // Check parent store's value changes
+        await XCTAssertEventuallyEqual(
+            { self.store.state.eventsReceived },
+            { [.subEvent(.setValue("a"))] }
+        )
     }
 }
-
-
-
-// MARK: Test event
-
-fileprivate enum TestEvent: Equatable
-{
-    case setValue(String)
-    case setValueByEffect(String)
-    case setValueToA
-}
-
-
-
-// MARK: Test state
-
-fileprivate struct TestState
-{
-    var value: String? = nil
-    var eventsReceived: [TestEvent] = []
-}
-
-
-
-// MARK: Environment
-
-fileprivate struct TestEnvironment { }

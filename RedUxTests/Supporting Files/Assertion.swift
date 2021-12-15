@@ -5,10 +5,8 @@ func XCTAssertAsyncThrowsError(
     _ closure: () async throws -> Void,
     file: StaticString = #filePath,
     line: UInt = #line
-) async
-{
-    do
-    {
+) async {
+    do {
         try await closure()
         XCTFail("File: \(file) Line: \(line) -- Failed to throw error")
     }
@@ -20,10 +18,8 @@ func XCTAsyncAssertThrowsError<T>(
     _ closure: () async throws -> T,
     file: StaticString = #filePath,
     line: UInt = #line
-) async
-{
-    do
-    {
+) async {
+    do {
         _ = try await closure()
         XCTFail(
             "Failed to throw error",
@@ -39,14 +35,11 @@ func XCTAssertAsyncNoThrow(
     _ closure: () async throws -> Void,
     file: StaticString = #filePath,
     line: UInt = #line
-) async
-{
-    do
-    {
+) async {
+    do {
         try await closure()
     }
-    catch
-    {
+    catch {
         XCTFail(
             "Unexpexted error thrown \(error)",
             file: file,
@@ -60,8 +53,7 @@ func XCTAsyncAssertNil<T>(
     _ closure: () async -> T?,
     file: StaticString = #filePath,
     line: UInt = #line
-) async
-{
+) async {
     let value = await closure()
     XCTAssertNil(
         value,
@@ -76,8 +68,7 @@ func XCTAsyncAssertEqual<T: Equatable>(
     _ expression2: @escaping () async -> T,
     file: StaticString = #filePath,
     line: UInt = #line
-) async
-{
+) async {
     let valueA = await expression1()
     let valueB = await expression2()
 
@@ -96,15 +87,13 @@ func XCTAssertEventuallyEqual<T: Equatable>(
     timeout: TimeInterval = 5.0,
     file: StaticString = #filePath,
     line: UInt = #line
-) async
-{
+) async {
     let handle = Task { () -> Result<Void, _XCTAssertEventuallyEqualError> in
         let timeoutDate = Date(timeIntervalSinceNow: timeout)
         var resultOne: T?
         var resultTwo: T?
         
-        repeat
-        {
+        repeat {
             resultOne = try? await expressionOne()
             resultTwo = try? await expressionTwo()
             
@@ -124,8 +113,7 @@ func XCTAssertEventuallyEqual<T: Equatable>(
     }
     
     let result = await handle.value
-    switch result
-    {
+    switch result {
     case .success:
         return
     case .failure(let error):
@@ -137,8 +125,7 @@ func XCTAssertEventuallyEqual<T: Equatable>(
 
 // MARK: _XCTAssertEventuallyEqualError
 
-private struct _XCTAssertEventuallyEqualError: Error
-{
+private struct _XCTAssertEventuallyEqualError: Error {
     let message: String
     
     var localizedDescription: String {
@@ -147,17 +134,14 @@ private struct _XCTAssertEventuallyEqualError: Error
     
     // MARK: Initialization
     
-    init<T: Equatable>(resultOne: T?, resultTwo: T?)
-    {
+    init<T: Equatable>(resultOne: T?, resultTwo: T?) {
         var resultOneDescription = "(null)"
-        if let resultOne = resultOne
-        {
+        if let resultOne = resultOne {
             resultOneDescription = String(describing: resultOne)
         }
         
         var resultTwoDescription = "(null)"
-        if let resultTwo = resultTwo
-        {
+        if let resultTwo = resultTwo {
             resultTwoDescription = String(describing: resultTwo)
         }
         
