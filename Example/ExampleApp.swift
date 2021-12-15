@@ -5,7 +5,9 @@ import SwiftUI
 struct ExampleApp: App {
     var body: some Scene {
         WindowGroup {
-            RootScreen.make()
+            RootScreen.make(
+                store: AppStore.make()
+            )
         }
     }
 }

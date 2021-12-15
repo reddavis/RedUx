@@ -14,6 +14,7 @@ final class AsyncStreamTests: XCTestCase
         }
         
         let streamB = AsyncStream<Int> { continuation in
+            await Task.sleep(100000)
             continuation.yield(1)
             await Task.sleep(100000)
             continuation.yield(3)

@@ -38,21 +38,29 @@ public struct Reducer<State, Event, Environment>
 
 // MARK: Pull
 
-extension Reducer
-{
+extension Reducer {
+    /// Transforms or "Pulls" a local reducer into a global reducer.
+    ///
+    /// The main benefit of this function is that it enables the ability to breakdown
+    /// a large reducer into several smaller ones.
+    /// - Parameters:
+    ///   - state: A key path that sets and gets the local state from the app state.
+    ///   - localEvent: A function for transforming an app event into a local event.
+    ///   - appEvent: A function for transforming a local event into an app event.
+    ///   - environment: A function for transforming an app environment into a local environment.
+    /// - Returns: A `Reducer<AppState, AppEvent, AppEnvironment>`.
     public func pull<AppState, AppEvent, AppEnvironment>(
         state: WritableKeyPath<AppState, State>,
         localEvent: @escaping (AppEvent) -> Event?,
         appEvent: @escaping (Event) -> AppEvent,
-        environment: KeyPath<AppEnvironment, Environment>
-    ) -> Reducer<AppState, AppEvent, AppEnvironment>
-    {
+        environment: @escaping (AppEnvironment) -> Environment
+    ) -> Reducer<AppState, AppEvent, AppEnvironment> {
         .init { appState, event, appEnvironment in
             guard let event = localEvent(event) else { return .none }
             let eventStream = self.reduce(
                 &appState[keyPath: state],
                 event,
-                appEnvironment[keyPath: environment]
+                environment(appEnvironment)
             )
             
             return eventStream?.map { event in
@@ -64,21 +72,26 @@ extension Reducer
 
 // MARK: Combine
 
-infix operator >>>
-extension Reducer
-{
-    public static func >>>(
+infix operator <>
+extension Reducer {
+    /// Combines two reducers of the same `State`, `Event` and `Environment` into one.
+    ///
+    /// The left hand reducer will be reduced first followed by the right hand reducer.
+    /// - Parameters:
+    ///   - lhs: The left hand reducer.
+    ///   - rhs: The right hand reducer.
+    /// - Returns: A new reducer
+    public static func <>(
         lhs: Reducer<State, Event, Environment>,
         rhs: Reducer<State, Event, Environment>
-    ) -> Reducer<State, Event, Environment>
-    {
+    ) -> Reducer<State, Event, Environment> {
         .init { state, event, environment in
             let streamA = lhs.reduce(&state, event, environment)
             let streamB = rhs.reduce(&state, event, environment)
             
-            if let streamA = streamA,
-               let streamB = streamB
-            {
+            if
+                let streamA = streamA,
+                let streamB = streamB {
                 return streamA.merge(with: streamB)
             }
             

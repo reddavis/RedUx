@@ -1,8 +1,7 @@
 import Foundation
 
 
-public extension AsyncStream
-{
+public extension AsyncStream {
     /// Construct a AsyncStream buffering given an Element type.
     ///
     /// - Parameter elementType: The type the AsyncStream will produce.
@@ -23,29 +22,22 @@ public extension AsyncStream
         _ elementType: Element.Type = Element.self,
         bufferingPolicy limit: AsyncStream<Element>.Continuation.BufferingPolicy = .unbounded,
         _ build: @escaping (AsyncStream<Element>.Continuation) async -> Void
-    )
-    {
-        self = AsyncStream(
-            elementType,
-            bufferingPolicy: limit,
-            { continuation in
-                Task {
-                    await build(continuation)
-                }
+    ) {
+        self = AsyncStream(elementType, bufferingPolicy: limit) { continuation in
+            Task {
+                await build(continuation)
             }
-        )
+        }
     }
 }
 
 // MARK: Just
 
-public extension AsyncStream
-{
+public extension AsyncStream {
     /// Initialize a single value yielding stream.
     /// - Parameter value: The value to yield.
     /// - Returns: An `AsyncStream`.
-    static func just(_ value: Element) -> Self
-    {
+    static func just(_ value: Element) -> Self {
         .init {
             $0.finish(with: value)
         }
@@ -54,20 +46,23 @@ public extension AsyncStream
 
 // MARK: Merging
 
-extension AsyncStream
-{
-    public func merge(with a: Self) -> Self
-    {
+extension AsyncStream {
+    /// Merge two streams into one.
+    /// - Parameter other: The other stream to merge with.
+    /// - Returns: A `AsyncStream<Element>`.
+    public func merge(with other: Self) -> Self {
         .init { continuation in
-            let handler: (_ stream: AsyncStream, _ continuation: AsyncStream.Continuation) async -> Void = { stream, continuation in
-                for await event in stream
-                {
+            let handler: (
+                _ stream: AsyncStream,
+                _ continuation: AsyncStream.Continuation
+            ) async -> Void = { stream, continuation in
+                for await event in stream {
                     continuation.yield(event)
                 }
             }
             
             async let resultA: () = handler(self, continuation)
-            async let resultB: () = handler(a, continuation)
+            async let resultB: () = handler(other, continuation)
             
             _ = await [resultA, resultB]
             continuation.finish()
@@ -77,13 +72,15 @@ extension AsyncStream
 
 // MARK: Map
 
-extension AsyncStream
-{
-    public func map<T>(_ transform: @escaping (Element) -> T) -> AsyncStream<T>
-    {
+extension AsyncStream {
+    /// Returns a stream that emits elements that are transformed by the given closure.
+    /// - Parameter transform: A mapping closure. `transform` accepts an element of this
+    /// stream as its parameter and returns a transformed value of the same or of a different type.
+    /// - Returns: An asynchronous stream that contains, in order, the elements produced
+    /// by the transform closure.
+    public func map<T>(_ transform: @escaping (Element) -> T) -> AsyncStream<T> {
         .init { continuation in
-            for await element in self
-            {
+            for await element in self {
                 continuation.yield(transform(element))
             }
             
@@ -94,12 +91,10 @@ extension AsyncStream
 
 // MARK: AsyncStream.Continuation
 
-public extension AsyncStream.Continuation
-{
+public extension AsyncStream.Continuation {
     /// Yield the provided value and then finish the stream.
     /// - Parameter value: The value to yield to the stream.
-    func finish(with value: Element)
-    {
+    func finish(with value: Element) {
         self.yield(value)
         self.finish()
     }
