@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A425FB6E275F9700002AFD72 /* AsyncStreamTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A425FB6D275F9700002AFD72 /* AsyncStreamTests.swift */; };
 		A425FB70275F9769002AFD72 /* ReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A425FB6F275F9769002AFD72 /* ReducerTests.swift */; };
+		A45E0EC52774D814006B64E1 /* Asynchrone in Frameworks */ = {isa = PBXBuildFile; productRef = A45E0EC42774D814006B64E1 /* Asynchrone */; };
 		A47E64A7267A1054005E265C /* RedUx.docc in Sources */ = {isa = PBXBuildFile; fileRef = A47E64A6267A1054005E265C /* RedUx.docc */; };
 		A47E64AD267A1054005E265C /* RedUx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A47E64A2267A1054005E265C /* RedUx.framework */; };
 		A47E64B3267A1054005E265C /* RedUx.h in Headers */ = {isa = PBXBuildFile; fileRef = A47E64A5267A1054005E265C /* RedUx.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -27,7 +27,6 @@
 		A48E08892743F1EB008090E5 /* Assertions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48E085C2743D1FE008090E5 /* Assertions.swift */; };
 		A48E088A2743F4B4008090E5 /* RedUxTestUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A48E08822743F1DB008090E5 /* RedUxTestUtilities.framework */; };
 		A48E088C2743F4EE008090E5 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A48E088B2743F4EE008090E5 /* XCTest.framework */; };
-		A4A1D67426B5917C00CFBD2B /* AsyncStream+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A1D67326B5917C00CFBD2B /* AsyncStream+Extension.swift */; };
 		A4C3619A276A086A00511525 /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C36199276A086A00511525 /* AppStore.swift */; };
 		A4D2CFA026C0FC34008D25DE /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D2CF9F26C0FC34008D25DE /* View+Extension.swift */; };
 		A4D2CFA226C13B31008D25DE /* Assertion.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D2CFA126C13B31008D25DE /* Assertion.swift */; };
@@ -81,7 +80,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A425FB6D275F9700002AFD72 /* AsyncStreamTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncStreamTests.swift; sourceTree = "<group>"; };
 		A425FB6F275F9769002AFD72 /* ReducerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReducerTests.swift; sourceTree = "<group>"; };
 		A47E64A2267A1054005E265C /* RedUx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RedUx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A47E64A5267A1054005E265C /* RedUx.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RedUx.h; sourceTree = "<group>"; };
@@ -103,7 +101,6 @@
 		A48E08822743F1DB008090E5 /* RedUxTestUtilities.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RedUxTestUtilities.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A48E08842743F1DB008090E5 /* RedUxTestUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RedUxTestUtilities.h; sourceTree = "<group>"; };
 		A48E088B2743F4EE008090E5 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		A4A1D67326B5917C00CFBD2B /* AsyncStream+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AsyncStream+Extension.swift"; sourceTree = "<group>"; };
 		A4C36199276A086A00511525 /* AppStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore.swift; sourceTree = "<group>"; };
 		A4D2CF9F26C0FC34008D25DE /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
 		A4D2CFA126C13B31008D25DE /* Assertion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assertion.swift; sourceTree = "<group>"; };
@@ -117,6 +114,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A45E0EC52774D814006B64E1 /* Asynchrone in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,7 +274,6 @@
 		A4D2CF9E26C0FC1F008D25DE /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				A4A1D67326B5917C00CFBD2B /* AsyncStream+Extension.swift */,
 				A4D2CF9F26C0FC34008D25DE /* View+Extension.swift */,
 			);
 			path = Extensions;
@@ -285,7 +282,6 @@
 		A4D2CFA326C1486E008D25DE /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				A425FB6D275F9700002AFD72 /* AsyncStreamTests.swift */,
 				A425FB6F275F9769002AFD72 /* ReducerTests.swift */,
 				A47E64C4267A10F3005E265C /* StoreTests.swift */,
 			);
@@ -354,6 +350,9 @@
 			dependencies = (
 			);
 			name = RedUx;
+			packageProductDependencies = (
+				A45E0EC42774D814006B64E1 /* Asynchrone */,
+			);
 			productName = RedUx;
 			productReference = A47E64A2267A1054005E265C /* RedUx.framework */;
 			productType = "com.apple.product-type.framework";
@@ -469,6 +468,9 @@
 				Base,
 			);
 			mainGroup = A47E6498267A1054005E265C;
+			packageReferences = (
+				A45E0EC32774D814006B64E1 /* XCRemoteSwiftPackageReference "Asynchrone" */,
+			);
 			productRefGroup = A47E64A3267A1054005E265C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -527,7 +529,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A4A1D67426B5917C00CFBD2B /* AsyncStream+Extension.swift in Sources */,
 				A47E64C2267A10E4005E265C /* Store.swift in Sources */,
 				A4D2CFA026C0FC34008D25DE /* View+Extension.swift in Sources */,
 				A47E64C1267A10E4005E265C /* Reducer.swift in Sources */,
@@ -541,7 +542,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A4D2CFA226C13B31008D25DE /* Assertion.swift in Sources */,
-				A425FB6E275F9700002AFD72 /* AsyncStreamTests.swift in Sources */,
 				A425FB70275F9769002AFD72 /* ReducerTests.swift in Sources */,
 				A47E64C5267A10F3005E265C /* StoreTests.swift in Sources */,
 				A4EE8D352763B4ED00BE7F55 /* Models.swift in Sources */,
@@ -1047,6 +1047,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A45E0EC32774D814006B64E1 /* XCRemoteSwiftPackageReference "Asynchrone" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/reddavis/Asynchrone";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A45E0EC42774D814006B64E1 /* Asynchrone */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A45E0EC32774D814006B64E1 /* XCRemoteSwiftPackageReference "Asynchrone" */;
+			productName = Asynchrone;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A47E6499267A1054005E265C /* Project object */;
 }

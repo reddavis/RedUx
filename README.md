@@ -76,12 +76,12 @@ extension RootScreen
             state.count -= 1
             return .none
         case .incrementWithDelay:
-            return .init { continuation in
+            return AsyncStream { continuation in
                 // Really taxing shiz
                 await Task.sleep(2 * 1_000_000_000)
                 continuation.yield(.increment)
                 continuation.finish()
-            }
+            }.eraseToAnyAsyncSequenceable()
         }
     }
 }

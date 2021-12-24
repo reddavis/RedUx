@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Asynchrone",
+        "repositoryURL": "https://github.com/reddavis/Asynchrone",
+        "state": {
+          "branch": "main",
+          "revision": "8341eccda803ff9fb2aeca7bd43efa97a65ae3c2",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
