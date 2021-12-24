@@ -1,3 +1,4 @@
+import Asynchrone
 import Foundation
 
 
@@ -10,7 +11,7 @@ public struct Reducer<State, Event, Environment>
     }
     
     // Public
-    public typealias Reduce = (inout State, Event, Environment) -> AsyncStream<Event>?
+    public typealias Reduce = (inout State, Event, Environment) -> AnyAsyncSequenceable<Event>?
     
     // Private
     private let reduce: Reduce
@@ -30,7 +31,7 @@ public struct Reducer<State, Event, Environment>
         state: inout State,
         event: Event,
         environment: Environment
-    ) -> AsyncStream<Event>?
+    ) -> AnyAsyncSequenceable<Event>?
     {
         self.reduce(&state, event, environment)
     }
@@ -65,7 +66,7 @@ extension Reducer {
             
             return eventStream?.map { event in
                 appEvent(event)
-            }
+            }.eraseToAnyAsyncSequenceable()
         }
     }
 }
@@ -92,7 +93,9 @@ extension Reducer {
             if
                 let streamA = streamA,
                 let streamB = streamB {
-                return streamA.merge(with: streamB)
+                return streamA
+                    .merge(with: streamB)
+                    .eraseToAnyAsyncSequenceable()
             }
             
             return streamA ?? streamB ?? .none

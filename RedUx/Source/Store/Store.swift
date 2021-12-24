@@ -1,3 +1,4 @@
+import Asynchrone
 import Combine
 import Foundation
 import SwiftUI
@@ -12,7 +13,7 @@ public final class Store<State, Event, Environment>: ObservableObject {
     public let environment: Environment
     
     // Private
-    private let reducer: (inout State, Event) -> AsyncStream<Event>?
+    private let reducer: (inout State, Event) -> AnyAsyncSequenceable<Event>?
     private var parentStatePropagationCancellable: AnyCancellable?
     
     // MARK: Initialization
@@ -36,7 +37,7 @@ public final class Store<State, Event, Environment>: ObservableObject {
     
     private init(
         state: State,
-        reducer: @escaping (inout State, Event) -> AsyncStream<Event>?,
+        reducer: @escaping (inout State, Event) -> AnyAsyncSequenceable<Event>?,
         environment: Environment
     ) {
         self.state = state

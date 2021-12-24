@@ -1,3 +1,4 @@
+import Asynchrone
 import Foundation
 @testable import RedUx
 
@@ -45,7 +46,7 @@ struct Environment { }
 let reducer
     =
     mainReducer
-    <<<
+    <>
     subReducer.pull(
         state: \.subState,
         localEvent: { event in
@@ -53,7 +54,7 @@ let reducer
             return subEvent
         },
         appEvent: { .subEvent($0) },
-        environment: \.self
+        environment: { $0 }
     )
 
 let mainReducer: Reducer<State, Event, Environment> = .init { state, event, environment in
@@ -67,9 +68,11 @@ let mainReducer: Reducer<State, Event, Environment> = .init { state, event, envi
     case .subEvent(let event):
         return .none
     case .setValueByEffect(let value):
-        return .just(.setValue(value))
+        return Just(.setValue(value))
+            .eraseToAnyAsyncSequenceable()
     case .setValueToA:
-        return .just(.setValue("a"))
+        return Just(.setValue("a"))
+            .eraseToAnyAsyncSequenceable()
     }
 }
 
