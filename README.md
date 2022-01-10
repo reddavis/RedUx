@@ -20,7 +20,11 @@ In Xcode:
 5. Add `RedUx` to your app target.
 6. If you want the test utilities, add `RedUxTestUtilities` to your test target.
 
-![Example screenshot of Xcode](./Documentation Resources/Installation.png)
+![Example screenshot of Xcode](./Resources/Installation.png)
+
+## Documentation
+
+Documentation can be found [here](https://determined-dubinsky-ed15d5.netlify.app/).
 
 ## Usage
 
@@ -216,8 +220,16 @@ class RootScreenTests: XCTestCase
     }
 }
 
-
 ```
+
+## Other libraries
+
+- [Papyrus](https://github.com/reddavis/Papyrus) - Papyrus aims to hit the sweet spot between saving raw API responses to the file system and a fully fledged database like Realm.
+- [Asynchrone](https://github.com/reddavis/Asynchrone) - Extensions and additions to AsyncSequence, AsyncStream and AsyncThrowingStream.
+- [Validate](https://github.com/reddavis/Validate) - A property wrapper that can validate the property it wraps.
+- [Kyu](https://github.com/reddavis/Kyu) - A persistent queue system in Swift.
+- [FloatingLabelTextFieldStyle](https://github.com/reddavis/FloatingLabelTextFieldStyle) - A floating label style for SwiftUI's TextField.
+- [Panel](https://github.com/reddavis/Panel) - A panel component similar to the iOS Airpod battery panel.
 
 ## License
 
