@@ -21,7 +21,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/reddavis/Asynchrone", from: "0.9.0")
+        .package(url: "https://github.com/reddavis/Asynchrone", from: "0.10.0")
     ],
     targets: [
         .target(

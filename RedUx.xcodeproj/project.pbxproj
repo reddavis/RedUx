@@ -1065,8 +1065,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/reddavis/Asynchrone";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.10.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
