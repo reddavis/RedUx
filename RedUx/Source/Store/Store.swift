@@ -4,8 +4,13 @@ import Foundation
 import SwiftUI
 
 
+/// A Store is the core of the application. It is used to manage state and handle events sent to it.
+///
+/// Generally an application will have one store and then use the scope function to create sub stores for
+/// different components of the app.
 @dynamicMemberLookup
 public final class Store<State, Event, Environment>: ObservableObject {
+    
     /// The state of the store.
     @Published private(set) public var state: State
     
@@ -71,6 +76,16 @@ public final class Store<State, Event, Environment>: ObservableObject {
 
 extension Store
 {
+    /// Create a sub store from the current store.
+    ///
+    /// The scoped store derives it's state and environment from the parent store.
+    /// Events that are sent to this store are converted a parent store event, using the `fromScopedEvent` parameter
+    /// and then passed to the parent store. Changes to the parent state are then reflected back to the scoped store.
+    /// - Parameters:
+    ///   - state: An initial state.
+    ///   - event: A reducer.
+    ///   - environment: An environment.
+    /// - Returns: A `Store` instance.
     public func scope<ScopedState, ScopedEvent, ScopedEnvironment>(
         state toScopedState: @escaping (_ state: State) -> ScopedState,
         event fromScopedEvent: @escaping (_ event: ScopedEvent) -> Event,

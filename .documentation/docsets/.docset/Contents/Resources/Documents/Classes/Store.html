@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Store Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/Store" class="dashAnchor"></a>
+    <a title="Store Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html"> Docs</a> (90% documented)</p>
+        <div class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html"> Reference</a>
+        <img id="carat" src="../img/carat.png" alt=""/>
+        Store Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/Store.html">Store</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/View.html">View</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/Reducer.html">Reducer</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>Store</h1>
+              <div class="declaration">
+                <div class="language">
+                  
+                  <pre class="highlight swift"><code><span class="kd">@dynamicMemberLookup</span>
+<span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">Store</span><span class="o">&lt;</span><span class="kt">State</span><span class="p">,</span> <span class="kt">Event</span><span class="p">,</span> <span class="kt">Environment</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt">ObservableObject</span></code></pre>
+
+                </div>
+              </div>
+            <p>A Store is the core of the application. It is used to manage state and handle events sent to it.</p>
+
+<p>Generally an application will have one store and then use the scope function to create sub stores for
+different components of the app.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:5RedUx5StoreC5statexvp"></a>
+                    <a name="//apple_ref/swift/Property/state" class="dashAnchor"></a>
+                    <a class="token" href="#/s:5RedUx5StoreC5statexvp">state</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The state of the store.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@Published</span>
+<span class="kd">private(set)</span> <span class="kd">public</span> <span class="k">var</span> <span class="nv">state</span><span class="p">:</span> <span class="kt">State</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:5RedUx5StoreC11environmentq0_vp"></a>
+                    <a name="//apple_ref/swift/Property/environment" class="dashAnchor"></a>
+                    <a class="token" href="#/s:5RedUx5StoreC11environmentq0_vp">environment</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The environment.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">environment</span><span class="p">:</span> <span class="kt">Environment</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Initialization"></a>
+                <a name="//apple_ref/swift/Section/Initialization" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Initialization"></a>
+                  <h3 class="section-name"><span>Initialization</span>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:5RedUx5StoreC5state7reducer11environmentACyxq_q0_Gx_AA7ReducerVyxq_q0_Gq0_tcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(state:reducer:environment:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:5RedUx5StoreC5state7reducer11environmentACyxq_q0_Gx_AA7ReducerVyxq_q0_Gq0_tcfc">init(state:<wbr>reducer:<wbr>environment:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Construct a Store with state, reducer and environment.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">convenience</span> <span class="nf">init</span><span class="p">(</span>
+    <span class="nv">state</span><span class="p">:</span> <span class="kt">State</span><span class="p">,</span>
+    <span class="nv">reducer</span><span class="p">:</span> <span class="kt"><a href="../Structs/Reducer.html">Reducer</a></span><span class="o">&lt;</span><span class="kt">State</span><span class="p">,</span> <span class="kt">Event</span><span class="p">,</span> <span class="kt">Environment</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="nv">environment</span><span class="p">:</span> <span class="kt">Environment</span>
+<span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>state</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An initial state.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>reducer</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A reducer.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>environment</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An environment.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/State"></a>
+                <a name="//apple_ref/swift/Section/State" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/State"></a>
+                  <h3 class="section-name"><span>State</span>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:5RedUx5StoreC13dynamicMemberqd__s7KeyPathCyxqd__G_tcluip"></a>
+                    <a name="//apple_ref/swift/Method/subscript(dynamicMember:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:5RedUx5StoreC13dynamicMemberqd__s7KeyPathCyxqd__G_tcluip">subscript(dynamicMember:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">subscript</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dynamicMember</span> <span class="nv">keyPath</span><span class="p">:</span> <span class="kt">KeyPath</span><span class="o">&lt;</span><span class="kt">State</span><span class="p">,</span> <span class="kt">U</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">U</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Events"></a>
+                <a name="//apple_ref/swift/Section/Events" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Events"></a>
+                  <h3 class="section-name"><span>Events</span>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:5RedUx5StoreC4sendyyq_F"></a>
+                    <a name="//apple_ref/swift/Method/send(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:5RedUx5StoreC4sendyyq_F">send(_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Send an event through the store&rsquo;s reducer.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@MainActor</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">send</span><span class="p">(</span><span class="n">_</span> <span class="nv">event</span><span class="p">:</span> <span class="kt">Event</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>event</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The event.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:5RedUx5StoreC7binding5value5event7SwiftUI7BindingVyqd__Gqd__xc_q_qd__ctlF"></a>
+                    <a name="//apple_ref/swift/Method/binding(value:event:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:5RedUx5StoreC7binding5value5event7SwiftUI7BindingVyqd__Gqd__xc_q_qd__ctlF">binding(value:<wbr>event:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a <code>Binding</code> that prevents direct write access to the
+state and instead sends an event on <code>set</code>.</p>
+
+<p>This makes working with SwiftUI components easier.</p>
+
+<p>For example:</p>
+<pre class="highlight swift"><code><span class="kt">TextField</span><span class="p">(</span>
+    <span class="s">"Email"</span><span class="p">,</span>
+    <span class="nv">text</span><span class="p">:</span> <span class="n">viewStore</span><span class="o">.</span><span class="nf">binding</span><span class="p">(</span>
+        <span class="nv">get</span><span class="p">:</span> <span class="p">\</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+        <span class="nv">send</span><span class="p">:</span> <span class="p">{</span> <span class="o">.</span><span class="nf">setEmail</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span> <span class="p">}</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">binding</span><span class="o">&lt;</span><span class="kt">ScopedState</span><span class="o">&gt;</span><span class="p">(</span>
+    <span class="nv">value</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">State</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">ScopedState</span><span class="p">,</span>
+    <span class="nv">event</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">ScopedState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Event</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Binding</span><span class="o">&lt;</span><span class="kt">ScopedState</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>value</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A function to extract the value from the state.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>event</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A function to build the event that is sent to the store.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A binding.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:5RedUx5StoreC7binding5value5event7SwiftUI7BindingVyqd__Gqd__xc_q_tlF"></a>
+                    <a name="//apple_ref/swift/Method/binding(value:event:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:5RedUx5StoreC7binding5value5event7SwiftUI7BindingVyqd__Gqd__xc_q_tlF">binding(value:<wbr>event:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a <code>Binding</code> that prevents direct write access to the
+state and instead sends an event on <code>set</code>.</p>
+
+<p>This makes working with SwiftUI components easier.</p>
+
+<p>For example:</p>
+<pre class="highlight swift"><code><span class="kt">SomeView</span><span class="p">()</span>
+    <span class="o">.</span><span class="nf">alert</span><span class="p">(</span>
+        <span class="s">"Error"</span><span class="p">,</span>
+        <span class="nv">isPresented</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="nf">binding</span><span class="p">(</span>
+            <span class="nv">value</span><span class="p">:</span> <span class="p">{</span> <span class="nv">$0</span><span class="o">.</span><span class="n">loginStatus</span><span class="o">.</span><span class="n">isFailed</span> <span class="p">},</span>
+            <span class="nv">event</span><span class="p">:</span> <span class="o">.</span><span class="n">resetLoginState</span>
+        <span class="p">),</span>
+        <span class="nv">actions</span><span class="p">:</span> <span class="p">{</span> <span class="p">},</span>
+        <span class="nv">message</span><span class="p">:</span> <span class="p">{</span>
+            <span class="kt">Text</span><span class="p">(</span><span class="k">self</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">loginStatus</span><span class="o">.</span><span class="n">failedMessage</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">binding</span><span class="o">&lt;</span><span class="kt">ScopedState</span><span class="o">&gt;</span><span class="p">(</span>
+    <span class="nv">value</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">State</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">ScopedState</span><span class="p">,</span>
+    <span class="nv">event</span><span class="p">:</span> <span class="kt">Event</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Binding</span><span class="o">&lt;</span><span class="kt">ScopedState</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>value</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A function to extract the value from the state.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>event</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An event that is sent to the store.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A binding.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Scope"></a>
+                <a name="//apple_ref/swift/Section/Scope" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Scope"></a>
+                  <h3 class="section-name"><span>Scope</span>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:5RedUx5StoreC5scope5state5event11environmentACyqd__qd_0_qd_1_Gqd__xc_q_qd_0_cqd_1_q0_XEtr1_lF"></a>
+                    <a name="//apple_ref/swift/Method/scope(state:event:environment:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:5RedUx5StoreC5scope5state5event11environmentACyqd__qd_0_qd_1_Gqd__xc_q_qd_0_cqd_1_q0_XEtr1_lF">scope(state:<wbr>event:<wbr>environment:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Create a sub store from the current store.</p>
+
+<p>The scoped store derives it&rsquo;s state and environment from the parent store.
+Events that are sent to this store are converted a parent store event, using the <code>fromScopedEvent</code> parameter
+and then passed to the parent store. Changes to the parent state are then reflected back to the scoped store.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">scope</span><span class="o">&lt;</span><span class="kt">ScopedState</span><span class="p">,</span> <span class="kt">ScopedEvent</span><span class="p">,</span> <span class="kt">ScopedEnvironment</span><span class="o">&gt;</span><span class="p">(</span>
+    <span class="n"><a href="../Classes/Store.html#/s:5RedUx5StoreC5statexvp">state</a></span> <span class="nv">toScopedState</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">state</span><span class="p">:</span> <span class="kt">State</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">ScopedState</span><span class="p">,</span>
+    <span class="n">event</span> <span class="nv">fromScopedEvent</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="n">_</span> <span class="nv">event</span><span class="p">:</span> <span class="kt">ScopedEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Event</span><span class="p">,</span>
+    <span class="n"><a href="../Classes/Store.html#/s:5RedUx5StoreC11environmentq0_vp">environment</a></span> <span class="nv">toScopedEnvironment</span><span class="p">:</span> <span class="p">(</span><span class="n">_</span> <span class="nv">environment</span><span class="p">:</span> <span class="kt">Environment</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">ScopedEnvironment</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Store</span><span class="o">&lt;</span><span class="kt">ScopedState</span><span class="p">,</span> <span class="kt">ScopedEvent</span><span class="p">,</span> <span class="kt">ScopedEnvironment</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>state</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An initial state.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>event</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A reducer.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>environment</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An environment.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A <code>Store</code> instance.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2022 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2022-01-10)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</html>

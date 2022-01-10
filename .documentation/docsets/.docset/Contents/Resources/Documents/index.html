@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+    <script src="js/lunr.min.js" defer></script>
+    <script src="js/typeahead.jquery.js" defer></script>
+    <script src="js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+    <a title="  Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="index.html"> Docs</a> (90% documented)</p>
+        <div class="header-right">
+          <form role="search" action="search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="index.html"> Reference</a>
+        <img id="carat" src="img/carat.png" alt=""/>
+          Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Classes/Store.html">Store</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Extensions/View.html">View</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Structs/Reducer.html">Reducer</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            
+            <h1 id='redux' class='heading'>RedUx</h1>
+
+<p>A super simple Swift implementation of the redux pattern making use of Swift 5.5&rsquo;s new async await API&rsquo;s. </p>
+<h2 id='requirements' class='heading'>Requirements</h2>
+
+<ul>
+<li>iOS 15.0+</li>
+<li>macOS 12.0+</li>
+</ul>
+<h2 id='installation' class='heading'>Installation</h2>
+<h3 id='swift-package-manager' class='heading'>Swift Package Manager</h3>
+
+<p>In Xcode:</p>
+
+<ol>
+<li>Click <code>Project</code>.</li>
+<li>Click <code>Package Dependencies</code>.</li>
+<li>Click <code>+</code>.</li>
+<li>Enter package URL: <code>https://github.com/reddavis/Redux</code>.</li>
+<li>Add <code>RedUx</code> to your app target.</li>
+<li>If you want the test utilities, add <code>RedUxTestUtilities</code> to your test target.</li>
+</ol>
+
+<p><img src="./Documentation%20Resources/Installation.png" alt="Example screenshot of Xcode"></p>
+<h2 id='usage' class='heading'>Usage</h2>
+<h3 id='store-definition' class='heading'>Store definition</h3>
+<pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">RedUx</span>
+<span class="kd">import</span> <span class="kt">SwiftUI</span>
+
+
+<span class="kd">enum</span> <span class="kt">RootScreen</span>
+<span class="p">{</span>
+    <span class="kd">typealias</span> <span class="kt">Store</span> <span class="o">=</span> <span class="kt">RedUx</span><span class="o">.</span><span class="kt">Store</span><span class="o">&lt;</span><span class="kt">State</span><span class="p">,</span> <span class="kt">Event</span><span class="p">,</span> <span class="kt">Environment</span><span class="o">&gt;</span>
+
+    <span class="kd">static</span> <span class="kd">func</span> <span class="nf">make</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kd">some</span> <span class="kt">View</span>
+    <span class="p">{</span>
+        <span class="kt">ContentView</span><span class="p">(</span>
+            <span class="nv">store</span><span class="p">:</span> <span class="kt">Store</span><span class="p">(</span>
+                <span class="nv">state</span><span class="p">:</span> <span class="o">.</span><span class="nf">init</span><span class="p">(),</span>
+                <span class="nv">reducer</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">reducer</span><span class="p">,</span>
+                <span class="nv">environment</span><span class="p">:</span> <span class="o">.</span><span class="nf">init</span><span class="p">()</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="kd">static</span> <span class="kd">func</span> <span class="nf">mock</span><span class="p">(</span>
+        <span class="nv">state</span><span class="p">:</span> <span class="kt">State</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kd">some</span> <span class="kt">View</span>
+    <span class="p">{</span>
+        <span class="kt">ContentView</span><span class="p">(</span>
+            <span class="nv">store</span><span class="p">:</span> <span class="kt">Store</span><span class="p">(</span>
+                <span class="nv">state</span><span class="p">:</span> <span class="n">state</span><span class="p">,</span>
+                <span class="nv">reducer</span><span class="p">:</span> <span class="o">.</span><span class="n">empty</span><span class="p">,</span>
+                <span class="nv">environment</span><span class="p">:</span> <span class="o">.</span><span class="nf">init</span><span class="p">()</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+
+<span class="c1">// MARK: Reducer</span>
+
+<span class="kd">extension</span> <span class="kt">RootScreen</span>
+<span class="p">{</span>
+    <span class="kd">static</span> <span class="k">let</span> <span class="nv">reducer</span><span class="p">:</span> <span class="kt">Reducer</span><span class="o">&lt;</span><span class="kt">State</span><span class="p">,</span> <span class="kt">Event</span><span class="p">,</span> <span class="kt">Environment</span><span class="o">&gt;</span> <span class="o">=</span> <span class="kt">Reducer</span> <span class="p">{</span> <span class="n">state</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">environment</span> <span class="k">in</span>
+        <span class="k">switch</span> <span class="n">event</span>
+        <span class="p">{</span>
+        <span class="k">case</span> <span class="o">.</span><span class="nv">increment</span><span class="p">:</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">return</span> <span class="o">.</span><span class="k">none</span>
+        <span class="k">case</span> <span class="o">.</span><span class="nv">decrement</span><span class="p">:</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">count</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="k">return</span> <span class="o">.</span><span class="k">none</span>
+        <span class="k">case</span> <span class="o">.</span><span class="nv">incrementWithDelay</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kt">AsyncStream</span> <span class="p">{</span> <span class="n">continuation</span> <span class="k">in</span>
+                <span class="c1">// Really taxing shiz</span>
+                <span class="k">await</span> <span class="kt">Task</span><span class="o">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="mi">1_000_000_000</span><span class="p">)</span>
+                <span class="n">continuation</span><span class="o">.</span><span class="nf">yield</span><span class="p">(</span><span class="o">.</span><span class="n">increment</span><span class="p">)</span>
+                <span class="n">continuation</span><span class="o">.</span><span class="nf">finish</span><span class="p">()</span>
+            <span class="p">}</span><span class="o">.</span><span class="nf">eraseToAnyAsyncSequenceable</span><span class="p">()</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+
+<span class="c1">// MARK: State</span>
+
+<span class="kd">extension</span> <span class="kt">RootScreen</span>
+<span class="p">{</span>
+    <span class="kd">struct</span> <span class="kt">State</span><span class="p">:</span> <span class="kt">Equatable</span>
+    <span class="p">{</span>
+        <span class="k">var</span> <span class="nv">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+
+<span class="c1">// MARK: Event</span>
+
+<span class="kd">extension</span> <span class="kt">RootScreen</span>
+<span class="p">{</span>
+    <span class="kd">enum</span> <span class="kt">Event</span>
+    <span class="p">{</span>
+        <span class="k">case</span> <span class="n">increment</span>
+        <span class="k">case</span> <span class="n">decrement</span>
+        <span class="k">case</span> <span class="n">incrementWithDelay</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+
+<span class="c1">// MARK: Environment</span>
+
+<span class="kd">extension</span> <span class="kt">RootScreen</span>
+<span class="p">{</span>
+    <span class="kd">struct</span> <span class="kt">Environment</span> <span class="p">{</span> <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+<h3 id='view' class='heading'>View</h3>
+<pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">SwiftUI</span>
+
+
+<span class="kd">extension</span> <span class="kt">RootScreen</span>
+<span class="p">{</span>
+    <span class="kd">struct</span> <span class="kt">ContentView</span><span class="p">:</span> <span class="kt">View</span>
+    <span class="p">{</span>
+        <span class="kd">@StateObject</span> <span class="k">var</span> <span class="nv">store</span><span class="p">:</span> <span class="kt">Store</span>
+
+        <span class="c1">// MARK: Body</span>
+
+        <span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
+            <span class="kt">VStack</span><span class="p">(</span><span class="nv">alignment</span><span class="p">:</span> <span class="o">.</span><span class="n">center</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">Text</span><span class="p">(</span><span class="nv">verbatim</span><span class="p">:</span> <span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="k">self</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">count</span><span class="p">))</span>
+                    <span class="o">.</span><span class="nf">font</span><span class="p">(</span><span class="o">.</span><span class="n">largeTitle</span><span class="p">)</span>
+
+                <span class="kt">HStack</span> <span class="p">{</span>
+                    <span class="kt">Button</span><span class="p">(</span><span class="s">"Decrement"</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="k">self</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="nf">send</span><span class="p">(</span><span class="o">.</span><span class="n">decrement</span><span class="p">)</span>
+                    <span class="p">}</span>
+                    <span class="o">.</span><span class="nf">buttonStyle</span><span class="p">(</span><span class="o">.</span><span class="n">bordered</span><span class="p">)</span>
+
+                    <span class="kt">Button</span><span class="p">(</span><span class="s">"Increment"</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="k">self</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="nf">send</span><span class="p">(</span><span class="o">.</span><span class="n">increment</span><span class="p">)</span>
+                    <span class="p">}</span>
+                    <span class="o">.</span><span class="nf">buttonStyle</span><span class="p">(</span><span class="o">.</span><span class="n">bordered</span><span class="p">)</span>
+
+                    <span class="kt">Button</span><span class="p">(</span><span class="s">"Delayed increment"</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="k">self</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="nf">send</span><span class="p">(</span><span class="o">.</span><span class="n">incrementWithDelay</span><span class="p">)</span>
+                    <span class="p">}</span>
+                    <span class="o">.</span><span class="nf">buttonStyle</span><span class="p">(</span><span class="o">.</span><span class="n">bordered</span><span class="p">)</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+
+<span class="c1">// MARK: Preview</span>
+
+<span class="kd">struct</span> <span class="kt">RootScreen_ContentView_Previews</span><span class="p">:</span> <span class="kt">PreviewProvider</span>
+<span class="p">{</span>
+    <span class="kd">static</span> <span class="k">var</span> <span class="nv">previews</span><span class="p">:</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
+        <span class="kt">RootScreen</span><span class="o">.</span><span class="nf">mock</span><span class="p">(</span>
+            <span class="nv">state</span><span class="p">:</span> <span class="o">.</span><span class="nf">init</span><span class="p">(</span>
+                <span class="nv">count</span><span class="p">:</span> <span class="mi">0</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+<h3 id='tests' class='heading'>Tests</h3>
+<pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">XCTest</span>
+<span class="kd">import</span> <span class="kt">RedUxTestUtilities</span>
+<span class="kd">@testable</span> <span class="kd">import</span> <span class="kt">Example</span>
+
+
+<span class="kd">class</span> <span class="kt">RootScreenTests</span><span class="p">:</span> <span class="kt">XCTestCase</span>
+<span class="p">{</span>
+    <span class="kd">@MainActor</span>
+    <span class="kd">func</span> <span class="nf">testStateChange</span><span class="p">()</span> <span class="k">async</span>
+    <span class="p">{</span>
+        <span class="k">let</span> <span class="nv">store</span> <span class="o">=</span> <span class="kt">RootScreen</span><span class="o">.</span><span class="kt">Store</span><span class="p">(</span>
+            <span class="nv">state</span><span class="p">:</span> <span class="o">.</span><span class="nf">init</span><span class="p">(),</span>
+            <span class="nv">reducer</span><span class="p">:</span> <span class="kt">RootScreen</span><span class="o">.</span><span class="n">reducer</span><span class="p">,</span>
+            <span class="nv">environment</span><span class="p">:</span> <span class="o">.</span><span class="nf">init</span><span class="p">()</span>
+        <span class="p">)</span>
+
+        <span class="k">await</span> <span class="kt">XCTAssertStateChange</span><span class="p">(</span>
+            <span class="nv">store</span><span class="p">:</span> <span class="n">store</span><span class="p">,</span>
+            <span class="nv">events</span><span class="p">:</span> <span class="p">[</span>
+                <span class="o">.</span><span class="n">increment</span><span class="p">,</span>
+                <span class="o">.</span><span class="n">decrement</span><span class="p">,</span>
+                <span class="o">.</span><span class="n">incrementWithDelay</span>
+            <span class="p">],</span>
+            <span class="nv">matches</span><span class="p">:</span> <span class="p">[</span>
+                <span class="o">.</span><span class="nf">init</span><span class="p">(),</span>
+                <span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="nv">count</span><span class="p">:</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="nv">count</span><span class="p">:</span> <span class="mi">0</span><span class="p">),</span>
+                <span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="nv">count</span><span class="p">:</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+<h2 id='other-libraries' class='heading'>Other libraries</h2>
+
+<ul>
+<li><a href="https://github.com/reddavis/Papyrus">Papyrus</a> - Papyrus aims to hit the sweet spot between saving raw API responses to the file system and a fully fledged database like Realm.</li>
+<li><a href="https://github.com/reddavis/Asynchrone">Asynchrone</a> - Extensions and additions to AsyncSequence, AsyncStream and AsyncThrowingStream.</li>
+<li><a href="https://github.com/reddavis/Validate">Validate</a> - A property wrapper that can validate the property it wraps.</li>
+<li><a href="https://github.com/reddavis/Kyu">Kyu</a> - A persistent queue system in Swift.</li>
+<li><a href="https://github.com/reddavis/FloatingLabelTextFieldStyle">FloatingLabelTextFieldStyle</a> - A floating label style for SwiftUI&rsquo;s TextField.</li>
+<li><a href="https://github.com/reddavis/Panel">Panel</a> - A panel component similar to the iOS Airpod battery panel.</li>
+</ul>
+<h2 id='license' class='heading'>License</h2>
+
+<p>Whatevs.</p>
+
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2022 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2022-01-10)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</html>
