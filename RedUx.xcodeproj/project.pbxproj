@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A40B6E61278F00A900CA6502 /* Asynchrone in Frameworks */ = {isa = PBXBuildFile; productRef = A40B6E60278F00A900CA6502 /* Asynchrone */; };
 		A425FB70275F9769002AFD72 /* ReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A425FB6F275F9769002AFD72 /* ReducerTests.swift */; };
-		A45E0EC52774D814006B64E1 /* Asynchrone in Frameworks */ = {isa = PBXBuildFile; productRef = A45E0EC42774D814006B64E1 /* Asynchrone */; };
 		A47E64A7267A1054005E265C /* RedUx.docc in Sources */ = {isa = PBXBuildFile; fileRef = A47E64A6267A1054005E265C /* RedUx.docc */; };
 		A47E64AD267A1054005E265C /* RedUx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A47E64A2267A1054005E265C /* RedUx.framework */; };
 		A47E64B3267A1054005E265C /* RedUx.h in Headers */ = {isa = PBXBuildFile; fileRef = A47E64A5267A1054005E265C /* RedUx.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -114,7 +114,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A45E0EC52774D814006B64E1 /* Asynchrone in Frameworks */,
+				A40B6E61278F00A900CA6502 /* Asynchrone in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -351,7 +351,7 @@
 			);
 			name = RedUx;
 			packageProductDependencies = (
-				A45E0EC42774D814006B64E1 /* Asynchrone */,
+				A40B6E60278F00A900CA6502 /* Asynchrone */,
 			);
 			productName = RedUx;
 			productReference = A47E64A2267A1054005E265C /* RedUx.framework */;
@@ -469,7 +469,7 @@
 			);
 			mainGroup = A47E6498267A1054005E265C;
 			packageReferences = (
-				A45E0EC32774D814006B64E1 /* XCRemoteSwiftPackageReference "Asynchrone" */,
+				A40B6E5F278F00A900CA6502 /* XCRemoteSwiftPackageReference "Asynchrone" */,
 			);
 			productRefGroup = A47E64A3267A1054005E265C /* Products */;
 			projectDirPath = "";
@@ -654,10 +654,12 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
+				SDKROOT = "";
+				SUPPORTED_PLATFORMS = "macosx iphoneos appletvos watchos iphonesimulator appletvsimulator watchsimulator appletvos";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -712,9 +714,11 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				SDKROOT = iphoneos;
+				SDKROOT = "";
+				SUPPORTED_PLATFORMS = "macosx iphoneos appletvos watchos iphonesimulator appletvsimulator watchsimulator appletvos";
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
@@ -741,6 +745,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.reddavis.RedUx;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -771,6 +776,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.reddavis.RedUx;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -800,7 +806,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.reddavis.RedUxTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = "";
-				SUPPORTED_PLATFORMS = "macosx watchos macosx iphonesimulator iphoneos appletvsimulator appletvos";
+				SUPPORTED_PLATFORMS = "macosx watchsimulator watchos iphonesimulator iphoneos appletvsimulator appletvos";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -824,7 +830,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.reddavis.RedUxTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = "";
-				SUPPORTED_PLATFORMS = "macosx watchos macosx iphonesimulator iphoneos appletvsimulator appletvos";
+				SUPPORTED_PLATFORMS = "macosx watchsimulator watchos iphonesimulator iphoneos appletvsimulator appletvos";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1061,20 +1067,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		A45E0EC32774D814006B64E1 /* XCRemoteSwiftPackageReference "Asynchrone" */ = {
+		A40B6E5F278F00A900CA6502 /* XCRemoteSwiftPackageReference "Asynchrone" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/reddavis/Asynchrone";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.10.0;
+				minimumVersion = 0.9.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		A45E0EC42774D814006B64E1 /* Asynchrone */ = {
+		A40B6E60278F00A900CA6502 /* Asynchrone */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A45E0EC32774D814006B64E1 /* XCRemoteSwiftPackageReference "Asynchrone" */;
+			package = A40B6E5F278F00A900CA6502 /* XCRemoteSwiftPackageReference "Asynchrone" */;
 			productName = Asynchrone;
 		};
 /* End XCSwiftPackageProductDependency section */
