@@ -4,8 +4,7 @@ import Foundation
 
 /// A reducer is responsible for taking an event and deciding how the state should be changed and
 /// whether any effects should be executed.
-public struct Reducer<State, Event, Environment>
-{
+public struct Reducer<State, Event, Environment> {
     // Static
     
     /// An empty reducer. Useful for SwiftUI's previews.
@@ -34,8 +33,7 @@ public struct Reducer<State, Event, Environment>
         state: inout State,
         event: Event,
         environment: Environment
-    ) -> AnyAsyncSequenceable<Event>?
-    {
+    ) -> AnyAsyncSequenceable<Event>? {
         self.reduce(&state, event, environment)
     }
 }
@@ -76,7 +74,11 @@ extension Reducer {
 
 // MARK: Combine
 
-infix operator <>
+precedencegroup CombineReducerOperatorPrecedence {
+    associativity: left
+}
+infix operator <>: CombineReducerOperatorPrecedence
+
 extension Reducer {
     /// Combines two reducers of the same `State`, `Event` and `Environment` into one.
     ///
