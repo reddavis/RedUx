@@ -31,7 +31,7 @@ extension Store {
             set: { scopedState, transaction in
                 guard transaction.animation == nil else {
                     _ = SwiftUI.withTransaction(transaction) {
-                        Task.detached {
+                        Task {
                             await MainActor.run {
                                 self.send(event(scopedState))
                             }
@@ -40,7 +40,7 @@ extension Store {
                     return
                 }
                 
-                Task.detached {
+                Task {
                     await MainActor.run {
                         self.send(event(scopedState))
                     }
