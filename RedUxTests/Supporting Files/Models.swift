@@ -43,22 +43,22 @@ struct Environment { }
 
 // MARK: Reducers
 
-let reducer
-    =
-    mainReducer
-    <>
-    subReducer.pull(
-        state: \.subState,
-        localEvent: { event in
-            guard case let Event.subEvent(subEvent) = event else { return nil }
-            return subEvent
-        },
-        appEvent: { .subEvent($0) },
-        environment: { $0 }
-    )
+let reducer =
+mainReducer
+<>
+subReducer.pull(
+    state: \.subState,
+    localEvent: { event in
+        guard case let Event.subEvent(subEvent) = event else { return nil }
+        return subEvent
+    },
+    appEvent: { .subEvent($0) },
+    environment: { $0 }
+)
 
 let mainReducer: Reducer<State, Event, Environment> = .init { state, event, environment in
     state.eventsReceived.append(event)
+    print("main reducer -- appeded events receive \(event)")
     
     switch event
     {
@@ -78,11 +78,13 @@ let mainReducer: Reducer<State, Event, Environment> = .init { state, event, envi
 
 let subReducer: Reducer<SubState, SubEvent, Environment> = .init { state, event, environment in
     state.eventsReceived.append(event)
+    print("sub reducer -- appeded events receive \(event)")
     
     switch event
     {
     case .setValue(let value):
         state.value = value
+        print("sub reducer -- changed valued \(event)")
         return .none
     }
 }

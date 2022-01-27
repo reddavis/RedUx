@@ -1,4 +1,4 @@
-import Combine
+import Asynchrone
 import RedUx
 import XCTest
 
@@ -20,18 +20,15 @@ public func XCTAssertStateChange<State: Equatable, Event, Environment>(
     timeout: TimeInterval = 5.0,
     file: StaticString = #filePath,
     line: UInt = #line
-) async
-{
-    var cancellables = Set<AnyCancellable>()
-    var states = [State]()
-    store.$state
+) async {
+    // Add initial state
+    var states: [State] = [store.state]
+    store.stateSequence
         .removeDuplicates()
         .sink { states.append($0) }
-        .store(in: &cancellables)
     
-    for event in events
-    {
-        await store.send(event)
+    for event in events {
+        store.send(event)
     }
     
     await _XCTAssertEventuallyEqualStates(
@@ -53,20 +50,17 @@ private func _XCTAssertEventuallyEqualStates<State: Equatable>(
     timeout: TimeInterval = 5.0,
     file: StaticString = #filePath,
     line: UInt = #line
-) async
-{
+) async {
     let handle = Task { () -> Result<Void, _XCTError> in
         let timeoutDate = Date(timeIntervalSinceNow: timeout)
         var resultOne: [State] = []
         var resultTwo: [State] = []
         
-        repeat
-        {
+        repeat {
             resultOne = await expressionOne()
             resultTwo = await expressionTwo()
             
-            if resultOne == resultTwo
-            {
+            if resultOne == resultTwo {
                 return .success(Void())
             }
             
@@ -81,8 +75,7 @@ private func _XCTAssertEventuallyEqualStates<State: Equatable>(
     }
     
     let result = await handle.value
-    switch result
-    {
+    switch result {
     case .success:
         return
     case .failure(let error):
@@ -98,8 +91,7 @@ private func _XCTAssertEventuallyEqualStates<State: Equatable>(
 
 // MARK: XCTError
 
-private struct _XCTError: Error
-{
+private struct _XCTError: Error {
     let message: String
     
     var localizedDescription: String {
@@ -108,13 +100,11 @@ private struct _XCTError: Error
     
     // MARK: Initialization
     
-    init(_ message: String)
-    {
+    init(_ message: String) {
         self.message = message
     }
     
-    init<State: Equatable>(stateChanges: [State], stateChangesExpected: [State])
-    {
+    init<State: Equatable>(stateChanges: [State], stateChangesExpected: [State]) {
         self.init(
 """
 

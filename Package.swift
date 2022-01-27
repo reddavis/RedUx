@@ -21,7 +21,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/reddavis/Asynchrone", from: "0.10.0")
+        .package(url: "https://github.com/reddavis/Asynchrone", from: "0.12.0")
     ],
     targets: [
         .target(
@@ -34,6 +34,9 @@ let package = Package(
         ),
         .target(
             name: "RedUxTestUtilities",
+            dependencies: [
+                .product(name: "Asynchrone", package: "Asynchrone")
+            ],
             dependencies: ["RedUx"],
             path: "RedUxTestUtilities"
         ),
