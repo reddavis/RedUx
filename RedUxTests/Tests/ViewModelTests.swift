@@ -75,8 +75,9 @@ final class ViewModelTests: XCTestCase {
             value: \.value,
             event: .setValueToA
         )
-
         XCTAssertNil(self.store.state.value)
+        
+        // trigger the .setValueToA event.
         binding.wrappedValue = "whatever"
         
         await XCTAssertEventuallyEqual(

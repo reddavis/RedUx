@@ -46,6 +46,7 @@ final class StoreTests: XCTestCase {
             environment: { $0 }
         )
         
+        XCTAssertNil(scopedStore.state.value)
         scopedStore.send(.setValue("a"))
         
         // Check scoped store's value changes

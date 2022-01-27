@@ -26,18 +26,13 @@ let package = Package(
     targets: [
         .target(
             name: "RedUx",
-            dependencies: [
-                .product(name: "Asynchrone", package: "Asynchrone")
-            ],
+            dependencies: ["Asynchrone"],
             path: "RedUx",
             exclude: ["Supporting Files/RedUx.docc"]
         ),
         .target(
             name: "RedUxTestUtilities",
-            dependencies: [
-                .product(name: "Asynchrone", package: "Asynchrone")
-            ],
-            dependencies: ["RedUx"],
+            dependencies: ["RedUx", "Asynchrone"],
             path: "RedUxTestUtilities"
         ),
         .testTarget(

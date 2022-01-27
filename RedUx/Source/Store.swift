@@ -99,8 +99,12 @@ extension Store {
         )
         
         // Propagate changes to state to scoped store.
-        scopedStore.parentStatePropagationTask = self.stateSequence.sink { [weak scopedStore] in
-            scopedStore?.state = toScopedState($0)
+        scopedStore.parentStatePropagationTask = Task { [stateSequence, weak scopedStore] in
+            scopedStore?.state = toScopedState(self.state)
+
+            for await state in stateSequence {
+                scopedStore?.state = toScopedState(state)
+            }
         }
 
         return scopedStore
