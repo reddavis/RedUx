@@ -1,5 +1,4 @@
 import Asynchrone
-import Combine
 import Foundation
 import SwiftUI
 
@@ -8,18 +7,23 @@ import SwiftUI
 ///
 /// Generally an application will have one store and then use the scope function to create sub stores for
 /// different components of the app.
-@dynamicMemberLookup
-public final class Store<State, Event, Environment>: ObservableObject {
+public final class Store<State, Event, Environment> {
     
     /// The state of the store.
-    @Published private(set) public var state: State
+    public private(set) var state: State {
+        didSet {
+            self._stateSequence.yield(self.state)
+        }
+    }
     
-    /// The environment.
-    public let environment: Environment
+    /// A sequence that emits state changes.
+    public let stateSequence: AnyAsyncSequenceable<State>
     
     // Private
     private let reducer: (inout State, Event) -> AnyAsyncSequenceable<Event>?
-    private var parentStatePropagationCancellable: AnyCancellable?
+    private let environment: Environment
+    private var parentStatePropagationTask: Task<Void, Error>?
+    private let _stateSequence: PassthroughAsyncSequence<State> = .init()
     
     // MARK: Initialization
     
@@ -46,27 +50,22 @@ public final class Store<State, Event, Environment>: ObservableObject {
         environment: Environment
     ) {
         self.state = state
+        self.stateSequence = self._stateSequence.shared().eraseToAnyAsyncSequenceable()
+        
         self.reducer = reducer
         self.environment = environment
-    }
-    
-    // MARK: State
-    
-    public subscript<U>(dynamicMember keyPath: KeyPath<State, U>) -> U {
-        self.state[keyPath: keyPath]
     }
     
     // MARK: Events
     
     /// Send an event through the store's reducer.
     /// - Parameter event: The event.
-    @MainActor
     public func send(_ event: Event) {
         guard let stream = self.reducer(&self.state, event) else { return }
         
-        Task.detached {
+        Task {
             for await event in stream {
-                await self.send(event)
+                self.send(event)
             }
         }
     }
@@ -74,8 +73,7 @@ public final class Store<State, Event, Environment>: ObservableObject {
 
 // MARK: Scope
 
-extension Store
-{
+extension Store {
     /// Create a sub store from the current store.
     ///
     /// The scoped store derives it's state and environment from the parent store.
@@ -94,24 +92,21 @@ extension Store
         let scopedStore = Store<ScopedState, ScopedEvent, ScopedEnvironment>(
             state: toScopedState(self.state),
             reducer: .init { state, event, environment in
-                Task.detached {
-                    await MainActor.run {
-                        self.send(fromScopedEvent(event))
-                    }
-                }
-
+                self.send(fromScopedEvent(event))
                 return .none
             },
             environment: toScopedEnvironment(self.environment)
         )
         
         // Propagate changes to state to scoped store.
-        scopedStore.parentStatePropagationCancellable = self.$state
-            .dropFirst()
-            .sink { [weak scopedStore] state in
+        scopedStore.parentStatePropagationTask = Task { [stateSequence, weak scopedStore] in
+            scopedStore?.state = toScopedState(self.state)
+
+            for await state in stateSequence {
                 scopedStore?.state = toScopedState(state)
             }
-        
+        }
+
         return scopedStore
     }
 }

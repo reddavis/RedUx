@@ -2,65 +2,16 @@
   "warnings": [
     {
       "file": "/Users/reddavis/Documents/Projects/RedUx/RedUx/Source/Reducer.swift",
-      "line": 5,
-      "symbol": "Reducer",
-      "symbol_kind": "source.lang.swift.decl.struct",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/reddavis/Documents/Projects/RedUx/RedUx/Source/Reducer.swift",
-      "line": 14,
+      "line": 18,
       "symbol": "Reducer.Reduce",
       "symbol_kind": "source.lang.swift.decl.typealias",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/reddavis/Documents/Projects/RedUx/RedUx/Source/Reducer.swift",
-      "line": 42,
-      "symbol": "Reducer",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/reddavis/Documents/Projects/RedUx/RedUx/Source/Reducer.swift",
-      "line": 77,
-      "symbol": "Reducer",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/reddavis/Documents/Projects/RedUx/RedUx/Source/Store/Store.swift",
-      "line": 4,
-      "symbol": "Store",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/reddavis/Documents/Projects/RedUx/RedUx/Source/Store/Store.swift",
-      "line": 8,
-      "symbol": "Store",
-      "symbol_kind": "source.lang.swift.decl.class",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/reddavis/Documents/Projects/RedUx/RedUx/Source/Store/Store.swift",
-      "line": 50,
+      "line": 55,
       "symbol": "Store.subscript(dynamicMember:)",
       "symbol_kind": "source.lang.swift.decl.function.subscript",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/reddavis/Documents/Projects/RedUx/RedUx/Source/Store/Store.swift",
-      "line": 72,
-      "symbol": "Store",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/reddavis/Documents/Projects/RedUx/RedUx/Source/Store/Store.swift",
-      "line": 74,
-      "symbol": "Store.scope(state:event:environment:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     }
   ],

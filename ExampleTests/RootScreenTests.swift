@@ -4,9 +4,8 @@ import RedUxTestUtilities
 
 
 class RootScreenTests: XCTestCase {
-    @MainActor
     func testStateChange() async {
-        let store = RootScreen.Store.make()
+        let store = RootScreen.LocalStore.make()
         
         await XCTAssertStateChange(
             store: store,

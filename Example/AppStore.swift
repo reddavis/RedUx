@@ -39,12 +39,27 @@ fileprivate let reducer: Reducer<AppState, AppEvent, AppEnvironment> = Reducer {
     case .incrementWithDelay:
         return AsyncStream { continuation in
             // Really taxing shiz
-            await Task.sleep(2 * 1_000_000_000)
+            try? await Task.sleep(nanoseconds: 2 * 1_000_000_000)
             continuation.yield(.increment)
             continuation.finish()
         }.eraseToAnyAsyncSequenceable()
+    case .toggleIsPresentingSheet:
+        state.isPresentingSheet.toggle()
+        return .none
+    case .details:
+        return .none
     }
 }
+<>
+detailsReducer.pull(
+    state: \.details,
+    localEvent: {
+        guard case AppEvent.details(let localEvent) = $0 else { return nil }
+        return localEvent
+    },
+    appEvent: AppEvent.details,
+    environment: { $0 }
+)
 
 
 
@@ -52,6 +67,8 @@ fileprivate let reducer: Reducer<AppState, AppEvent, AppEnvironment> = Reducer {
 
 struct AppState: Equatable {
     var count = 0
+    var isPresentingSheet = false
+    var details: DetailsState = .init()
 }
 
 
@@ -62,6 +79,8 @@ enum AppEvent {
     case increment
     case decrement
     case incrementWithDelay
+    case toggleIsPresentingSheet
+    case details(DetailsEvent)
 }
 
 
