@@ -28,38 +28,31 @@ Documentation can be found [here](https://determined-dubinsky-ed15d5.netlify.app
 
 ## Usage
 
-### Store definition
+### App store
 
 ```swift
 import RedUx
-import SwiftUI
 
 
-enum RootScreen
-{
-    typealias Store = RedUx.Store<State, Event, Environment>
-    
-    static func make() -> some View
-    {
-        ContentView(
-            store: Store(
-                state: .init(),
-                reducer: self.reducer,
-                environment: .init()
-            )
+typealias AppStore = RedUx.Store<AppState, AppEvent, AppEnvironment>
+
+
+extension AppStore {
+    static func make() -> AppStore {
+        Store(
+            state: .init(),
+            reducer: reducer,
+            environment: .init()
         )
     }
     
     static func mock(
-        state: State
-    ) -> some View
-    {
-        ContentView(
-            store: Store(
-                state: state,
-                reducer: .empty,
-                environment: .init()
-            )
+        state: AppState
+    ) -> AppStore {
+        Store(
+            state: state,
+            reducer: .empty,
+            environment: .init()
         )
     }
 }
@@ -68,102 +61,139 @@ enum RootScreen
 
 // MARK: Reducer
 
-extension RootScreen
-{
-    static let reducer: Reducer<State, Event, Environment> = Reducer { state, event, environment in
-        switch event
-        {
-        case .increment:
-            state.count += 1
-            return .none
-        case .decrement:
-            state.count -= 1
-            return .none
-        case .incrementWithDelay:
-            return AsyncStream { continuation in
-                // Really taxing shiz
-                await Task.sleep(2 * 1_000_000_000)
-                continuation.yield(.increment)
-                continuation.finish()
-            }.eraseToAnyAsyncSequenceable()
-        }
+fileprivate let reducer: Reducer<AppState, AppEvent, AppEnvironment> = Reducer { state, event, environment in
+    switch event {
+    case .increment:
+        state.count += 1
+        return .none
+    case .decrement:
+        state.count -= 1
+        return .none
+    case .incrementWithDelay:
+        return AsyncStream { continuation in
+            // Really taxing shiz
+            try? await Task.sleep(nanoseconds: 2 * 1_000_000_000)
+            continuation.yield(.increment)
+            continuation.finish()
+        }.eraseToAnyAsyncSequenceable()
+    case .toggleIsPresentingSheet:
+        state.isPresentingSheet.toggle()
+        return .none
+    case .details:
+        return .none
     }
 }
+<>
+detailsReducer.pull(
+    state: \.details,
+    localEvent: {
+        guard case AppEvent.details(let localEvent) = $0 else { return nil }
+        return localEvent
+    },
+    appEvent: AppEvent.details,
+    environment: { $0 }
+)
 
 
 
 // MARK: State
 
-extension RootScreen
-{
-    struct State: Equatable
-    {
-        var count = 0
-    }
+struct AppState: Equatable {
+    var count = 0
+    var isPresentingSheet = false
+    var details: DetailsState = .init()
 }
 
 
 
 // MARK: Event
 
-extension RootScreen
-{
-    enum Event
-    {
-        case increment
-        case decrement
-        case incrementWithDelay
-    }
+enum AppEvent {
+    case increment
+    case decrement
+    case incrementWithDelay
+    case toggleIsPresentingSheet
+    case details(DetailsEvent)
 }
 
 
 
 // MARK: Environment
 
-extension RootScreen
-{
-    struct Environment { }
+struct AppEnvironment {
+    static var mock: AppEnvironment { .init() }
 }
+
 
 ```
 
-### View
+### Root screen
 
 ```swift
 import SwiftUI
+import RedUx
 
 
-extension RootScreen
-{
-    struct ContentView: View
-    {
-        @StateObject var store: Store
-        
-        // MARK: Body
-        
-        var body: some View {
-            VStack(alignment: .center) {
-                Text(verbatim: .init(self.store.count))
-                    .font(.largeTitle)
-                
-                HStack {
-                    Button("Decrement") {
-                        self.store.send(.decrement)
-                    }
-                    .buttonStyle(.bordered)
-                    
-                    Button("Increment") {
-                        self.store.send(.increment)
-                    }
-                    .buttonStyle(.bordered)
-                    
-                    Button("Delayed increment") {
-                        self.store.send(.incrementWithDelay)
-                    }
-                    .buttonStyle(.bordered)
+struct RootScreen: View, RedUxable {
+    typealias LocalState = AppState
+    typealias LocalEvent = AppEvent
+    typealias LocalEnvironment = AppEnvironment
+    
+    let store: LocalStore
+    @StateObject var viewModel: LocalViewModel
+    
+    // MARK: Initialization
+    
+    init(store: LocalStore, viewModel: LocalViewModel) {
+        self.store = store
+        self._viewModel = .init(wrappedValue: viewModel)
+    }
+    
+    // MARK: Body
+    
+    var body: some View {
+        VStack(alignment: .center) {
+            Text(verbatim: .init(self.viewModel.count))
+                .font(.largeTitle)
+            
+            HStack {
+                Button("Decrement") {
+                    self.viewModel.send(.decrement)
                 }
+                .buttonStyle(.bordered)
+                
+                Button("Increment") {
+                    self.viewModel.send(.increment)
+                }
+                .buttonStyle(.bordered)
+                
+                Button("Delayed increment") {
+                    self.viewModel.send(.incrementWithDelay)
+                }
+                .buttonStyle(.bordered)
             }
+            
+            Button("Present sheet") {
+                self.viewModel.send(.toggleIsPresentingSheet)
+            }
+            .buttonStyle(.bordered)
         }
+        .sheet(
+            isPresented: self.viewModel.binding(
+                value: \.isPresentingSheet,
+                event: .toggleIsPresentingSheet
+            ),
+            onDismiss: nil,
+            content: {
+                DetailsScreen.make(
+                    store: self.store.scope(
+                        state: \.details,
+                        event: AppEvent.details,
+                        environment: { $0 }
+                    )
+                )
+            }
+        )
     }
 }
 
@@ -171,17 +201,16 @@ extension RootScreen
 
 // MARK: Preview
 
-struct RootScreen_ContentView_Previews: PreviewProvider
-{
+struct RootScreen_Previews: PreviewProvider {
     static var previews: some View {
         RootScreen.mock(
             state: .init(
                 count: 0
-            )
+            ),
+            environment: .mock
         )
     }
 }
-
 ```
 
 ### Tests
@@ -192,16 +221,9 @@ import RedUxTestUtilities
 @testable import Example
 
 
-class RootScreenTests: XCTestCase
-{
-    @MainActor
-    func testStateChange() async
-    {
-        let store = RootScreen.Store(
-            state: .init(),
-            reducer: RootScreen.reducer,
-            environment: .init()
-        )
+class RootScreenTests: XCTestCase {
+    func testStateChange() async {
+        let store = RootScreen.LocalStore.make()
         
         await XCTAssertStateChange(
             store: store,
@@ -219,7 +241,6 @@ class RootScreenTests: XCTestCase
         )
     }
 }
-
 ```
 
 ## Other libraries

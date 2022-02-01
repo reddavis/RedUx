@@ -5,9 +5,9 @@
         "package": "Asynchrone",
         "repositoryURL": "https://github.com/reddavis/Asynchrone",
         "state": {
-          "branch": null,
-          "revision": "08864a0ef0823c53e7c098a0701096bb4d6efc26",
-          "version": "0.11.0"
+          "branch": "main",
+          "revision": "7de79df5c859397058ee788b66e8aa747c70924f",
+          "version": null
         }
       }
     ]
