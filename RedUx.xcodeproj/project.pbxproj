@@ -39,6 +39,8 @@
 		A4C06AE927AAACC600C3B5D7 /* StateAssertions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C06AE827AAACC600C3B5D7 /* StateAssertions.swift */; };
 		A4C3619A276A086A00511525 /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C36199276A086A00511525 /* AppStore.swift */; };
 		A4D2CFA026C0FC34008D25DE /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D2CF9F26C0FC34008D25DE /* View+Extension.swift */; };
+		A4C3619A276A086A00511525 /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C36199276A086A00511525 /* AppStore.swift */; };
+		A4D2CFA026C0FC34008D25DE /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D2CF9F26C0FC34008D25DE /* View+Extension.swift */; };
 		A4EE8D352763B4ED00BE7F55 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4EE8D342763B4ED00BE7F55 /* Models.swift */; };
 /* End PBXBuildFile section */
 
