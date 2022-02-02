@@ -31,9 +31,16 @@
 		A48E088A2743F4B4008090E5 /* RedUxTestUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A48E08822743F1DB008090E5 /* RedUxTestUtilities.framework */; };
 		A48E088C2743F4EE008090E5 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A48E088B2743F4EE008090E5 /* XCTest.framework */; };
 		A4B9E5A727A269590000ED07 /* RedUxable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B9E5A627A269590000ED07 /* RedUxable.swift */; };
+		A4C06AE027AA8EBA00C3B5D7 /* XCTAssertStatesEventuallyEqualError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C06ADF27AA8EBA00C3B5D7 /* XCTAssertStatesEventuallyEqualError.swift */; };
+		A4C06AE127AAA05200C3B5D7 /* Assertions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48E085C2743D1FE008090E5 /* Assertions.swift */; };
+		A4C06AE227AAA05200C3B5D7 /* XCTAssertStatesEventuallyEqualError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C06ADF27AA8EBA00C3B5D7 /* XCTAssertStatesEventuallyEqualError.swift */; };
+		A4C06AE427AAA18E00C3B5D7 /* XCTAssertEventuallyEqualError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C06AE327AAA18E00C3B5D7 /* XCTAssertEventuallyEqualError.swift */; };
+		A4C06AE527AAA32600C3B5D7 /* XCTAssertEventuallyEqualError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C06AE327AAA18E00C3B5D7 /* XCTAssertEventuallyEqualError.swift */; };
+		A4C06AE927AAACC600C3B5D7 /* StateAssertions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C06AE827AAACC600C3B5D7 /* StateAssertions.swift */; };
 		A4C3619A276A086A00511525 /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C36199276A086A00511525 /* AppStore.swift */; };
 		A4D2CFA026C0FC34008D25DE /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D2CF9F26C0FC34008D25DE /* View+Extension.swift */; };
-		A4D2CFA226C13B31008D25DE /* Assertion.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D2CFA126C13B31008D25DE /* Assertion.swift */; };
+		A4C3619A276A086A00511525 /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C36199276A086A00511525 /* AppStore.swift */; };
+		A4D2CFA026C0FC34008D25DE /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D2CF9F26C0FC34008D25DE /* View+Extension.swift */; };
 		A4EE8D352763B4ED00BE7F55 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4EE8D342763B4ED00BE7F55 /* Models.swift */; };
 /* End PBXBuildFile section */
 
@@ -108,9 +115,11 @@
 		A48E08842743F1DB008090E5 /* RedUxTestUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RedUxTestUtilities.h; sourceTree = "<group>"; };
 		A48E088B2743F4EE008090E5 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		A4B9E5A627A269590000ED07 /* RedUxable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedUxable.swift; sourceTree = "<group>"; };
+		A4C06ADF27AA8EBA00C3B5D7 /* XCTAssertStatesEventuallyEqualError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTAssertStatesEventuallyEqualError.swift; sourceTree = "<group>"; };
+		A4C06AE327AAA18E00C3B5D7 /* XCTAssertEventuallyEqualError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTAssertEventuallyEqualError.swift; sourceTree = "<group>"; };
+		A4C06AE827AAACC600C3B5D7 /* StateAssertions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateAssertions.swift; sourceTree = "<group>"; };
 		A4C36199276A086A00511525 /* AppStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore.swift; sourceTree = "<group>"; };
 		A4D2CF9F26C0FC34008D25DE /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
-		A4D2CFA126C13B31008D25DE /* Assertion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assertion.swift; sourceTree = "<group>"; };
 		A4D2CFA526C16A69008D25DE /* Package.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		A4EE8D342763B4ED00BE7F55 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -290,10 +299,29 @@
 		A48E08832743F1DB008090E5 /* RedUxTestUtilities */ = {
 			isa = PBXGroup;
 			children = (
-				A48E085C2743D1FE008090E5 /* Assertions.swift */,
+				A4C06AE727AAACB200C3B5D7 /* Assertions */,
+				A4C06AE627AAACA700C3B5D7 /* Errors */,
 				A48E08842743F1DB008090E5 /* RedUxTestUtilities.h */,
 			);
 			path = RedUxTestUtilities;
+			sourceTree = "<group>";
+		};
+		A4C06AE627AAACA700C3B5D7 /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				A4C06ADF27AA8EBA00C3B5D7 /* XCTAssertStatesEventuallyEqualError.swift */,
+				A4C06AE327AAA18E00C3B5D7 /* XCTAssertEventuallyEqualError.swift */,
+			);
+			path = Errors;
+			sourceTree = "<group>";
+		};
+		A4C06AE727AAACB200C3B5D7 /* Assertions */ = {
+			isa = PBXGroup;
+			children = (
+				A48E085C2743D1FE008090E5 /* Assertions.swift */,
+				A4C06AE827AAACC600C3B5D7 /* StateAssertions.swift */,
+			);
+			path = Assertions;
 			sourceTree = "<group>";
 		};
 		A4D2CF9E26C0FC1F008D25DE /* Extensions */ = {
@@ -325,7 +353,6 @@
 		A4EE8D332763B45500BE7F55 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				A4D2CFA126C13B31008D25DE /* Assertion.swift */,
 				A4EE8D342763B4ED00BE7F55 /* Models.swift */,
 			);
 			path = "Supporting Files";
@@ -559,10 +586,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A4D2CFA226C13B31008D25DE /* Assertion.swift in Sources */,
+				A4C06AE127AAA05200C3B5D7 /* Assertions.swift in Sources */,
+				A4C06AE527AAA32600C3B5D7 /* XCTAssertEventuallyEqualError.swift in Sources */,
 				A425FB70275F9769002AFD72 /* ReducerTests.swift in Sources */,
 				A40EE2A527A044FE00663E6C /* ViewModelTests.swift in Sources */,
 				A47E64C5267A10F3005E265C /* StoreTests.swift in Sources */,
+				A4C06AE227AAA05200C3B5D7 /* XCTAssertStatesEventuallyEqualError.swift in Sources */,
 				A4EE8D352763B4ED00BE7F55 /* Models.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -591,6 +620,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A4C06AE927AAACC600C3B5D7 /* StateAssertions.swift in Sources */,
+				A4C06AE027AA8EBA00C3B5D7 /* XCTAssertStatesEventuallyEqualError.swift in Sources */,
+				A4C06AE427AAA18E00C3B5D7 /* XCTAssertEventuallyEqualError.swift in Sources */,
 				A48E08892743F1EB008090E5 /* Assertions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
