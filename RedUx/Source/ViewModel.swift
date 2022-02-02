@@ -57,6 +57,8 @@ public final class ViewModel<State: Equatable, Event>: ObservableObject {
         self._send = { store.send($0) }
         self.stateTask = Task { [weak self] in
             do {
+                self?.state = store.state
+                
                 for try await state in store.stateSequence.removeDuplicates() {
                     guard
                         let self = self,
