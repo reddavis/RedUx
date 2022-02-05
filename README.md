@@ -251,7 +251,3 @@ class RootScreenTests: XCTestCase {
 - [Kyu](https://github.com/reddavis/Kyu) - A persistent queue system in Swift.
 - [FloatingLabelTextFieldStyle](https://github.com/reddavis/FloatingLabelTextFieldStyle) - A floating label style for SwiftUI's TextField.
 - [Panel](https://github.com/reddavis/Panel) - A panel component similar to the iOS Airpod battery panel.
-
-## License
-
-Whatevs.
