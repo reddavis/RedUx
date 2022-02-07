@@ -6,7 +6,7 @@ import Foundation
 // MARK: Events
 
 enum Event: Equatable {
-    case setValue(String)
+    case setValue(String?)
     case subEvent(SubEvent)
     case setValueByEffect(String)
     case setValueToA
