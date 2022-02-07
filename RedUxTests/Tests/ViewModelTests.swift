@@ -90,4 +90,27 @@ final class ViewModelTests: XCTestCase {
             { [.setValueToA, .setValue("a")] }
         )
     }
+    
+    func testBindingRemovesDuplicateSetterCalls() async {
+        let binding = self.viewModel.binding(
+            value: \.value,
+            event: Event.setValue
+        )
+        XCTAssertNil(self.store.state.value)
+        
+        // trigger the .setValue event.
+        let value = "a value"
+        binding.wrappedValue = value
+        binding.wrappedValue = value
+        
+        await XCTAssertEventuallyEqual(
+            { self.store.state.value },
+            { value }
+        )
+        
+        await XCTAssertEventuallyEqual(
+            { self.store.state.eventsReceived },
+            { [.setValue(value)] }
+        )
+    }
 }
