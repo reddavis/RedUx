@@ -116,10 +116,16 @@ extension ViewModel {
     public func binding<ScopedState>(
         value: @escaping (State) -> ScopedState,
         event: @escaping (ScopedState) -> Event
-    ) -> Binding<ScopedState> {
-        Binding(
+    ) -> Binding<ScopedState> where ScopedState: Equatable {
+        var previousState: ScopedState? = nil
+        
+        return Binding(
             get: { value(self.state) },
             set: { scopedState, transaction in
+                // This is a work around where SwiftUI(?) calls the setter on the binding twice.
+                guard previousState != scopedState else { return }
+                previousState = scopedState
+                
                 guard transaction.animation == nil else {
                     _ = SwiftUI.withTransaction(transaction) {
                         self.send(event(scopedState))
@@ -160,7 +166,7 @@ extension ViewModel {
     public func binding<ScopedState>(
         value: @escaping (State) -> ScopedState,
         event: Event
-    ) -> Binding<ScopedState> {
+    ) -> Binding<ScopedState> where ScopedState: Equatable {
         self.binding(
             value: value,
             event: { _ in event }
