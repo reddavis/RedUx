@@ -18,9 +18,6 @@ In Xcode:
 3. Click `+`.
 4. Enter package URL: `https://github.com/reddavis/Redux`.
 5. Add `RedUx` to your app target.
-6. If you want the test utilities, add `RedUxTestUtilities` to your test target.
-
-![Example screenshot of Xcode](./Resources/Installation.png)
 
 ## Documentation
 
