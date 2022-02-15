@@ -14,10 +14,6 @@ let package = Package(
         .library(
             name: "RedUx",
             targets: ["RedUx"]
-        ),
-        .library(
-            name: "RedUxTestUtilities",
-            targets: ["RedUxTestUtilities"]
         )
     ],
     dependencies: [
@@ -29,11 +25,6 @@ let package = Package(
             dependencies: ["Asynchrone"],
             path: "RedUx",
             exclude: ["Supporting Files/RedUx.docc"]
-        ),
-        .target(
-            name: "RedUxTestUtilities",
-            dependencies: [.product(name: "RedUx", package: "RedUx"), "Asynchrone"],
-            path: "RedUxTestUtilities"
         ),
         .testTarget(
             name: "RedUxTests",
