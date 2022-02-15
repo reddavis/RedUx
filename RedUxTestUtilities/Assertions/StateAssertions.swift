@@ -20,7 +20,7 @@ public func XCTAssertStateChange<State: Equatable, Event, Environment>(
     timeout: TimeInterval = 5.0,
     file: StaticString = #filePath,
     line: UInt = #line
-) async {
+) {
     // Add initial state
     var states: [State] = [store.state]
     store.stateSequence
@@ -32,8 +32,8 @@ public func XCTAssertStateChange<State: Equatable, Event, Environment>(
     }
     
     XCTAssertEventuallyEqualStates(
-        { states },
-        { statesToMatch },
+        states,
+        statesToMatch,
         timeout: timeout,
         file: file,
         line: line
@@ -45,39 +45,42 @@ public func XCTAssertStateChange<State: Equatable, Event, Environment>(
 // MARK: XCTAssertEventuallyEqualStates
 
 private func XCTAssertEventuallyEqualStates<State: Equatable>(
-    _ expressionA: @escaping () async -> [State],
-    _ expressionB: @escaping () async -> [State],
+    _ expressionA: @autoclosure @escaping () -> [State],
+    _ expressionB: @autoclosure @escaping () -> [State],
     timeout: TimeInterval = 5.0,
     file: StaticString = #filePath,
     line: UInt = #line
-) async {
-    let timeoutDate = Date(timeIntervalSinceNow: timeout)
-    
-    while true {
-        let resultA = await expressionA()
-        let resultB = await expressionB()
+) {
+    Task.detached(priority: .low) {
+        let timeoutDate = Date(timeIntervalSinceNow: timeout)
         
-        switch resultA == resultB {
-        // All good!
-        case true:
-            return
-        // False and timed out.
-        case false where Date.now.compare(timeoutDate) == .orderedDescending:
-            let error = XCTAssertStatesEventuallyEqualError(
-                stateChanges: resultA,
-                stateChangesExpected: resultB
-            )
+        while true {
+            let resultA = expressionA()
+            let resultB = expressionB()
             
-            XCTFail(
-                error.message,
-                file: file,
-                line: line
-            )
-            return
-        // False but still within timeout limit.
-        case false:()
+            switch resultA == resultB {
+            // All good!
+            case true:
+                return
+            // False and timed out.
+            case false where Date.now.compare(timeoutDate) == .orderedDescending:
+                let error = XCTAssertStatesEventuallyEqualError(
+                    stateChanges: resultA,
+                    stateChangesExpected: resultB
+                )
+                
+                XCTFail(
+                    error.message,
+                    file: file,
+                    line: line
+                )
+                return
+            // False but still within timeout limit.
+            case false:()
+            }
+            
+            try? await Task.sleep(nanoseconds: 50_000_000)
+            await Task.yield()
         }
-        
-        try? await Task.sleep(nanoseconds: 100_000_000)
     }
 }
