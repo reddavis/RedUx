@@ -11,11 +11,11 @@ public struct Reducer<State, Event, Environment> {
     /// An empty reducer. Useful for SwiftUI's previews.
     /// - Returns: A reducer.
     public static var empty: Reducer<State, Event, Environment> {
-        .init { _, _, _ in .none }
+        .init { _, _, _ in }
     }
     
     // Public
-    public typealias Reduce = (inout State, Event, Environment) -> AnyAsyncSequenceable<Event>?
+    public typealias Reduce = (inout State, Event, Environment) -> Void
     
     // Private
     private let reduce: Reduce
@@ -34,7 +34,7 @@ public struct Reducer<State, Event, Environment> {
         state: inout State,
         event: Event,
         environment: Environment
-    ) -> AnyAsyncSequenceable<Event>? {
+    ) {
         self.reduce(&state, event, environment)
     }
 }
@@ -54,21 +54,17 @@ extension Reducer {
     /// - Returns: A `Reducer<AppState, AppEvent, AppEnvironment>`.
     public func pull<AppState, AppEvent, AppEnvironment>(
         state: WritableKeyPath<AppState, State>,
-        localEvent: @escaping (AppEvent) -> Event?,
+        event: @escaping (AppEvent) -> Event?,
         appEvent: @escaping (Event) -> AppEvent,
         environment: @escaping (AppEnvironment) -> Environment
     ) -> Reducer<AppState, AppEvent, AppEnvironment> {
-        .init { appState, event, appEnvironment in
-            guard let event = localEvent(event) else { return .none }
-            let eventStream = self.reduce(
+        .init { appState, appEvent, appEnvironment in
+            guard let event = event(appEvent) else { return }
+            self.reduce(
                 &appState[keyPath: state],
                 event,
                 environment(appEnvironment)
             )
-            
-            return eventStream?.map { event in
-                appEvent(event)
-            }.eraseToAnyAsyncSequenceable()
         }
     }
 }
@@ -93,18 +89,8 @@ extension Reducer {
         rhs: Reducer<State, Event, Environment>
     ) -> Reducer<State, Event, Environment> {
         .init { state, event, environment in
-            let streamA = lhs.reduce(&state, event, environment)
-            let streamB = rhs.reduce(&state, event, environment)
-            
-            if
-                let streamA = streamA,
-                let streamB = streamB {
-                return streamA
-                    .merge(with: streamB)
-                    .eraseToAnyAsyncSequenceable()
-            }
-            
-            return streamA ?? streamB ?? .none
+            lhs.reduce(&state, event, environment)
+            rhs.reduce(&state, event, environment)
         }
     }
 }

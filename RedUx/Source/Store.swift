@@ -20,10 +20,13 @@ public final class Store<State, Event, Environment> {
     public let stateSequence: AnyAsyncSequenceable<State>
     
     // Private
-    private let reducer: (inout State, Event) -> AnyAsyncSequenceable<Event>?
+    private let reducer: (inout State, Event, Environment) -> Void
     private let environment: Environment
     private var parentStatePropagationTask: Task<Void, Error>?
     private let _stateSequence: PassthroughAsyncSequence<State> = .init()
+    
+    private let middlewares: [AnyMiddleware<Event, Event, State>]
+    private var middlewareTasks: [Task<Void, Error>] = []
     
     // MARK: Initialization
     
@@ -35,25 +38,31 @@ public final class Store<State, Event, Environment> {
     public convenience init(
         state: State,
         reducer: Reducer<State, Event, Environment>,
-        environment: Environment
+        environment: Environment,
+        middlewares: [AnyMiddleware<Event, Event, State>]
     ) {
         self.init(
             state: state,
-            reducer: { reducer.execute(state: &$0, event: $1, environment: environment) },
-            environment: environment
+            reducer: { reducer.execute(state: &$0, event: $1, environment: $2) },
+            environment: environment,
+            middlewares: middlewares
         )
     }
     
     private init(
         state: State,
-        reducer: @escaping (inout State, Event) -> AnyAsyncSequenceable<Event>?,
-        environment: Environment
+        reducer: @escaping (inout State, Event, Environment) -> Void,
+        environment: Environment,
+        middlewares: [AnyMiddleware<Event, Event, State>]
     ) {
         self.state = state
         self.stateSequence = self._stateSequence.shared().eraseToAnyAsyncSequenceable()
         
         self.reducer = reducer
         self.environment = environment
+        self.middlewares = middlewares
+        
+        self.subscribeToMiddlewares()
     }
     
     // MARK: Events
@@ -61,12 +70,24 @@ public final class Store<State, Event, Environment> {
     /// Send an event through the store's reducer.
     /// - Parameter event: The event.
     public func send(_ event: Event) {
-        guard let stream = self.reducer(&self.state, event) else { return }
-        
         Task {
-            for await event in stream {
-                self.send(event)
+            for middleware in self.middlewares {
+                await middleware.execute(event: event, state: { self.state })
             }
+        }
+        
+        self.reducer(&self.state, event, self.environment)
+    }
+    
+    // MARK: Middleware
+    
+    private func subscribeToMiddlewares() {
+        self.middlewareTasks = self.middlewares.reduce(into: [Task<Void, Error>]()) { [weak self] results, middleware in
+            results.append(
+                middleware.outputStream.sink { event in
+                    self?.send(event)
+                }
+            )
         }
     }
 }
@@ -91,15 +112,15 @@ extension Store {
     ) -> Store<ScopedState, ScopedEvent, ScopedEnvironment> {
         let scopedStore = Store<ScopedState, ScopedEvent, ScopedEnvironment>(
             state: toScopedState(self.state),
-            reducer: .init { state, event, environment in
+            reducer: .init { _, event, _ in
                 self.send(fromScopedEvent(event))
-                return .none
             },
-            environment: toScopedEnvironment(self.environment)
+            environment: toScopedEnvironment(self.environment),
+            middlewares: []
         )
         
         // Propagate changes to state to scoped store.
-        scopedStore.parentStatePropagationTask = Task { [stateSequence, weak scopedStore] in
+        scopedStore.parentStatePropagationTask = Task(priority: .high) { [stateSequence, weak scopedStore] in
             scopedStore?.state = toScopedState(self.state)
 
             for await state in stateSequence {

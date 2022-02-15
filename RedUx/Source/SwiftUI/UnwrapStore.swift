@@ -44,13 +44,15 @@ struct UnwrapStore_Previews: PreviewProvider {
     static let nilStore: Store<String?, Event, Environment> = .init(
         state: nil,
         reducer: .empty,
-        environment: .init()
+        environment: .init(),
+        middlewares: []
     )
     
     static let store: Store<String?, Event, Environment> = .init(
         state: "hello",
         reducer: .empty,
-        environment: .init()
+        environment: .init(),
+        middlewares: []
     )
     
     static var previews: some View {
