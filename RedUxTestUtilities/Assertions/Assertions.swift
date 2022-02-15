@@ -10,40 +10,43 @@ import XCTest
 ///   - file: The file where this assertion is being called. Defaults to `#filePath`.
 ///   - line: The line in the file where this assertion is being called. Defaults to `#line`.
 public func XCTAssertEventuallyEqual<T: Equatable>(
-    _ expressionA: @escaping () async -> T?,
-    _ expressionB: @escaping () async -> T?,
+    _ expressionA: @escaping @autoclosure () -> T?,
+    _ expressionB: @escaping @autoclosure () -> T?,
     timeout: TimeInterval = 5.0,
     file: StaticString = #filePath,
     line: UInt = #line
-) async {
-    let timeoutDate = Date(timeIntervalSinceNow: timeout)
-    
-    while true {
-        let resultA = await expressionA()
-        let resultB = await expressionB()
+) {
+    Task.detached(priority: .low) {
+        let timeoutDate = Date(timeIntervalSinceNow: timeout)
         
-        switch resultA == resultB {
-        // All good!
-        case true:
-            return
-        // False and timed out.
-        case false where Date.now.compare(timeoutDate) == .orderedDescending:
-            let error = XCTAssertEventuallyEqualError(
-                resultA: resultA,
-                resultB: resultB
-            )
+        while true {
+            let resultA = expressionA()
+            let resultB = expressionB()
             
-            XCTFail(
-                error.message,
-                file: file,
-                line: line
-            )
-            return
-        // False but still within timeout limit.
-        case false:()
+            switch resultA == resultB {
+            // All good!
+            case true:
+                return
+            // False and timed out.
+            case false where Date.now.compare(timeoutDate) == .orderedDescending:
+                let error = XCTAssertEventuallyEqualError(
+                    resultA: resultA,
+                    resultB: resultB
+                )
+                
+                XCTFail(
+                    error.message,
+                    file: file,
+                    line: line
+                )
+                return
+            // False but still within timeout limit.
+            case false:()
+            }
+            
+            try? await Task.sleep(nanoseconds: 50_000_000)
+            await Task.yield()
         }
-        
-        try? await Task.sleep(nanoseconds: 100_000_000)
     }
 }
 

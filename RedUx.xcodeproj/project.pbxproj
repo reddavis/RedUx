@@ -30,7 +30,9 @@
 		A48E08892743F1EB008090E5 /* Assertions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48E085C2743D1FE008090E5 /* Assertions.swift */; };
 		A48E088A2743F4B4008090E5 /* RedUxTestUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A48E08822743F1DB008090E5 /* RedUxTestUtilities.framework */; };
 		A48E088C2743F4EE008090E5 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A48E088B2743F4EE008090E5 /* XCTest.framework */; };
-		A4A12B5527B51EF30094B270 /* Unwrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A12B5427B51EF30094B270 /* Unwrap.swift */; };
+		A4A12B5527B51EF30094B270 /* UnwrapStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A12B5427B51EF30094B270 /* UnwrapStore.swift */; };
+		A4A12B5A27B6A77D0094B270 /* Middlewareable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A12B5927B6A77D0094B270 /* Middlewareable.swift */; };
+		A4A12B5C27B6CCC70094B270 /* AnyMiddlewareable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A12B5B27B6CCC70094B270 /* AnyMiddlewareable.swift */; };
 		A4B9E5A727A269590000ED07 /* RedUxable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B9E5A627A269590000ED07 /* RedUxable.swift */; };
 		A4C06AE027AA8EBA00C3B5D7 /* XCTAssertStatesEventuallyEqualError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C06ADF27AA8EBA00C3B5D7 /* XCTAssertStatesEventuallyEqualError.swift */; };
 		A4C06AE127AAA05200C3B5D7 /* Assertions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48E085C2743D1FE008090E5 /* Assertions.swift */; };
@@ -113,7 +115,9 @@
 		A48E08822743F1DB008090E5 /* RedUxTestUtilities.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RedUxTestUtilities.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A48E08842743F1DB008090E5 /* RedUxTestUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RedUxTestUtilities.h; sourceTree = "<group>"; };
 		A48E088B2743F4EE008090E5 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		A4A12B5427B51EF30094B270 /* Unwrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unwrap.swift; sourceTree = "<group>"; };
+		A4A12B5427B51EF30094B270 /* UnwrapStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnwrapStore.swift; sourceTree = "<group>"; };
+		A4A12B5927B6A77D0094B270 /* Middlewareable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Middlewareable.swift; sourceTree = "<group>"; };
+		A4A12B5B27B6CCC70094B270 /* AnyMiddlewareable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyMiddlewareable.swift; sourceTree = "<group>"; };
 		A4B9E5A627A269590000ED07 /* RedUxable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedUxable.swift; sourceTree = "<group>"; };
 		A4C06ADF27AA8EBA00C3B5D7 /* XCTAssertStatesEventuallyEqualError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTAssertStatesEventuallyEqualError.swift; sourceTree = "<group>"; };
 		A4C06AE327AAA18E00C3B5D7 /* XCTAssertEventuallyEqualError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTAssertEventuallyEqualError.swift; sourceTree = "<group>"; };
@@ -242,6 +246,7 @@
 		A47E64BD267A10CB005E265C /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				A4A12B5827B661DD0094B270 /* Middleware */,
 				A4A12B5327B51EBC0094B270 /* SwiftUI */,
 				A47E64BE267A10E4005E265C /* Reducer.swift */,
 				A47E64BF267A10E4005E265C /* Store.swift */,
@@ -310,9 +315,18 @@
 			isa = PBXGroup;
 			children = (
 				A4D2CF9E26C0FC1F008D25DE /* Extensions */,
-				A4A12B5427B51EF30094B270 /* Unwrap.swift */,
+				A4A12B5427B51EF30094B270 /* UnwrapStore.swift */,
 			);
 			path = SwiftUI;
+			sourceTree = "<group>";
+		};
+		A4A12B5827B661DD0094B270 /* Middleware */ = {
+			isa = PBXGroup;
+			children = (
+				A4A12B5B27B6CCC70094B270 /* AnyMiddlewareable.swift */,
+				A4A12B5927B6A77D0094B270 /* Middlewareable.swift */,
+			);
+			path = Middleware;
 			sourceTree = "<group>";
 		};
 		A4C06AE627AAACA700C3B5D7 /* Errors */ = {
@@ -583,11 +597,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				A4B9E5A727A269590000ED07 /* RedUxable.swift in Sources */,
+				A4A12B5C27B6CCC70094B270 /* AnyMiddlewareable.swift in Sources */,
+				A4A12B5A27B6A77D0094B270 /* Middlewareable.swift in Sources */,
 				A40EE2A327A02D7600663E6C /* ViewModel.swift in Sources */,
 				A47E64C2267A10E4005E265C /* Store.swift in Sources */,
 				A4D2CFA026C0FC34008D25DE /* View+Extension.swift in Sources */,
 				A47E64C1267A10E4005E265C /* Reducer.swift in Sources */,
-				A4A12B5527B51EF30094B270 /* Unwrap.swift in Sources */,
+				A4A12B5527B51EF30094B270 /* UnwrapStore.swift in Sources */,
 				A47E64A7267A1054005E265C /* RedUx.docc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
