@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Reducer Structure Reference</title>
+    <title>AnyMiddleware Structure Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -13,8 +13,8 @@
     <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
-    <a name="//apple_ref/swift/Struct/Reducer" class="dashAnchor"></a>
-    <a title="Reducer Structure Reference"></a>
+    <a name="//apple_ref/swift/Struct/AnyMiddleware" class="dashAnchor"></a>
+    <a title="AnyMiddleware Structure Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html"> Docs</a> (94% documented)</p>
@@ -29,7 +29,7 @@
       <p id="breadcrumbs">
         <a href="../index.html"> Reference</a>
         <img id="carat" src="../img/carat.png" alt=""/>
-        Reducer Structure Reference
+        AnyMiddleware Structure Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -84,16 +84,15 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>Reducer</h1>
+            <h1>AnyMiddleware</h1>
               <div class="declaration">
                 <div class="language">
                   
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Reducer</span><span class="o">&lt;</span><span class="kt">State</span><span class="p">,</span> <span class="kt">Event</span><span class="p">,</span> <span class="kt">Environment</span><span class="o">&gt;</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">AnyMiddleware</span><span class="o">&lt;</span><span class="kt">InputEvent</span><span class="p">,</span> <span class="kt">OutputEvent</span><span class="p">,</span> <span class="kt">State</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/Middlewareable.html">Middlewareable</a></span></code></pre>
 
                 </div>
               </div>
-            <p>A reducer is responsible for taking an event and deciding how the state should be changed and
-whether any effects should be executed.</p>
+            <p>A middleware that performs type erasure by wrapping another middleware.</p>
 
           </section>
           <section class="section task-group-section">
@@ -102,30 +101,29 @@ whether any effects should be executed.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:5RedUx7ReducerV5emptyACyxq_q0_GvpZ"></a>
-                    <a name="//apple_ref/swift/Variable/empty" class="dashAnchor"></a>
-                    <a class="token" href="#/s:5RedUx7ReducerV5emptyACyxq_q0_GvpZ">empty</a>
+                    <a name="/s:5RedUx13AnyMiddlewareV9OnExecutea"></a>
+                    <a name="//apple_ref/swift/Alias/OnExecute" class="dashAnchor"></a>
+                    <a class="token" href="#/s:5RedUx13AnyMiddlewareV9OnExecutea">OnExecute</a>
                     </code>
+                      <span class="declaration-note">
+                        Asynchronous
+                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>An empty reducer. Useful for SwiftUI&rsquo;s previews.</p>
+                        <p>The closure that is called when the <code>execute</code> function is called.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">var</span> <span class="nv">empty</span><span class="p">:</span> <span class="kt">Reducer</span><span class="o">&lt;</span><span class="kt">State</span><span class="p">,</span> <span class="kt">Event</span><span class="p">,</span> <span class="kt">Environment</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">OnExecute</span> <span class="o">=</span> <span class="p">(</span><span class="n">_</span> <span class="nv">event</span><span class="p">:</span> <span class="kt">InputEvent</span><span class="p">,</span> <span class="n">_</span> <span class="nv">state</span><span class="p">:</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">State</span><span class="p">)</span> <span class="k">async</span> <span class="o">-&gt;</span> <span class="kt">Void</span></code></pre>
 
                         </div>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>A reducer.</p>
                       </div>
                     </section>
                   </div>
@@ -133,9 +131,9 @@ whether any effects should be executed.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:5RedUx7ReducerV6Reducea"></a>
-                    <a name="//apple_ref/swift/Alias/Reduce" class="dashAnchor"></a>
-                    <a class="token" href="#/s:5RedUx7ReducerV6Reducea">Reduce</a>
+                    <a name="/s:5RedUx13AnyMiddlewareV12outputStream10Asynchrone0C17AsyncSequenceableVyq_Gvp"></a>
+                    <a name="//apple_ref/swift/Property/outputStream" class="dashAnchor"></a>
+                    <a class="token" href="#/s:5RedUx13AnyMiddlewareV12outputStream10Asynchrone0C17AsyncSequenceableVyq_Gvp">outputStream</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -143,14 +141,15 @@ whether any effects should be executed.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The output stream is used my the middleware to emit events
+to a subscriber - which would be a store.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">Reduce</span> <span class="o">=</span> <span class="p">(</span><span class="k">inout</span> <span class="kt">State</span><span class="p">,</span> <span class="kt">Event</span><span class="p">,</span> <span class="kt">Environment</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">outputStream</span><span class="p">:</span> <span class="kt">AnyAsyncSequenceable</span><span class="o">&lt;</span><span class="kt">OutputEvent</span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -173,9 +172,9 @@ whether any effects should be executed.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:5RedUx7ReducerVyACyxq_q0_Gyxz_q_q0_tccfc"></a>
-                    <a name="//apple_ref/swift/Method/init(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:5RedUx7ReducerVyACyxq_q0_Gyxz_q_q0_tccfc">init(_:<wbr>)</a>
+                    <a name="/s:5RedUx13AnyMiddlewareV12outputStream9onExecuteACyxq_q0_G10Asynchrone0C17AsyncSequenceableVyq_G_yx_q0_yXEtYactcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(outputStream:onExecute:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:5RedUx13AnyMiddlewareV12outputStream9onExecuteACyxq_q0_G10Asynchrone0C17AsyncSequenceableVyq_G_yx_q0_yXEtYactcfc">init(outputStream:<wbr>onExecute:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -183,14 +182,14 @@ whether any effects should be executed.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Construct a Reducer.</p>
+                        <p>Create a new AnyMiddleware instance.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">reduce</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Structs/Reducer.html#/s:5RedUx7ReducerV6Reducea">Reduce</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">outputStream</span><span class="p">:</span> <span class="kt">AnyAsyncSequenceable</span><span class="o">&lt;</span><span class="kt">OutputEvent</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">onExecute</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Structs/AnyMiddleware.html#/s:5RedUx13AnyMiddlewareV9OnExecutea">OnExecute</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -201,12 +200,75 @@ whether any effects should be executed.</p>
                             <tr>
                               <td>
                                 <code>
-                                <em>reduce</em>
+                                <em>outputStream</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>Reduce closure.</p>
+                                  <p>The async sequence used to emit events.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>onExecute</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The closure that is called when execute function is called.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:5RedUx13AnyMiddlewareVyACyxq_q0_Gqd__c10InputEventQyd__Rsz06OutputF0Qyd__Rs_5StateQyd__Rs0_AA14MiddlewareableRd__lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:5RedUx13AnyMiddlewareVyACyxq_q0_Gqd__c10InputEventQyd__Rsz06OutputF0Qyd__Rs_5StateQyd__Rs0_AA14MiddlewareableRd__lufc">init(_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Create a new AnyMiddleware instance that type erases the provided middleware.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">middleware</span><span class="p">:</span> <span class="kt">T</span><span class="p">)</span>
+<span class="k">where</span>
+<span class="kt">T</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Middlewareable.html">Middlewareable</a></span><span class="p">,</span>
+<span class="kt">T</span><span class="o">.</span><span class="kt">InputEvent</span> <span class="o">==</span> <span class="kt">InputEvent</span><span class="p">,</span>
+<span class="kt">T</span><span class="o">.</span><span class="kt">OutputEvent</span> <span class="o">==</span> <span class="kt">OutputEvent</span><span class="p">,</span>
+<span class="kt">T</span><span class="o">.</span><span class="kt">State</span> <span class="o">==</span> <span class="kt">State</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>middleware</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The middleware to type erase.</p>
                                 </div>
                               </td>
                             </tr>
@@ -220,11 +282,11 @@ whether any effects should be executed.</p>
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Pull"></a>
-                <a name="//apple_ref/swift/Section/Pull" class="dashAnchor"></a>
+                <a name="/Middlewareable"></a>
+                <a name="//apple_ref/swift/Section/Middlewareable" class="dashAnchor"></a>
                 <div class="section-name-container">
-                  <a class="section-name-link" href="#/Pull"></a>
-                  <h3 class="section-name"><span>Pull</span>
+                  <a class="section-name-link" href="#/Middlewareable"></a>
+                  <h3 class="section-name"><span>Middlewareable</span>
 </h3>
                 </div>
               </div>
@@ -232,32 +294,27 @@ whether any effects should be executed.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:5RedUx7ReducerV4pull5state5event8appEvent11environmentACyqd__qd_0_qd_1_Gs15WritableKeyPathCyqd__xG_q_Sgqd_0_cqd_0_q_cq0_qd_1_ctr1_lF"></a>
-                    <a name="//apple_ref/swift/Method/pull(state:event:appEvent:environment:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:5RedUx7ReducerV4pull5state5event8appEvent11environmentACyqd__qd_0_qd_1_Gs15WritableKeyPathCyqd__xG_q_Sgqd_0_cqd_0_q_cq0_qd_1_ctr1_lF">pull(state:<wbr>event:<wbr>appEvent:<wbr>environment:<wbr>)</a>
+                    <a name="/s:5RedUx13AnyMiddlewareV7execute5event5stateyx_q0_yXEtYaF"></a>
+                    <a name="//apple_ref/swift/Method/execute(event:state:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:5RedUx13AnyMiddlewareV7execute5event5stateyx_q0_yXEtYaF">execute(event:<wbr>state:<wbr>)</a>
                     </code>
+                      <span class="declaration-note">
+                        Asynchronous
+                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Transforms or &ldquo;Pulls&rdquo; a local reducer into a global reducer.</p>
-
-<p>The main benefit of this function is that it enables the ability to breakdown
-a large reducer into several smaller ones.</p>
+                        <p>The execute function is called by the store when it receives an event.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">pull</span><span class="o">&lt;</span><span class="kt">AppState</span><span class="p">,</span> <span class="kt">AppEvent</span><span class="p">,</span> <span class="kt">AppEnvironment</span><span class="o">&gt;</span><span class="p">(</span>
-    <span class="nv">state</span><span class="p">:</span> <span class="kt">WritableKeyPath</span><span class="o">&lt;</span><span class="kt">AppState</span><span class="p">,</span> <span class="kt">State</span><span class="o">&gt;</span><span class="p">,</span>
-    <span class="nv">event</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">AppEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Event</span><span class="p">?,</span>
-    <span class="nv">appEvent</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">AppEvent</span><span class="p">,</span>
-    <span class="nv">environment</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">AppEnvironment</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Environment</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Reducer</span><span class="o">&lt;</span><span class="kt">AppState</span><span class="p">,</span> <span class="kt">AppEvent</span><span class="p">,</span> <span class="kt">AppEnvironment</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">execute</span><span class="p">(</span><span class="nv">event</span><span class="p">:</span> <span class="kt">InputEvent</span><span class="p">,</span> <span class="nv">state</span><span class="p">:</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">State</span><span class="p">)</span> <span class="k">async</span></code></pre>
 
                         </div>
                       </div>
@@ -265,6 +322,18 @@ a large reducer into several smaller ones.</p>
                         <h4>Parameters</h4>
                         <table class="graybox">
                           <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>event</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The event.</p>
+                                </div>
+                              </td>
+                            </tr>
                             <tr>
                               <td>
                                 <code>
@@ -273,132 +342,12 @@ a large reducer into several smaller ones.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>A key path that sets and gets the local state from the app state.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>localEvent</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A function for transforming an app event into a local event.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>appEvent</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A function for transforming a local event into an app event.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>environment</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A function for transforming an app environment into a local environment.</p>
+                                  <p>The store&rsquo;s current state.</p>
                                 </div>
                               </td>
                             </tr>
                           </tbody>
                         </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>A <code>Reducer&lt;AppState, AppEvent, AppEnvironment&gt;</code>.</p>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <div class="task-name-container">
-                <a name="/Combine"></a>
-                <a name="//apple_ref/swift/Section/Combine" class="dashAnchor"></a>
-                <div class="section-name-container">
-                  <a class="section-name-link" href="#/Combine"></a>
-                  <h3 class="section-name"><span>Combine</span>
-</h3>
-                </div>
-              </div>
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:5RedUx7ReducerV2lgoiyACyxq_q0_GAE_AEtFZ"></a>
-                    <a name="//apple_ref/swift/Method/&lt;&gt;(_:_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:5RedUx7ReducerV2lgoiyACyxq_q0_GAE_AEtFZ"><>(_:<wbr>_:<wbr>)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Combines two reducers of the same <code>State</code>, <code>Event</code> and <code>Environment</code> into one.</p>
-
-<p>The left hand reducer will be reduced first followed by the right hand reducer.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">&lt;&gt;</span><span class="p">(</span>
-    <span class="nv">lhs</span><span class="p">:</span> <span class="kt">Reducer</span><span class="o">&lt;</span><span class="kt">State</span><span class="p">,</span> <span class="kt">Event</span><span class="p">,</span> <span class="kt">Environment</span><span class="o">&gt;</span><span class="p">,</span>
-    <span class="nv">rhs</span><span class="p">:</span> <span class="kt">Reducer</span><span class="o">&lt;</span><span class="kt">State</span><span class="p">,</span> <span class="kt">Event</span><span class="p">,</span> <span class="kt">Environment</span><span class="o">&gt;</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Reducer</span><span class="o">&lt;</span><span class="kt">State</span><span class="p">,</span> <span class="kt">Event</span><span class="p">,</span> <span class="kt">Environment</span><span class="o">&gt;</span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>lhs</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The left hand reducer.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>rhs</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The right hand reducer.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>A new reducer</p>
                       </div>
                     </section>
                   </div>

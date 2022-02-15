@@ -6,13 +6,6 @@
       "symbol": "Reducer.Reduce",
       "symbol_kind": "source.lang.swift.decl.typealias",
       "warning": "undocumented"
-    },
-    {
-      "file": "/Users/reddavis/Documents/Projects/RedUx/RedUx/Source/Store/Store.swift",
-      "line": 55,
-      "symbol": "Store.subscript(dynamicMember:)",
-      "symbol_kind": "source.lang.swift.decl.function.subscript",
-      "warning": "undocumented"
     }
   ],
   "source_directory": "/Users/reddavis/Documents/Projects/RedUx"

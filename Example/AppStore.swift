@@ -1,3 +1,4 @@
+import Asynchrone
 import RedUx
 
 
@@ -9,7 +10,10 @@ extension AppStore {
         Store(
             state: .init(),
             reducer: reducer,
-            environment: .init()
+            environment: .init(),
+            middlewares: [
+                HighlyComplicatedIncrementMiddleware().eraseToAnyMiddleware()
+            ]
         )
     }
     
@@ -19,7 +23,8 @@ extension AppStore {
         Store(
             state: state,
             reducer: .empty,
-            environment: .init()
+            environment: .init(),
+            middlewares: []
         )
     }
 }
@@ -32,28 +37,23 @@ fileprivate let reducer: Reducer<AppState, AppEvent, AppEnvironment> = Reducer {
     switch event {
     case .increment:
         state.count += 1
-        return .none
+        return
     case .decrement:
         state.count -= 1
-        return .none
+        return
     case .incrementWithDelay:
-        return AsyncStream { continuation in
-            // Really taxing shiz
-            try? await Task.sleep(nanoseconds: 2 * 1_000_000_000)
-            continuation.yield(.increment)
-            continuation.finish()
-        }.eraseToAnyAsyncSequenceable()
+        return
     case .toggleIsPresentingSheet:
         state.isPresentingSheet.toggle()
-        return .none
+        return
     case .details:
-        return .none
+        return
     }
 }
 <>
 detailsReducer.pull(
     state: \.details,
-    localEvent: {
+    event: {
         guard case AppEvent.details(let localEvent) = $0 else { return nil }
         return localEvent
     },
@@ -89,4 +89,30 @@ enum AppEvent {
 
 struct AppEnvironment {
     static var mock: AppEnvironment { .init() }
+}
+
+
+
+// MARK: Middleware
+
+struct HighlyComplicatedIncrementMiddleware: Middlewareable {
+    let outputStream: AnyAsyncSequenceable<AppEvent>
+    
+    // Private
+    private let _outputStream: PassthroughAsyncSequence<AppEvent> = .init()
+    
+    // MARK: Initialization
+    
+    init() {
+        self.outputStream = self._outputStream.eraseToAnyAsyncSequenceable()
+    }
+    
+    // MARK: Middlewareable
+    
+    func execute(event: AppEvent, state: () -> AppState) async {
+        guard case .incrementWithDelay = event else { return }
+        
+        try? await Task.sleep(seconds: 2)
+        self._outputStream.yield(.increment)
+    }
 }
