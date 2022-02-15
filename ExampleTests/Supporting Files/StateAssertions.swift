@@ -13,7 +13,7 @@ import XCTest
 ///   - timeout: Time to wait for store state changes. Defaults to `5`
 ///   - file: The file where this assertion is being called. Defaults to `#filePath`.
 ///   - line: The line in the file where this assertion is being called. Defaults to `#line`.
-public func XCTAssertStateChange<State: Equatable, Event, Environment>(
+func XCTAssertStateChange<State: Equatable, Event, Environment>(
     store: Store<State, Event, Environment>,
     events: [Event],
     matches statesToMatch: [State],

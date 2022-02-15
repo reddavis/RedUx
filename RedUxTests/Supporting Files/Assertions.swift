@@ -8,7 +8,7 @@ import XCTest
 ///   - timeout: Time to wait for store state changes. Defaults to `5`
 ///   - file: The file where this assertion is being called. Defaults to `#filePath`.
 ///   - line: The line in the file where this assertion is being called. Defaults to `#line`.
-public func XCTAssertEventuallyEqual<T: Equatable>(
+func XCTAssertEventuallyEqual<T: Equatable>(
     _ expressionA: @escaping @autoclosure () -> T?,
     _ expressionB: @escaping @autoclosure () -> T?,
     timeout: TimeInterval = 5.0,
@@ -54,7 +54,7 @@ public func XCTAssertEventuallyEqual<T: Equatable>(
 ///   - closure: The closure.
 ///   - file: The file where this assertion is being called. Defaults to `#filePath`.
 ///   - line: The line in the file where this assertion is being called. Defaults to `#line`.
-public func XCTAsyncAssertThrowsError<T>(
+func XCTAsyncAssertThrowsError<T>(
     _ closure: () async throws -> T,
     file: StaticString = #filePath,
     line: UInt = #line
@@ -75,7 +75,7 @@ public func XCTAsyncAssertThrowsError<T>(
 ///   - closure: The closure.
 ///   - file: The file where this assertion is being called. Defaults to `#filePath`.
 ///   - line: The line in the file where this assertion is being called. Defaults to `#line`.
-public func XCTAsyncAssertNoThrow<T>(
+func XCTAsyncAssertNoThrow<T>(
     _ closure: () async throws -> T,
     file: StaticString = #filePath,
     line: UInt = #line
@@ -97,7 +97,7 @@ public func XCTAsyncAssertNoThrow<T>(
 ///   - closure: The closure.
 ///   - file: The file where this assertion is being called. Defaults to `#filePath`.
 ///   - line: The line in the file where this assertion is being called. Defaults to `#line`.
-public func XCTAsyncAssertNil<T>(
+func XCTAsyncAssertNil<T>(
     _ closure: () async -> T?,
     file: StaticString = #filePath,
     line: UInt = #line
@@ -116,7 +116,7 @@ public func XCTAsyncAssertNil<T>(
 ///   - expressionB: Expression B.
 ///   - file: The file where this assertion is being called. Defaults to `#filePath`.
 ///   - line: The line in the file where this assertion is being called. Defaults to `#line`.
-public func XCTAsyncAssertEqual<T: Equatable>(
+func XCTAsyncAssertEqual<T: Equatable>(
     _ expressionA: @escaping () async -> T,
     _ expressionB: @escaping () async -> T,
     file: StaticString = #filePath,
@@ -132,3 +132,46 @@ public func XCTAsyncAssertEqual<T: Equatable>(
         line: line
     )
 }
+
+
+
+// MARK: XCTAssertEventuallyEqualError
+
+struct XCTAssertEventuallyEqualError: Error {
+    let message: String
+
+    var localizedDescription: String {
+        self.message
+    }
+
+    // MARK: Initialization
+
+    init<T: Equatable>(resultA: T?, resultB: T?) {
+        var resultADescription = "(null)"
+        if let resultA = resultA {
+            resultADescription = String(describing: resultA)
+        }
+
+        var resultBDescription = "(null)"
+        if let resultB = resultB {
+            resultBDescription = String(describing: resultB)
+        }
+
+        self.message = """
+
+---------------------------
+Failed To Assert Equality
+---------------------------
+
+# Result A
+\(resultADescription)
+
+
+# Result B
+\(resultBDescription)
+
+---------------------------
+"""
+    }
+}
+
