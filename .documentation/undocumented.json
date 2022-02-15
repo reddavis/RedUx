@@ -6,6 +6,20 @@
       "symbol": "Reducer.Reduce",
       "symbol_kind": "source.lang.swift.decl.typealias",
       "warning": "undocumented"
+    },
+    {
+      "file": "/Users/reddavis/Documents/Projects/RedUx/RedUx/Source/SwiftUI/UnwrapStore.swift",
+      "line": 4,
+      "symbol": "UnwrapStore",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/reddavis/Documents/Projects/RedUx/RedUx/Source/SwiftUI/UnwrapStore.swift",
+      "line": 11,
+      "symbol": "UnwrapStore.init(_:unwrappedContent:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
     }
   ],
   "source_directory": "/Users/reddavis/Documents/Projects/RedUx"
