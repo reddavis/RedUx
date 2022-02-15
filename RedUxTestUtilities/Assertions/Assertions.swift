@@ -1,4 +1,3 @@
-import RedUx
 import XCTest
 
 

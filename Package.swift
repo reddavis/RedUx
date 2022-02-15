@@ -32,7 +32,7 @@ let package = Package(
         ),
         .target(
             name: "RedUxTestUtilities",
-            dependencies: ["RedUx", "Asynchrone"],
+            dependencies: [.product(name: "RedUx", package: "RedUx"), "Asynchrone"],
             path: "RedUxTestUtilities"
         ),
         .testTarget(

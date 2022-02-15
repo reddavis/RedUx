@@ -13,6 +13,10 @@
 		A40EE2A327A02D7600663E6C /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40EE2A227A02D7600663E6C /* ViewModel.swift */; };
 		A40EE2A527A044FE00663E6C /* ViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40EE2A427A044FE00663E6C /* ViewModelTests.swift */; };
 		A425FB70275F9769002AFD72 /* ReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A425FB6F275F9769002AFD72 /* ReducerTests.swift */; };
+		A47BE5F727BC40C00011ECE6 /* Assertions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48E085C2743D1FE008090E5 /* Assertions.swift */; };
+		A47BE5F827BC40C00011ECE6 /* StateAssertions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C06AE827AAACC600C3B5D7 /* StateAssertions.swift */; };
+		A47BE5F927BC40C70011ECE6 /* XCTAssertStatesEventuallyEqualError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C06ADF27AA8EBA00C3B5D7 /* XCTAssertStatesEventuallyEqualError.swift */; };
+		A47BE5FA27BC40C70011ECE6 /* XCTAssertEventuallyEqualError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C06AE327AAA18E00C3B5D7 /* XCTAssertEventuallyEqualError.swift */; };
 		A47E64A7267A1054005E265C /* RedUx.docc in Sources */ = {isa = PBXBuildFile; fileRef = A47E64A6267A1054005E265C /* RedUx.docc */; };
 		A47E64AD267A1054005E265C /* RedUx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A47E64A2267A1054005E265C /* RedUx.framework */; };
 		A47E64B3267A1054005E265C /* RedUx.h in Headers */ = {isa = PBXBuildFile; fileRef = A47E64A5267A1054005E265C /* RedUx.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -27,19 +31,12 @@
 		A47E64DA267A4B07005E265C /* RedUx.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A47E64A2267A1054005E265C /* RedUx.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A48E08652743D463008090E5 /* RootScreenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48E08642743D463008090E5 /* RootScreenTests.swift */; };
 		A48E08852743F1DB008090E5 /* RedUxTestUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = A48E08842743F1DB008090E5 /* RedUxTestUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A48E08892743F1EB008090E5 /* Assertions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48E085C2743D1FE008090E5 /* Assertions.swift */; };
 		A48E088A2743F4B4008090E5 /* RedUxTestUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A48E08822743F1DB008090E5 /* RedUxTestUtilities.framework */; };
 		A48E088C2743F4EE008090E5 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A48E088B2743F4EE008090E5 /* XCTest.framework */; };
 		A4A12B5527B51EF30094B270 /* UnwrapStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A12B5427B51EF30094B270 /* UnwrapStore.swift */; };
 		A4A12B5A27B6A77D0094B270 /* Middlewareable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A12B5927B6A77D0094B270 /* Middlewareable.swift */; };
 		A4A12B5C27B6CCC70094B270 /* AnyMiddlewareable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A12B5B27B6CCC70094B270 /* AnyMiddlewareable.swift */; };
 		A4B9E5A727A269590000ED07 /* RedUxable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B9E5A627A269590000ED07 /* RedUxable.swift */; };
-		A4C06AE027AA8EBA00C3B5D7 /* XCTAssertStatesEventuallyEqualError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C06ADF27AA8EBA00C3B5D7 /* XCTAssertStatesEventuallyEqualError.swift */; };
-		A4C06AE127AAA05200C3B5D7 /* Assertions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48E085C2743D1FE008090E5 /* Assertions.swift */; };
-		A4C06AE227AAA05200C3B5D7 /* XCTAssertStatesEventuallyEqualError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C06ADF27AA8EBA00C3B5D7 /* XCTAssertStatesEventuallyEqualError.swift */; };
-		A4C06AE427AAA18E00C3B5D7 /* XCTAssertEventuallyEqualError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C06AE327AAA18E00C3B5D7 /* XCTAssertEventuallyEqualError.swift */; };
-		A4C06AE527AAA32600C3B5D7 /* XCTAssertEventuallyEqualError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C06AE327AAA18E00C3B5D7 /* XCTAssertEventuallyEqualError.swift */; };
-		A4C06AE927AAACC600C3B5D7 /* StateAssertions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C06AE827AAACC600C3B5D7 /* StateAssertions.swift */; };
 		A4C3619A276A086A00511525 /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C36199276A086A00511525 /* AppStore.swift */; };
 		A4D2CFA026C0FC34008D25DE /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D2CF9F26C0FC34008D25DE /* View+Extension.swift */; };
 		A4EE8D352763B4ED00BE7F55 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4EE8D342763B4ED00BE7F55 /* Models.swift */; };
@@ -612,12 +609,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A4C06AE127AAA05200C3B5D7 /* Assertions.swift in Sources */,
-				A4C06AE527AAA32600C3B5D7 /* XCTAssertEventuallyEqualError.swift in Sources */,
 				A425FB70275F9769002AFD72 /* ReducerTests.swift in Sources */,
 				A40EE2A527A044FE00663E6C /* ViewModelTests.swift in Sources */,
 				A47E64C5267A10F3005E265C /* StoreTests.swift in Sources */,
-				A4C06AE227AAA05200C3B5D7 /* XCTAssertStatesEventuallyEqualError.swift in Sources */,
 				A4EE8D352763B4ED00BE7F55 /* Models.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -646,10 +640,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A4C06AE927AAACC600C3B5D7 /* StateAssertions.swift in Sources */,
-				A4C06AE027AA8EBA00C3B5D7 /* XCTAssertStatesEventuallyEqualError.swift in Sources */,
-				A4C06AE427AAA18E00C3B5D7 /* XCTAssertEventuallyEqualError.swift in Sources */,
-				A48E08892743F1EB008090E5 /* Assertions.swift in Sources */,
+				A47BE5F927BC40C70011ECE6 /* XCTAssertStatesEventuallyEqualError.swift in Sources */,
+				A47BE5F827BC40C00011ECE6 /* StateAssertions.swift in Sources */,
+				A47BE5FA27BC40C70011ECE6 /* XCTAssertEventuallyEqualError.swift in Sources */,
+				A47BE5F727BC40C00011ECE6 /* Assertions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -939,6 +933,8 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.reddavis.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -969,6 +965,8 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.reddavis.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -992,6 +990,8 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.reddavis.ExampleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1016,6 +1016,8 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.reddavis.ExampleTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
