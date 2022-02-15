@@ -4,7 +4,7 @@ import XCTest
 
 final class ReducerTests: XCTestCase
 {
-    private var state: State!
+    private var state: AppState!
     
     // MARK: Setup
     
@@ -17,7 +17,7 @@ final class ReducerTests: XCTestCase
     
     func testEventOnMainReducer()
     {
-        _ = reducer.execute(
+        reducer.execute(
             state: &self.state,
             event: .setValue("abc"),
             environment: .init()
@@ -34,7 +34,7 @@ final class ReducerTests: XCTestCase
     
     func testEventOnSubReducer()
     {
-        _ = reducer.execute(
+        reducer.execute(
             state: &self.state,
             event: .subEvent(.setValue("abc")),
             environment: .init()

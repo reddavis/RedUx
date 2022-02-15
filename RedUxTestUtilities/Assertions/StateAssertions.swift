@@ -31,7 +31,7 @@ public func XCTAssertStateChange<State: Equatable, Event, Environment>(
         store.send(event)
     }
     
-    await XCTAssertEventuallyEqualStates(
+    XCTAssertEventuallyEqualStates(
         { states },
         { statesToMatch },
         timeout: timeout,
