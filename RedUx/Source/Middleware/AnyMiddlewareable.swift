@@ -37,7 +37,7 @@ public struct AnyMiddleware<InputEvent, OutputEvent, State>: Middlewareable {
 // MARK: Erasure
 
 extension Middlewareable {
-    func eraseToAnyMiddleware() -> AnyMiddleware<InputEvent, OutputEvent, State> {
+    public func eraseToAnyMiddleware() -> AnyMiddleware<InputEvent, OutputEvent, State> {
         .init(self)
     }
 }

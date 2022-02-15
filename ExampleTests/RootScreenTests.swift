@@ -7,7 +7,7 @@ class RootScreenTests: XCTestCase {
     func testStateChange() async {
         let store = RootScreen.LocalStore.make()
         
-        await XCTAssertStateChange(
+        XCTAssertStateChange(
             store: store,
             events: [
                 .increment,
