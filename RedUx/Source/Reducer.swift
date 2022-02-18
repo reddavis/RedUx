@@ -28,7 +28,7 @@ public struct Reducer<State, Event, Environment> {
         self.reduce = reduce
     }
 
-    // MARK: API
+    // MARK: Event execution
     
     func execute(
         state: inout State,
@@ -36,6 +36,15 @@ public struct Reducer<State, Event, Environment> {
         environment: Environment
     ) {
         self.reduce(&state, event, environment)
+    }
+    
+    // MARK: Optional
+    
+    public func optional() -> Reducer<State?, Event, Environment> {
+        .init { state, event, environment in
+            guard state != nil else { return }
+            self.reduce(&state!, event, environment)
+        }
     }
 }
 

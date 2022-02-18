@@ -7,9 +7,9 @@ import Foundation
 
 enum AppEvent: Equatable {
     case setValue(String?)
-    case subEvent(SubEvent)
     case setValueByEffect(String)
     case setValueToA
+    case subEvent(SubEvent)
 }
 
 
@@ -25,11 +25,19 @@ enum SubEvent: Equatable {
 struct AppState: Equatable {
     var value: String? = nil
     var eventsReceived: [AppEvent] = []
+    
     var subState: SubState = .init()
+    var optionalState: SubState? = nil
 }
 
 
 struct SubState: Equatable {
+    var value: String? = nil
+    var eventsReceived: [SubEvent] = []
+}
+
+
+struct OptionalState: Equatable {
     var value: String? = nil
     var eventsReceived: [SubEvent] = []
 }
@@ -49,11 +57,21 @@ mainReducer
 <>
 subReducer.pull(
     state: \.subState,
-    event: { event in
-        guard case let AppEvent.subEvent(subEvent) = event else { return nil }
+    event: {
+        guard case let AppEvent.subEvent(subEvent) = $0 else { return nil }
         return subEvent
     },
-    appEvent: { .subEvent($0) },
+    appEvent: AppEvent.subEvent,
+    environment: { $0 }
+)
+<>
+optionalReducer.optional().pull(
+    state: \.optionalState,
+    event: {
+        guard case let AppEvent.subEvent(subEvent) = $0 else { return nil }
+        return subEvent
+    },
+    appEvent: AppEvent.subEvent,
     environment: { $0 }
 )
 
@@ -76,6 +94,18 @@ let mainReducer: Reducer<AppState, AppEvent, AppEnvironment> = .init { state, ev
 let subReducer: Reducer<SubState, SubEvent, AppEnvironment> = .init { state, event, environment in
     state.eventsReceived.append(event)
     
+    switch event {
+    case .setValue(let value):
+        state.value = value
+        return
+    case .setValueByEffect:
+        return
+    }
+}
+
+let optionalReducer: Reducer<SubState, SubEvent, AppEnvironment> = .init { state, event, environment in
+    state.eventsReceived.append(event)
+
     switch event {
     case .setValue(let value):
         state.value = value
