@@ -2,21 +2,18 @@ import XCTest
 @testable import RedUx
 
 
-final class ReducerTests: XCTestCase
-{
+final class ReducerTests: XCTestCase {
     private var state: AppState!
     
     // MARK: Setup
     
-    override func setUpWithError() throws
-    {
+    override func setUpWithError() throws {
         self.state = .init()
     }
     
     // MARK: Tests
     
-    func testEventOnMainReducer()
-    {
+    func testEventOnMainReducer() {
         reducer.execute(
             state: &self.state,
             event: .setValue("abc"),
@@ -32,8 +29,7 @@ final class ReducerTests: XCTestCase
         )
     }
     
-    func testEventOnSubReducer()
-    {
+    func testEventOnSubReducer() {
         reducer.execute(
             state: &self.state,
             event: .subEvent(.setValue("abc")),
@@ -52,6 +48,36 @@ final class ReducerTests: XCTestCase
                         .setValue("abc")
                     ]
                 )
+            )
+        )
+    }
+    
+    func testOptionalReducer() {
+        var state: AppState? = nil
+        let reducer = appReducer.optional
+        let value = "abc"
+        
+        // State nil
+        reducer.execute(
+            state: &state,
+            event: .setValue(value),
+            environment: .init()
+        )
+        XCTAssertNil(state)
+        
+        // State not nil
+        state = .init()
+        reducer.execute(
+            state: &state,
+            event: .setValue(value),
+            environment: .init()
+        )
+        
+        XCTAssertEqual(
+            state,
+            .init(
+                value: "abc",
+                eventsReceived: [.setValue("abc")]
             )
         )
     }
