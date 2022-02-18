@@ -40,7 +40,10 @@ public struct Reducer<State, Event, Environment> {
     
     // MARK: Optional
     
-    public func optional() -> Reducer<State?, Event, Environment> {
+    /// Transform the current reducer into one that accepts an optional state.
+    ///
+    /// The reducer will only be ran when state is non-nil.
+    public var optional: Reducer<State?, Event, Environment> {
         .init { state, event, environment in
             guard state != nil else { return }
             self.reduce(&state!, event, environment)

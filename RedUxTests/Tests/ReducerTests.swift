@@ -54,6 +54,31 @@ final class ReducerTests: XCTestCase {
     
     func testOptionalReducer() {
         var state: AppState? = nil
-        let reducer = reducer.optional()
+        let reducer = appReducer.optional
+        let value = "abc"
+        
+        // State nil
+        reducer.execute(
+            state: &state,
+            event: .setValue(value),
+            environment: .init()
+        )
+        XCTAssertNil(state)
+        
+        // State not nil
+        state = .init()
+        reducer.execute(
+            state: &state,
+            event: .setValue(value),
+            environment: .init()
+        )
+        
+        XCTAssertEqual(
+            state,
+            .init(
+                value: "abc",
+                eventsReceived: [.setValue("abc")]
+            )
+        )
     }
 }

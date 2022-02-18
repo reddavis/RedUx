@@ -53,7 +53,7 @@ struct AppEnvironment { }
 // MARK: Reducers
 
 let reducer =
-mainReducer
+appReducer
 <>
 subReducer.pull(
     state: \.subState,
@@ -65,7 +65,7 @@ subReducer.pull(
     environment: { $0 }
 )
 <>
-optionalReducer.optional().pull(
+optionalReducer.optional.pull(
     state: \.optionalState,
     event: {
         guard case let AppEvent.subEvent(subEvent) = $0 else { return nil }
@@ -75,19 +75,21 @@ optionalReducer.optional().pull(
     environment: { $0 }
 )
 
-let mainReducer: Reducer<AppState, AppEvent, AppEnvironment> = .init { state, event, environment in
+let appReducer: Reducer<AppState, AppEvent, AppEnvironment> = .init { state, event, environment in
     state.eventsReceived.append(event)
     
     switch event {
     case .setValue(let value):
         state.value = value
+        return
     case .subEvent(let event):
         return
-    case .setValueByEffect:
+    case .setValueByEffect:()
         // Do nothing, it's handled by the middleware
         return
     case .setValueToA:
         state.value = "a"
+        return
     }
 }
 
