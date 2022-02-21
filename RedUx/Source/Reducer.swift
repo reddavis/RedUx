@@ -58,16 +58,15 @@ extension Reducer {
     ///
     /// The main benefit of this function is that it enables the ability to breakdown
     /// a large reducer into several smaller ones.
+    ///
     /// - Parameters:
     ///   - state: A key path that sets and gets the local state from the app state.
-    ///   - localEvent: A function for transforming an app event into a local event.
-    ///   - appEvent: A function for transforming a local event into an app event.
+    ///   - event: A function for transforming an app event into a local event.
     ///   - environment: A function for transforming an app environment into a local environment.
     /// - Returns: A `Reducer<AppState, AppEvent, AppEnvironment>`.
     public func pull<AppState, AppEvent, AppEnvironment>(
         state: WritableKeyPath<AppState, State>,
         event: @escaping (AppEvent) -> Event?,
-        appEvent: @escaping (Event) -> AppEvent,
         environment: @escaping (AppEnvironment) -> Environment
     ) -> Reducer<AppState, AppEvent, AppEnvironment> {
         .init { appState, appEvent, appEnvironment in
@@ -77,6 +76,36 @@ extension Reducer {
                 event,
                 environment(appEnvironment)
             )
+        }
+    }
+    
+    /// Transforms or "Pulls" a local reducer into a global reducer.
+    ///
+    /// The main benefit of this function is that it enables the ability to breakdown
+    /// a large reducer into several smaller ones.
+    ///
+    /// - Parameters:
+    ///   - getState: A key path that sets and gets the local state from the app state.
+    ///   - setAppState: A key path that sets and gets the local state from the app state.
+    ///   - event: A function for transforming an app event into a local event.
+    ///   - environment: A function for transforming an app environment into a local environment.
+    /// - Returns: A `Reducer<AppState, AppEvent, AppEnvironment>`.
+    public func pull<AppState, AppEvent, AppEnvironment>(
+        state getState: @escaping (AppState) -> State,
+        appState setAppState: @escaping (inout AppState, State) -> Void,
+        event: @escaping (AppEvent) -> Event?,
+        environment: @escaping (AppEnvironment) -> Environment
+    ) -> Reducer<AppState, AppEvent, AppEnvironment> {
+        .init { appState, appEvent, appEnvironment in
+            guard let event = event(appEvent) else { return }
+            
+            var state = getState(appState)
+            self.reduce(
+                &state,
+                event,
+                environment(appEnvironment)
+            )
+            setAppState(&appState, state)
         }
     }
 }
@@ -92,6 +121,7 @@ extension Reducer {
     /// Combines two reducers of the same `State`, `Event` and `Environment` into one.
     ///
     /// The left hand reducer will be reduced first followed by the right hand reducer.
+    ///
     /// - Parameters:
     ///   - lhs: The left hand reducer.
     ///   - rhs: The right hand reducer.

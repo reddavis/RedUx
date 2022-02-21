@@ -61,7 +61,6 @@ subReducer.pull(
         guard case let AppEvent.subEvent(subEvent) = $0 else { return nil }
         return subEvent
     },
-    appEvent: AppEvent.subEvent,
     environment: { $0 }
 )
 <>
@@ -71,7 +70,6 @@ optionalReducer.optional.pull(
         guard case let AppEvent.subEvent(subEvent) = $0 else { return nil }
         return subEvent
     },
-    appEvent: AppEvent.subEvent,
     environment: { $0 }
 )
 
