@@ -29,23 +29,63 @@ final class ReducerTests: XCTestCase {
         )
     }
     
-    func testEventOnSubReducer() {
+    func testPullingReducer() {
+        let reducer: Reducer<AppState, AppEvent, AppEnvironment> = subReducer.pull(
+            state: \.subState,
+            appState: { $0.subState = $1 },
+            event: {
+                guard case let AppEvent.subEvent(subEvent) = $0 else { return nil }
+                return subEvent
+            },
+            environment: { $0 }
+        )
+        
+        // Execute
+        let value = "abc"
         reducer.execute(
             state: &self.state,
-            event: .subEvent(.setValue("abc")),
+            event: .subEvent(.setValue(value)),
             environment: .init()
         )
         
         XCTAssertEqual(
             self.state,
             .init(
-                eventsReceived: [
-                    .subEvent(.setValue("abc"))
-                ],
                 subState: .init(
-                    value: "abc",
+                    value: value,
                     eventsReceived: [
-                        .setValue("abc")
+                        .setValue(value)
+                    ]
+                )
+            )
+        )
+    }
+    
+    func testPullingReducerWithWritableKey() {
+        let reducer: Reducer<AppState, AppEvent, AppEnvironment> = subReducer.pull(
+            state: \.subState,
+            event: {
+                guard case let AppEvent.subEvent(subEvent) = $0 else { return nil }
+                return subEvent
+            },
+            environment: { $0 }
+        )
+        
+        // Execute
+        let value = "abc"
+        reducer.execute(
+            state: &self.state,
+            event: .subEvent(.setValue(value)),
+            environment: .init()
+        )
+        
+        XCTAssertEqual(
+            self.state,
+            .init(
+                subState: .init(
+                    value: value,
+                    eventsReceived: [
+                        .setValue(value)
                     ]
                 )
             )
