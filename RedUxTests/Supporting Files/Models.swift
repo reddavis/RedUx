@@ -7,7 +7,8 @@ import Foundation
 
 enum AppEvent: Equatable {
     case setValue(String?)
-    case setValueByEffect(String)
+    case setValueViaMiddleware(String)
+    case setValueViaEffect(String)
     case setValueToA
     case subEvent(SubEvent)
 }
@@ -15,7 +16,8 @@ enum AppEvent: Equatable {
 
 enum SubEvent: Equatable {
     case setValue(String)
-    case setValueByEffect(String)
+    case setValueViaMiddleware(String)
+    case setValueViaEffect(String)
 }
 
 
@@ -61,6 +63,7 @@ subReducer.pull(
         guard case let AppEvent.subEvent(subEvent) = $0 else { return nil }
         return subEvent
     },
+    appEvent: AppEvent.subEvent,
     environment: { $0 }
 )
 <>
@@ -70,6 +73,7 @@ optionalReducer.optional.pull(
         guard case let AppEvent.subEvent(subEvent) = $0 else { return nil }
         return subEvent
     },
+    appEvent: AppEvent.subEvent,
     environment: { $0 }
 )
 
@@ -79,15 +83,18 @@ let appReducer: Reducer<AppState, AppEvent, AppEnvironment> = .init { state, eve
     switch event {
     case .setValue(let value):
         state.value = value
-        return
+        return .none
     case .subEvent(let event):
-        return
-    case .setValueByEffect:()
-        // Do nothing, it's handled by the middleware
-        return
+        return .none
     case .setValueToA:
         state.value = "a"
-        return
+        return .none
+    case .setValueViaMiddleware:
+        // Do nothing, it's handled by the middleware
+        return .none
+    case .setValueViaEffect(let value):
+        return Just(.setValue(value))
+            .eraseToAnyAsyncSequenceable()
     }
 }
 
@@ -97,9 +104,12 @@ let subReducer: Reducer<SubState, SubEvent, AppEnvironment> = .init { state, eve
     switch event {
     case .setValue(let value):
         state.value = value
-        return
-    case .setValueByEffect:
-        return
+        return .none
+    case .setValueViaMiddleware:
+        return .none
+    case .setValueViaEffect(let value):
+        return Just(.setValue(value))
+            .eraseToAnyAsyncSequenceable()
     }
 }
 
@@ -109,9 +119,12 @@ let optionalReducer: Reducer<SubState, SubEvent, AppEnvironment> = .init { state
     switch event {
     case .setValue(let value):
         state.value = value
-        return
-    case .setValueByEffect:
-        return
+        return .none
+    case .setValueViaMiddleware:
+        return .none
+    case .setValueViaEffect(let value):
+        return Just(.setValue(value))
+            .eraseToAnyAsyncSequenceable()
     }
 }
 
@@ -134,7 +147,7 @@ struct TestMiddleware: Middlewareable {
     // MARK: Middlewareable
     
     func execute(event: AppEvent, state: () -> AppState) async {
-        guard case let .setValueByEffect(value) = event else { return }
+        guard case let .setValueViaMiddleware(value) = event else { return }
         self._outputStream.yield(.setValue(value))
     }
 }
@@ -156,7 +169,7 @@ struct ScopedMiddleware: Middlewareable {
     // MARK: Middlewareable
     
     func execute(event: SubEvent, state: () -> SubState) async {
-        guard case let .setValueByEffect(value) = event else { return }
+        guard case let .setValueViaMiddleware(value) = event else { return }
         self._outputStream.yield(.setValue(value))
     }
 }

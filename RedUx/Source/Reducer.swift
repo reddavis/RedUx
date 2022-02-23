@@ -11,11 +11,11 @@ public struct Reducer<State, Event, Environment> {
     /// An empty reducer. Useful for SwiftUI's previews.
     /// - Returns: A reducer.
     public static var empty: Reducer<State, Event, Environment> {
-        .init { _, _, _ in }
+        .init { _, _, _ in .none }
     }
     
     // Public
-    public typealias Reduce = (inout State, Event, Environment) -> Void
+    public typealias Reduce = (inout State, Event, Environment) -> AnyAsyncSequenceable<Event>?
     
     // Private
     private let reduce: Reduce
@@ -34,7 +34,7 @@ public struct Reducer<State, Event, Environment> {
         state: inout State,
         event: Event,
         environment: Environment
-    ) {
+    ) -> AnyAsyncSequenceable<Event>? {
         self.reduce(&state, event, environment)
     }
     
@@ -45,8 +45,8 @@ public struct Reducer<State, Event, Environment> {
     /// The reducer will only be ran when state is non-nil.
     public var optional: Reducer<State?, Event, Environment> {
         .init { state, event, environment in
-            guard state != nil else { return }
-            self.reduce(&state!, event, environment)
+            guard state != nil else { return .none }
+            return self.reduce(&state!, event, environment)
         }
     }
 }
@@ -61,21 +61,28 @@ extension Reducer {
     ///
     /// - Parameters:
     ///   - state: A key path that sets and gets the local state from the app state.
-    ///   - event: A function for transforming an app event into a local event.
+    ///   - getEvent: A function for optionally transforming an app event into a local event.
+    ///   - setAppEvent: A function for optionally transforming a local event that
+    ///   is emitted by the reducer into an app event.
     ///   - environment: A function for transforming an app environment into a local environment.
     /// - Returns: A `Reducer<AppState, AppEvent, AppEnvironment>`.
     public func pull<AppState, AppEvent, AppEnvironment>(
         state: WritableKeyPath<AppState, State>,
-        event: @escaping (AppEvent) -> Event?,
+        event getEvent: @escaping (AppEvent) -> Event?,
+        appEvent setAppEvent: @escaping (Event) -> AppEvent?,
         environment: @escaping (AppEnvironment) -> Environment
     ) -> Reducer<AppState, AppEvent, AppEnvironment> {
         .init { appState, appEvent, appEnvironment in
-            guard let event = event(appEvent) else { return }
-            self.reduce(
+            guard let event = getEvent(appEvent) else { return .none }
+            let eventStream = self.reduce(
                 &appState[keyPath: state],
                 event,
                 environment(appEnvironment)
             )
+            
+            return eventStream?.compactMap { event in
+                setAppEvent(event)
+            }.eraseToAnyAsyncSequenceable()
         }
     }
     
@@ -87,25 +94,31 @@ extension Reducer {
     /// - Parameters:
     ///   - getState: A key path that sets and gets the local state from the app state.
     ///   - setAppState: A key path that sets and gets the local state from the app state.
-    ///   - event: A function for transforming an app event into a local event.
+    ///   - getEvent: A function for transforming an app event into a local event.
+    ///   - setAppEvent: A function for optionally transforming a local event into an app event.
     ///   - environment: A function for transforming an app environment into a local environment.
     /// - Returns: A `Reducer<AppState, AppEvent, AppEnvironment>`.
     public func pull<AppState, AppEvent, AppEnvironment>(
         state getState: @escaping (AppState) -> State,
         appState setAppState: @escaping (inout AppState, State) -> Void,
-        event: @escaping (AppEvent) -> Event?,
+        event getEvent: @escaping (AppEvent) -> Event?,
+        appEvent setAppEvent: @escaping (Event) -> AppEvent?,
         environment: @escaping (AppEnvironment) -> Environment
     ) -> Reducer<AppState, AppEvent, AppEnvironment> {
         .init { appState, appEvent, appEnvironment in
-            guard let event = event(appEvent) else { return }
+            guard let event = getEvent(appEvent) else { return .none }
             
             var state = getState(appState)
-            self.reduce(
+            let eventStream = self.reduce(
                 &state,
                 event,
                 environment(appEnvironment)
             )
             setAppState(&appState, state)
+            
+            return eventStream?.compactMap { event in
+                setAppEvent(event)
+            }.eraseToAnyAsyncSequenceable()
         }
     }
 }
@@ -131,8 +144,18 @@ extension Reducer {
         rhs: Reducer<State, Event, Environment>
     ) -> Reducer<State, Event, Environment> {
         .init { state, event, environment in
-            lhs.reduce(&state, event, environment)
-            rhs.reduce(&state, event, environment)
+            let eventStreamA = lhs.reduce(&state, event, environment)
+            let eventStreamB = rhs.reduce(&state, event, environment)
+            
+            if
+                let eventStreamA = eventStreamA,
+                let eventStreamB = eventStreamB {
+                return eventStreamA
+                    .merge(with: eventStreamB)
+                    .eraseToAnyAsyncSequenceable()
+            }
+            
+            return eventStreamA ?? eventStreamB ?? .none
         }
     }
 }
