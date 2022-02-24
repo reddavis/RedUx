@@ -150,7 +150,7 @@ whether any effects should be executed.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">Reduce</span> <span class="o">=</span> <span class="p">(</span><span class="k">inout</span> <span class="kt">State</span><span class="p">,</span> <span class="kt">Event</span><span class="p">,</span> <span class="kt">Environment</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">Reduce</span> <span class="o">=</span> <span class="p">(</span><span class="k">inout</span> <span class="kt">State</span><span class="p">,</span> <span class="kt">Event</span><span class="p">,</span> <span class="kt">Environment</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">AnyAsyncSequenceable</span><span class="o">&lt;</span><span class="kt">Event</span><span class="o">&gt;</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -173,9 +173,9 @@ whether any effects should be executed.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:5RedUx7ReducerVyACyxq_q0_Gyxz_q_q0_tccfc"></a>
+                    <a name="/s:5RedUx7ReducerVyACyxq_q0_G10Asynchrone20AnyAsyncSequenceableVyq_GSgxz_q_q0_tccfc"></a>
                     <a name="//apple_ref/swift/Method/init(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:5RedUx7ReducerVyACyxq_q0_Gyxz_q_q0_tccfc">init(_:<wbr>)</a>
+                    <a class="token" href="#/s:5RedUx7ReducerVyACyxq_q0_G10Asynchrone20AnyAsyncSequenceableVyq_GSgxz_q_q0_tccfc">init(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -274,9 +274,9 @@ whether any effects should be executed.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:5RedUx7ReducerV4pull5state5event8appEvent11environmentACyqd__qd_0_qd_1_Gs15WritableKeyPathCyqd__xG_q_Sgqd_0_cqd_0_q_cq0_qd_1_ctr1_lF"></a>
+                    <a name="/s:5RedUx7ReducerV4pull5state5event8appEvent11environmentACyqd__qd_0_qd_1_Gs15WritableKeyPathCyqd__xG_q_Sgqd_0_cqd_0_Sgq_cq0_qd_1_ctr1_lF"></a>
                     <a name="//apple_ref/swift/Method/pull(state:event:appEvent:environment:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:5RedUx7ReducerV4pull5state5event8appEvent11environmentACyqd__qd_0_qd_1_Gs15WritableKeyPathCyqd__xG_q_Sgqd_0_cqd_0_q_cq0_qd_1_ctr1_lF">pull(state:<wbr>event:<wbr>appEvent:<wbr>environment:<wbr>)</a>
+                    <a class="token" href="#/s:5RedUx7ReducerV4pull5state5event8appEvent11environmentACyqd__qd_0_qd_1_Gs15WritableKeyPathCyqd__xG_q_Sgqd_0_cqd_0_Sgq_cq0_qd_1_ctr1_lF">pull(state:<wbr>event:<wbr>appEvent:<wbr>environment:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -296,8 +296,8 @@ a large reducer into several smaller ones.</p>
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">pull</span><span class="o">&lt;</span><span class="kt">AppState</span><span class="p">,</span> <span class="kt">AppEvent</span><span class="p">,</span> <span class="kt">AppEnvironment</span><span class="o">&gt;</span><span class="p">(</span>
     <span class="nv">state</span><span class="p">:</span> <span class="kt">WritableKeyPath</span><span class="o">&lt;</span><span class="kt">AppState</span><span class="p">,</span> <span class="kt">State</span><span class="o">&gt;</span><span class="p">,</span>
-    <span class="nv">event</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">AppEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Event</span><span class="p">?,</span>
-    <span class="nv">appEvent</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">AppEvent</span><span class="p">,</span>
+    <span class="n">event</span> <span class="nv">getEvent</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">AppEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Event</span><span class="p">?,</span>
+    <span class="n">appEvent</span> <span class="nv">setAppEvent</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">AppEvent</span><span class="p">?,</span>
     <span class="nv">environment</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">AppEnvironment</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Environment</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Reducer</span><span class="o">&lt;</span><span class="kt">AppState</span><span class="p">,</span> <span class="kt">AppEvent</span><span class="p">,</span> <span class="kt">AppEnvironment</span><span class="o">&gt;</span></code></pre>
 
@@ -322,7 +322,115 @@ a large reducer into several smaller ones.</p>
                             <tr>
                               <td>
                                 <code>
-                                <em>localEvent</em>
+                                <em>getEvent</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A function for optionally transforming an app event into a local event.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>setAppEvent</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A function for optionally transforming a local event that
+is emitted by the reducer into an app event.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>environment</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A function for transforming an app environment into a local environment.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A <code>Reducer&lt;AppState, AppEvent, AppEnvironment&gt;</code>.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:5RedUx7ReducerV4pull5state8appState5event0F5Event11environmentACyqd__qd_0_qd_1_Gxqd__c_yqd__z_xtcq_Sgqd_0_cqd_0_Sgq_cq0_qd_1_ctr1_lF"></a>
+                    <a name="//apple_ref/swift/Method/pull(state:appState:event:appEvent:environment:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:5RedUx7ReducerV4pull5state8appState5event0F5Event11environmentACyqd__qd_0_qd_1_Gxqd__c_yqd__z_xtcq_Sgqd_0_cqd_0_Sgq_cq0_qd_1_ctr1_lF">pull(state:<wbr>appState:<wbr>event:<wbr>appEvent:<wbr>environment:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Transforms or &ldquo;Pulls&rdquo; a local reducer into a global reducer.</p>
+
+<p>The main benefit of this function is that it enables the ability to breakdown
+a large reducer into several smaller ones.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">pull</span><span class="o">&lt;</span><span class="kt">AppState</span><span class="p">,</span> <span class="kt">AppEvent</span><span class="p">,</span> <span class="kt">AppEnvironment</span><span class="o">&gt;</span><span class="p">(</span>
+    <span class="n">state</span> <span class="nv">getState</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">AppState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">State</span><span class="p">,</span>
+    <span class="n">appState</span> <span class="nv">setAppState</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="k">inout</span> <span class="kt">AppState</span><span class="p">,</span> <span class="kt">State</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">,</span>
+    <span class="n">event</span> <span class="nv">getEvent</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">AppEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Event</span><span class="p">?,</span>
+    <span class="n">appEvent</span> <span class="nv">setAppEvent</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">AppEvent</span><span class="p">?,</span>
+    <span class="nv">environment</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">AppEnvironment</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Environment</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Reducer</span><span class="o">&lt;</span><span class="kt">AppState</span><span class="p">,</span> <span class="kt">AppEvent</span><span class="p">,</span> <span class="kt">AppEnvironment</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>getState</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A key path that sets and gets the local state from the app state.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>setAppState</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A key path that sets and gets the local state from the app state.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>getEvent</em>
                                 </code>
                               </td>
                               <td>
@@ -334,12 +442,12 @@ a large reducer into several smaller ones.</p>
                             <tr>
                               <td>
                                 <code>
-                                <em>appEvent</em>
+                                <em>setAppEvent</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>A function for transforming a local event into an app event.</p>
+                                  <p>A function for optionally transforming a local event into an app event.</p>
                                 </div>
                               </td>
                             </tr>
@@ -393,7 +501,8 @@ a large reducer into several smaller ones.</p>
                       <div class="abstract">
                         <p>Combines two reducers of the same <code>State</code>, <code>Event</code> and <code>Environment</code> into one.</p>
 
-<p>The left hand reducer will be reduced first followed by the right hand reducer.</p>
+<p>The left hand reducer will be reduced first followed by the right hand reducer.
+Both reducer&rsquo;s event streams will be merged.</p>
 
                       </div>
                       <div class="declaration">
@@ -450,7 +559,7 @@ a large reducer into several smaller ones.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2022 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2022-02-18)</p>
+          <p>&copy; 2022 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2022-02-24)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>

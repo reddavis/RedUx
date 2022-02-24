@@ -87,7 +87,8 @@ public final class Store<State, Event, Environment> {
     // MARK: Middleware
     
     private func subscribeToMiddlewares() {
-        self.middlewareTasks = self.middlewares.reduce(into: [Task<Void, Error>]()) { [weak self] results, middleware in
+        self.middlewareTasks
+        = self.middlewares.reduce(into: [Task<Void, Error>]()) { [weak self] results, middleware in
             results.append(
                 middleware.outputStream.sink { event in
                     self?.send(event)

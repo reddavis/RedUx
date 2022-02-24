@@ -134,6 +134,7 @@ extension Reducer {
     /// Combines two reducers of the same `State`, `Event` and `Environment` into one.
     ///
     /// The left hand reducer will be reduced first followed by the right hand reducer.
+    /// Both reducer's event streams will be merged.
     ///
     /// - Parameters:
     ///   - lhs: The left hand reducer.
