@@ -20,7 +20,7 @@ public final class Store<State, Event, Environment> {
     public let stateSequence: AnyAsyncSequenceable<State>
     
     // Private
-    private let reducer: (inout State, Event, Environment) -> Void
+    private let reducer: Reducer<State, Event, Environment>.Reduce
     private let environment: Environment
     private var parentStatePropagationTask: Task<Void, Error>?
     private let _stateSequence: PassthroughAsyncSequence<State> = .init()
@@ -51,7 +51,7 @@ public final class Store<State, Event, Environment> {
     
     private init(
         state: State,
-        reducer: @escaping (inout State, Event, Environment) -> Void,
+        reducer: @escaping Reducer<State, Event, Environment>.Reduce,
         environment: Environment,
         middlewares: [AnyMiddleware<Event, Event, State>]
     ) {
@@ -70,19 +70,25 @@ public final class Store<State, Event, Environment> {
     /// Send an event through the store's reducer.
     /// - Parameter event: The event.
     public func send(_ event: Event) {
+        let eventStream = self.reducer(&self.state, event, self.environment)
+        
         Task {
             for middleware in self.middlewares {
                 await middleware.execute(event: event, state: { self.state })
             }
+            
+            guard let eventStream = eventStream else { return }
+            for await event in eventStream {
+                self.send(event)
+            }
         }
-        
-        self.reducer(&self.state, event, self.environment)
     }
     
     // MARK: Middleware
     
     private func subscribeToMiddlewares() {
-        self.middlewareTasks = self.middlewares.reduce(into: [Task<Void, Error>]()) { [weak self] results, middleware in
+        self.middlewareTasks
+        = self.middlewares.reduce(into: [Task<Void, Error>]()) { [weak self] results, middleware in
             results.append(
                 middleware.outputStream.sink { event in
                     self?.send(event)
@@ -114,6 +120,7 @@ extension Store {
             state: toScopedState(self.state),
             reducer: .init { _, event, _ in
                 self.send(fromScopedEvent(event))
+                return .none
             },
             environment: toScopedEnvironment(self.environment),
             middlewares: []
