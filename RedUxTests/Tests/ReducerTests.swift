@@ -14,7 +14,7 @@ final class ReducerTests: XCTestCase {
     // MARK: Tests
     
     func testEventOnMainReducer() {
-        reducer.execute(
+        _ = reducer.execute(
             state: &self.state,
             event: .setValue("abc"),
             environment: .init()
@@ -37,12 +37,13 @@ final class ReducerTests: XCTestCase {
                 guard case let AppEvent.subEvent(subEvent) = $0 else { return nil }
                 return subEvent
             },
+            appEvent: { _ in nil },
             environment: { $0 }
         )
         
         // Execute
         let value = "abc"
-        reducer.execute(
+        _ = reducer.execute(
             state: &self.state,
             event: .subEvent(.setValue(value)),
             environment: .init()
@@ -68,12 +69,13 @@ final class ReducerTests: XCTestCase {
                 guard case let AppEvent.subEvent(subEvent) = $0 else { return nil }
                 return subEvent
             },
+            appEvent: { _ in nil },
             environment: { $0 }
         )
         
         // Execute
         let value = "abc"
-        reducer.execute(
+        _ = reducer.execute(
             state: &self.state,
             event: .subEvent(.setValue(value)),
             environment: .init()
@@ -98,7 +100,7 @@ final class ReducerTests: XCTestCase {
         let value = "abc"
         
         // State nil
-        reducer.execute(
+        _ = reducer.execute(
             state: &state,
             event: .setValue(value),
             environment: .init()
@@ -107,7 +109,7 @@ final class ReducerTests: XCTestCase {
         
         // State not nil
         state = .init()
-        reducer.execute(
+        _ = reducer.execute(
             state: &state,
             event: .setValue(value),
             environment: .init()

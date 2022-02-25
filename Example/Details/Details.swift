@@ -13,7 +13,7 @@ let detailsReducer: Reducer<DetailsState, DetailsEvent, AppEnvironment> = Reduce
     switch event {
     case .toggleActionSheet:
         state.isPresentingActionSheet.toggle()
-        return
+        return .none
     }
 }
 

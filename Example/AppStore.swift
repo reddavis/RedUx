@@ -37,17 +37,22 @@ fileprivate let reducer: Reducer<AppState, AppEvent, AppEnvironment> = Reducer {
     switch event {
     case .increment:
         state.count += 1
-        return
+        return .none
     case .decrement:
         state.count -= 1
-        return
-    case .incrementWithDelay:
-        return
+        return .none
+    case .incrementWithDelayViaMiddleware:
+        return .none
+    case .incrementWithDelayViaEffect:
+        return AsyncStream {
+            try? await Task.sleep(seconds: 2)
+            $0.yield(.increment)
+        }.eraseToAnyAsyncSequenceable()
     case .toggleIsPresentingSheet:
         state.isPresentingSheet.toggle()
-        return
+        return .none
     case .details:
-        return
+        return .none
     }
 }
 <>
@@ -78,7 +83,8 @@ struct AppState: Equatable {
 enum AppEvent {
     case increment
     case decrement
-    case incrementWithDelay
+    case incrementWithDelayViaMiddleware
+    case incrementWithDelayViaEffect
     case toggleIsPresentingSheet
     case details(DetailsEvent)
 }
@@ -110,7 +116,7 @@ struct HighlyComplicatedIncrementMiddleware: Middlewareable {
     // MARK: Middlewareable
     
     func execute(event: AppEvent, state: () -> AppState) async {
-        guard case .incrementWithDelay = event else { return }
+        guard case .incrementWithDelayViaMiddleware = event else { return }
         
         try? await Task.sleep(seconds: 2)
         self._outputStream.yield(.increment)

@@ -12,7 +12,7 @@ class RootScreenTests: XCTestCase {
             events: [
                 .increment,
                 .decrement,
-                .incrementWithDelay
+                .incrementWithDelayViaMiddleware
             ],
             matches: [
                 .init(),
