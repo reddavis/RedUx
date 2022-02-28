@@ -16,7 +16,7 @@
     <a title="  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html"> Docs</a> (94% documented)</p>
+        <p><a href="index.html"> Docs</a> (95% documented)</p>
         <div class="header-right">
           <form role="search" action="search.json">
             <input type="text" placeholder="Search documentation" data-typeahead>
@@ -48,6 +48,9 @@
           <li class="nav-group-name">
             <a href="Extensions.html">Extensions</a>
             <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Extensions/AnyAsyncSequenceable.html">AnyAsyncSequenceable</a>
+              </li>
               <li class="nav-group-task">
                 <a href="Extensions/View.html">View</a>
               </li>
@@ -110,99 +113,130 @@
 <p>Documentation can be found <a href="https://determined-dubinsky-ed15d5.netlify.app/">here</a>.</p>
 <h2 id='usage' class='heading'>Usage</h2>
 <h3 id='app-store' class='heading'>App store</h3>
-<pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">RedUx</span>
+<pre class="highlight plaintext"><code>import Asynchrone
+import RedUx
 
 
-<span class="kd">typealias</span> <span class="kt">AppStore</span> <span class="o">=</span> <span class="kt">RedUx</span><span class="o">.</span><span class="kt">Store</span><span class="o">&lt;</span><span class="kt">AppState</span><span class="p">,</span> <span class="kt">AppEvent</span><span class="p">,</span> <span class="kt">AppEnvironment</span><span class="o">&gt;</span>
+typealias AppStore = RedUx.Store&lt;AppState, AppEvent, AppEnvironment&gt;
 
 
-<span class="kd">extension</span> <span class="kt">AppStore</span> <span class="p">{</span>
-    <span class="kd">static</span> <span class="kd">func</span> <span class="nf">make</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">AppStore</span> <span class="p">{</span>
-        <span class="kt">Store</span><span class="p">(</span>
-            <span class="nv">state</span><span class="p">:</span> <span class="o">.</span><span class="nf">init</span><span class="p">(),</span>
-            <span class="nv">reducer</span><span class="p">:</span> <span class="n">reducer</span><span class="p">,</span>
-            <span class="nv">environment</span><span class="p">:</span> <span class="o">.</span><span class="nf">init</span><span class="p">()</span>
-        <span class="p">)</span>
-    <span class="p">}</span>
+extension AppStore {
+    static func make() -&gt; AppStore {
+        Store(
+            state: .init(),
+            reducer: reducer,
+            environment: .init(),
+            middlewares: [
+                HighlyComplicatedIncrementMiddleware().eraseToAnyMiddleware()
+            ]
+        )
+    }
 
-    <span class="kd">static</span> <span class="kd">func</span> <span class="nf">mock</span><span class="p">(</span>
-        <span class="nv">state</span><span class="p">:</span> <span class="kt">AppState</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">AppStore</span> <span class="p">{</span>
-        <span class="kt">Store</span><span class="p">(</span>
-            <span class="nv">state</span><span class="p">:</span> <span class="n">state</span><span class="p">,</span>
-            <span class="nv">reducer</span><span class="p">:</span> <span class="o">.</span><span class="n">empty</span><span class="p">,</span>
-            <span class="nv">environment</span><span class="p">:</span> <span class="o">.</span><span class="nf">init</span><span class="p">()</span>
-        <span class="p">)</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-
-
-<span class="c1">// MARK: Reducer</span>
-
-<span class="kd">fileprivate</span> <span class="k">let</span> <span class="nv">reducer</span><span class="p">:</span> <span class="kt">Reducer</span><span class="o">&lt;</span><span class="kt">AppState</span><span class="p">,</span> <span class="kt">AppEvent</span><span class="p">,</span> <span class="kt">AppEnvironment</span><span class="o">&gt;</span> <span class="o">=</span> <span class="kt">Reducer</span> <span class="p">{</span> <span class="n">state</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">environment</span> <span class="k">in</span>
-    <span class="k">switch</span> <span class="n">event</span> <span class="p">{</span>
-    <span class="k">case</span> <span class="o">.</span><span class="nv">increment</span><span class="p">:</span>
-        <span class="n">state</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">return</span> <span class="o">.</span><span class="k">none</span>
-    <span class="k">case</span> <span class="o">.</span><span class="nv">decrement</span><span class="p">:</span>
-        <span class="n">state</span><span class="o">.</span><span class="n">count</span> <span class="o">-=</span> <span class="mi">1</span>
-        <span class="k">return</span> <span class="o">.</span><span class="k">none</span>
-    <span class="k">case</span> <span class="o">.</span><span class="nv">incrementWithDelay</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kt">AsyncStream</span> <span class="p">{</span> <span class="n">continuation</span> <span class="k">in</span>
-            <span class="c1">// Really taxing shiz</span>
-            <span class="k">try</span><span class="p">?</span> <span class="k">await</span> <span class="kt">Task</span><span class="o">.</span><span class="nf">sleep</span><span class="p">(</span><span class="nv">nanoseconds</span><span class="p">:</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">1_000_000_000</span><span class="p">)</span>
-            <span class="n">continuation</span><span class="o">.</span><span class="nf">yield</span><span class="p">(</span><span class="o">.</span><span class="n">increment</span><span class="p">)</span>
-            <span class="n">continuation</span><span class="o">.</span><span class="nf">finish</span><span class="p">()</span>
-        <span class="p">}</span><span class="o">.</span><span class="nf">eraseToAnyAsyncSequenceable</span><span class="p">()</span>
-    <span class="k">case</span> <span class="o">.</span><span class="nv">toggleIsPresentingSheet</span><span class="p">:</span>
-        <span class="n">state</span><span class="o">.</span><span class="n">isPresentingSheet</span><span class="o">.</span><span class="nf">toggle</span><span class="p">()</span>
-        <span class="k">return</span> <span class="o">.</span><span class="k">none</span>
-    <span class="k">case</span> <span class="o">.</span><span class="nv">details</span><span class="p">:</span>
-        <span class="k">return</span> <span class="o">.</span><span class="k">none</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-<span class="o">&lt;&gt;</span>
-<span class="n">detailsReducer</span><span class="o">.</span><span class="nf">pull</span><span class="p">(</span>
-    <span class="nv">state</span><span class="p">:</span> <span class="p">\</span><span class="o">.</span><span class="n">details</span><span class="p">,</span>
-    <span class="nv">localEvent</span><span class="p">:</span> <span class="p">{</span>
-        <span class="k">guard</span> <span class="k">case</span> <span class="kt">AppEvent</span><span class="o">.</span><span class="nf">details</span><span class="p">(</span><span class="k">let</span> <span class="nv">localEvent</span><span class="p">)</span> <span class="o">=</span> <span class="nv">$0</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
-        <span class="k">return</span> <span class="n">localEvent</span>
-    <span class="p">},</span>
-    <span class="nv">appEvent</span><span class="p">:</span> <span class="kt">AppEvent</span><span class="o">.</span><span class="n">details</span><span class="p">,</span>
-    <span class="nv">environment</span><span class="p">:</span> <span class="p">{</span> <span class="nv">$0</span> <span class="p">}</span>
-<span class="p">)</span>
+    static func mock(
+        state: AppState
+    ) -&gt; AppStore {
+        Store(
+            state: state,
+            reducer: .empty,
+            environment: .init(),
+            middlewares: []
+        )
+    }
+}
 
 
 
-<span class="c1">// MARK: State</span>
+// MARK: Reducer
 
-<span class="kd">struct</span> <span class="kt">AppState</span><span class="p">:</span> <span class="kt">Equatable</span> <span class="p">{</span>
-    <span class="k">var</span> <span class="nv">count</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">var</span> <span class="nv">isPresentingSheet</span> <span class="o">=</span> <span class="kc">false</span>
-    <span class="k">var</span> <span class="nv">details</span><span class="p">:</span> <span class="kt">DetailsState</span> <span class="o">=</span> <span class="o">.</span><span class="nf">init</span><span class="p">()</span>
-<span class="p">}</span>
+fileprivate let reducer: Reducer&lt;AppState, AppEvent, AppEnvironment&gt; = Reducer { state, event, environment in
+    switch event {
+    case .increment:
+        state.count += 1
+        return .none
+    case .decrement:
+        state.count -= 1
+        return .none
+    case .incrementWithDelayViaMiddleware:
+        return .none
+    case .incrementWithDelayViaEffect:
+        return .effect {
+            try? await Task.sleep(seconds: 2)
+            return .increment
+        }.eraseToAnyAsyncSequenceable()
+    case .toggleIsPresentingSheet:
+        state.isPresentingSheet.toggle()
+        return .none
+    case .details:
+        return .none
+    }
+}
+&lt;&gt;
+detailsReducer.pull(
+    state: \.details,
+    event: {
+        guard case AppEvent.details(let localEvent) = $0 else { return nil }
+        return localEvent
+    },
+    appEvent: AppEvent.details,
+    environment: { $0 }
+)
 
 
 
-<span class="c1">// MARK: Event</span>
+// MARK: State
 
-<span class="kd">enum</span> <span class="kt">AppEvent</span> <span class="p">{</span>
-    <span class="k">case</span> <span class="n">increment</span>
-    <span class="k">case</span> <span class="n">decrement</span>
-    <span class="k">case</span> <span class="n">incrementWithDelay</span>
-    <span class="k">case</span> <span class="n">toggleIsPresentingSheet</span>
-    <span class="k">case</span> <span class="nf">details</span><span class="p">(</span><span class="kt">DetailsEvent</span><span class="p">)</span>
-<span class="p">}</span>
+struct AppState: Equatable {
+    var count = 0
+    var isPresentingSheet = false
+    var details: DetailsState = .init()
+}
 
 
 
-<span class="c1">// MARK: Environment</span>
+// MARK: Event
 
-<span class="kd">struct</span> <span class="kt">AppEnvironment</span> <span class="p">{</span>
-    <span class="kd">static</span> <span class="k">var</span> <span class="nv">mock</span><span class="p">:</span> <span class="kt">AppEnvironment</span> <span class="p">{</span> <span class="o">.</span><span class="nf">init</span><span class="p">()</span> <span class="p">}</span>
-<span class="p">}</span>
+enum AppEvent {
+    case increment
+    case decrement
+    case incrementWithDelayViaMiddleware
+    case incrementWithDelayViaEffect
+    case toggleIsPresentingSheet
+    case details(DetailsEvent)
+}
 
+
+
+// MARK: Environment
+
+struct AppEnvironment {
+    static var mock: AppEnvironment { .init() }
+}
+
+
+
+// MARK: Middleware
+
+struct HighlyComplicatedIncrementMiddleware: Middlewareable {
+    let outputStream: AnyAsyncSequenceable&lt;AppEvent&gt;
+
+    // Private
+    private let _outputStream: PassthroughAsyncSequence&lt;AppEvent&gt; = .init()
+
+    // MARK: Initialization
+
+    init() {
+        self.outputStream = self._outputStream.eraseToAnyAsyncSequenceable()
+    }
+
+    // MARK: Middlewareable
+
+    func execute(event: AppEvent, state: () -&gt; AppState) async {
+        guard case .incrementWithDelayViaMiddleware = event else { return }
+
+        try? await Task.sleep(seconds: 2)
+        self._outputStream.yield(.increment)
+    }
+}
 
 </code></pre>
 <h3 id='root-screen' class='heading'>Root screen</h3>
@@ -244,7 +278,7 @@
                 <span class="o">.</span><span class="nf">buttonStyle</span><span class="p">(</span><span class="o">.</span><span class="n">bordered</span><span class="p">)</span>
 
                 <span class="kt">Button</span><span class="p">(</span><span class="s">"Delayed increment"</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="k">self</span><span class="o">.</span><span class="n">viewModel</span><span class="o">.</span><span class="nf">send</span><span class="p">(</span><span class="o">.</span><span class="n">incrementWithDelay</span><span class="p">)</span>
+                    <span class="k">self</span><span class="o">.</span><span class="n">viewModel</span><span class="o">.</span><span class="nf">send</span><span class="p">(</span><span class="o">.</span><span class="n">incrementWithDelayViaMiddleware</span><span class="p">)</span>
                 <span class="p">}</span>
                 <span class="o">.</span><span class="nf">buttonStyle</span><span class="p">(</span><span class="o">.</span><span class="n">bordered</span><span class="p">)</span>
             <span class="p">}</span>
@@ -329,7 +363,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2022 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2022-02-24)</p>
+          <p>&copy; 2022 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2022-02-28)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
