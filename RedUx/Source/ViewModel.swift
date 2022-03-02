@@ -42,7 +42,7 @@ import SwiftUI
 public final class ViewModel<State: Equatable, Event>: ObservableObject {
     
     /// The state of the store.
-    @Published var state: State
+    @Published public var state: State
     
     // Private
     private var stateTask: Task<Void, Never>?
