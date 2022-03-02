@@ -42,7 +42,7 @@ import SwiftUI
 public final class ViewModel<State: Equatable, Event>: ObservableObject {
     
     /// The state of the store.
-    @Published var state: State
+    @Published public var state: State
     
     // Private
     private var stateTask: Task<Void, Never>?
@@ -170,6 +170,35 @@ extension ViewModel {
         self.binding(
             value: value,
             event: { _ in event }
+        )
+    }
+    
+    /// Creates a readonly `Binding`.
+    ///
+    /// This makes working with SwiftUI components easier.
+    ///
+    /// For example:
+    ///
+    /// ```swift
+    /// .fullScreenCover(
+    ///     isPresented: self.viewModel.binding(
+    ///         value: { !$0.isLoggedIn }
+    ///     ),
+    ///     onDismiss: nil,
+    ///     content: {
+    ///         Text("Logged out")
+    ///     }
+    /// )
+    /// ```
+    /// - Parameters:
+    ///   - value: A function to extract the value from the state.
+    /// - Returns: A readonly binding.
+    public func binding<ScopedState>(
+        value: @escaping (State) -> ScopedState
+    ) -> Binding<ScopedState> {
+        Binding(
+            get: { value(self.state) },
+            set: { _, _ in }
         )
     }
 }

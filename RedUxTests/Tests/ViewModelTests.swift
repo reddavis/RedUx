@@ -99,6 +99,8 @@ final class ViewModelTests: XCTestCase {
         )
     }
     
+    // MARK: Bindings
+    
     func testBindingWithValue() {
         let binding = self.viewModel.binding(
             value: \.value,
@@ -189,5 +191,29 @@ final class ViewModelTests: XCTestCase {
             self.viewModel.state.eventsReceived,
             [.setValue(self.value)]
         )
+    }
+    
+    func testReadonlyBindingReceivesValueChange() {
+        let binding = self.viewModel.binding(
+            value: \.value
+        )
+        
+        XCTAssertNil(binding.wrappedValue)
+        self.viewModel.send(.setValue(self.value))
+        XCTAssertEventuallyEqual(
+            binding.wrappedValue,
+            self.value
+        )
+    }
+    
+    func testReadonlyBindingDoesNotEmitsEventOnWrappedValueChange() {
+        let binding = self.viewModel.binding(
+            value: \.value
+        )
+        binding.wrappedValue = "whatever"
+        
+        XCTAssertNil(binding.wrappedValue)
+        XCTAssertNil(self.store.state.value)
+        XCTAssertNil(self.viewModel.state.value)
     }
 }
