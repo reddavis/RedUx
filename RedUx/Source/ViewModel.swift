@@ -172,4 +172,33 @@ extension ViewModel {
             event: { _ in event }
         )
     }
+    
+    /// Creates a readonly `Binding`.
+    ///
+    /// This makes working with SwiftUI components easier.
+    ///
+    /// For example:
+    ///
+    /// ```swift
+    /// .fullScreenCover(
+    ///     isPresented: self.viewModel.binding(
+    ///         value: { !$0.isLoggedIn }
+    ///     ),
+    ///     onDismiss: nil,
+    ///     content: {
+    ///         Text("Logged out")
+    ///     }
+    /// )
+    /// ```
+    /// - Parameters:
+    ///   - value: A function to extract the value from the state.
+    /// - Returns: A readonly binding.
+    public func binding<ScopedState>(
+        value: @escaping (State) -> ScopedState
+    ) -> Binding<ScopedState> {
+        Binding(
+            get: { value(self.state) },
+            set: { _, _ in }
+        )
+    }
 }
