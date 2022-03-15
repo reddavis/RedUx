@@ -1,16 +1,14 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "Asynchrone",
-        "repositoryURL": "https://github.com/reddavis/Asynchrone",
-        "state": {
-          "branch": "main",
-          "revision": "7de79df5c859397058ee788b66e8aa747c70924f",
-          "version": null
-        }
+  "pins" : [
+    {
+      "identity" : "asynchrone",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/reddavis/Asynchrone",
+      "state" : {
+        "revision" : "f4d01f40e35ccbd5c907fe3b9d6120ab36e79c88",
+        "version" : "0.14.0"
       }
-    ]
-  },
-  "version": 1
+    }
+  ],
+  "version" : 2
 }
