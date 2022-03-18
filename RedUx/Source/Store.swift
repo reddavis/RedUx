@@ -116,10 +116,14 @@ extension Store {
         event fromScopedEvent: @escaping (_ event: ScopedEvent) -> Event,
         environment toScopedEnvironment: (_ environment: Environment) -> ScopedEnvironment
     ) -> Store<ScopedState, ScopedEvent, ScopedEnvironment> {
+        var isSending = false
         let scopedStore = Store<ScopedState, ScopedEvent, ScopedEnvironment>(
             state: toScopedState(self.state),
-            reducer: .init { _, event, _ in
+            reducer: .init { state, event, _ in
+                isSending = true
+                defer { isSending = false }
                 self.send(fromScopedEvent(event))
+                state = toScopedState(self.state)
                 return .none
             },
             environment: toScopedEnvironment(self.environment),
@@ -127,10 +131,11 @@ extension Store {
         )
         
         // Propagate changes to state to scoped store.
-        scopedStore.parentStatePropagationTask = Task(priority: .high) { [stateSequence, weak scopedStore] in
+        scopedStore.parentStatePropagationTask = Task(priority: .high) { [stateSequence, isSending, weak scopedStore] in
             scopedStore?.state = toScopedState(self.state)
 
             for await state in stateSequence {
+                guard !isSending else { continue }
                 scopedStore?.state = toScopedState(state)
             }
         }
