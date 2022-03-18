@@ -70,8 +70,7 @@ import SwiftUI
 ///     }
 /// }
 /// ```
-
-public protocol RedUxable where Self: View {
+public protocol RedUxable {
     
     /// The local state type.
     associatedtype LocalState: Equatable
