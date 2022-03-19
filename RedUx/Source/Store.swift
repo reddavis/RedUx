@@ -28,6 +28,9 @@ public final class Store<State, Event, Environment> {
     private let middlewares: [AnyMiddleware<Event, Event, State>]
     private var middlewareTasks: [Task<Void, Error>] = []
     
+    private var eventBacklog: [Event] = []
+    private var isProcessingEvent = false
+    
     // MARK: Initialization
     
     /// Construct a Store with state, reducer and environment.
@@ -70,16 +73,30 @@ public final class Store<State, Event, Environment> {
     /// Send an event through the store's reducer.
     /// - Parameter event: The event.
     public func send(_ event: Event) {
-        let eventStream = self.reducer(&self.state, event, self.environment)
+        self.eventBacklog.append(event)
+        guard !self.isProcessingEvent else { return }
         
-        Task {
-            for middleware in self.middlewares {
-                await middleware.execute(event: event, state: { self.state })
-            }
+        self.isProcessingEvent = true
+        var state = self.state
+        
+        defer {
+            self.isProcessingEvent = false
+            self.state = state
+        }
+        
+        while !self.eventBacklog.isEmpty {
+            let event = self.eventBacklog.removeFirst()
+            let eventStream = self.reducer(&state, event, self.environment)
             
-            guard let eventStream = eventStream else { return }
-            for await event in eventStream {
-                self.send(event)
+            Task { [state] in
+                for middleware in self.middlewares {
+                    await middleware.execute(event: event, state: { state })
+                }
+                
+                guard let eventStream = eventStream else { return }
+                for await event in eventStream {
+                    self.send(event)
+                }
             }
         }
     }
@@ -112,18 +129,15 @@ extension Store {
     ///   - environment: An environment.
     /// - Returns: A `Store` instance.
     public func scope<ScopedState, ScopedEvent, ScopedEnvironment>(
-        state toScopedState: @escaping (_ state: inout State) -> ScopedState,
+        state toScopedState: @escaping (_ state: State) -> ScopedState,
         event fromScopedEvent: @escaping (_ event: ScopedEvent) -> Event,
         environment toScopedEnvironment: (_ environment: Environment) -> ScopedEnvironment
     ) -> Store<ScopedState, ScopedEvent, ScopedEnvironment> {
-        var isSending = false
         let scopedStore = Store<ScopedState, ScopedEvent, ScopedEnvironment>(
-            state: toScopedState(&self.state),
+            state: toScopedState(self.state),
             reducer: .init { state, event, _ in
-                isSending = true
-                defer { isSending = false }
                 self.send(fromScopedEvent(event))
-                state = toScopedState(&self.state)
+                state = toScopedState(self.state)
                 return .none
             },
             environment: toScopedEnvironment(self.environment),
@@ -131,13 +145,11 @@ extension Store {
         )
         
         // Propagate changes to state to scoped store.
-        scopedStore.parentStatePropagationTask = Task(priority: .high) { [stateSequence, isSending, weak scopedStore] in
-            scopedStore?.state = toScopedState(&self.state)
+        scopedStore.parentStatePropagationTask = Task(priority: .high) { [stateSequence, weak scopedStore] in
+            scopedStore?.state = toScopedState(self.state)
 
             for await state in stateSequence {
-                guard !isSending else { continue }
-                var state = state
-                scopedStore?.state = toScopedState(&state)
+                scopedStore?.state = toScopedState(state)
             }
         }
 
