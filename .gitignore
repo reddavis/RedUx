@@ -8,7 +8,6 @@
 *.perspectivev3
 !default.perspectivev3
 xcuserdata
-profile
 *.moved-aside
 DerivedData
 .idea/
@@ -19,3 +18,4 @@ Carthage/Checkouts/*
 Carthage/Build/*
 /fastlane/report.xml
 /.ruby-version
+*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
