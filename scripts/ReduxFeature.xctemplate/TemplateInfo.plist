@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Kind</key>
+	<string>Xcode.IDEFoundation.TextSubstitutionFileTemplateKind</string>
+	<key>Description</key>
+	<string>Standard redux feature.</string>
+	<key>Summary</key>
+	<string>Standard redux feature.</string>
+	<key>SortOrder</key>
+	<string>30</string>
+	<key>DefaultCompletionName</key>
+	<string>ReduxFeature</string>
+	<key>Platforms</key>
+	<array>
+		<string>com.apple.platform.iphoneos</string>
+	</array>
+	<key>Options</key>
+	<array>
+		<dict>
+			<key>Identifier</key>
+			<string>productName</string>
+			<key>Required</key>
+			<true/>
+			<key>Name</key>
+			<string>Feature name:</string>
+			<key>Description</key>
+			<string>The name of the feature to create</string>
+			<key>Type</key>
+			<string>text</string>
+			<key>NotPersisted</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>Identifier</key>
+			<string>parentName</string>
+			<key>Required</key>
+			<false/>
+			<key>Name</key>
+			<string>Parent name (optional)</string>
+			<key>Description</key>
+			<string>The name of the parent screen</string>
+			<key>Type</key>
+			<string>text</string>
+			<key>NotPersisted</key>
+			<true/>
+		</dict>
+	</array>
+	<key>MainTemplateFiles</key>
+	<array>
+		<string>___FILEBASENAME___Store.swift</string>
+		<string>___FILEBASENAME___Reducer.swift</string>
+		<string>___FILEBASENAME___State.swift</string>
+		<string>___FILEBASENAME___Event.swift</string>
+		<string>___FILEBASENAME___Environment.swift</string>
+		<string>___FILEBASENAME___Screen.swift</string>
+		<string>___FILEBASENAME___Route.swift</string>
+	</array>
+</dict>
+</plist>
