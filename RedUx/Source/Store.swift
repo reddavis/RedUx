@@ -88,17 +88,15 @@ public final class Store<State, Event, Environment> {
             let event = self.eventBacklog.removeFirst()
             let eventStream = self.reducer(&state, event, self.environment)
             
-            Task { @MainActor [state] in
-//                await MainActor.run {
-                    for middleware in self.middlewares {
-                        await middleware.execute(event: event, state: { state })
-                    }
-                    
-                    guard let eventStream = eventStream else { return }
-                    for await event in eventStream {
-                        self.send(event)
-                    }
-//                }
+            Task { [state] in
+                for middleware in self.middlewares {
+                    await middleware.execute(event: event, state: { state })
+                }
+                
+                guard let eventStream = eventStream else { return }
+                for await event in eventStream {
+                    self.send(event)
+                }
             }
         }
     }
