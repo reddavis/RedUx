@@ -1,12 +1,10 @@
 import Asynchrone
-import RedUx
+import Quoin
 
-
-typealias AppStore = RedUx.Store<AppState, AppEvent, AppEnvironment>
-
+typealias AppStore = Store<AppState, AppEvent, AppEnvironment>
 
 extension AppStore {
-    static func make() -> AppStore {
+    static func main() -> AppStore {
         Store(
             state: .init(),
             reducer: reducer,
@@ -28,8 +26,6 @@ extension AppStore {
         )
     }
 }
-
-
 
 // MARK: Reducer
 
@@ -66,8 +62,6 @@ detailsReducer.pull(
     environment: { $0 }
 )
 
-
-
 // MARK: State
 
 struct AppState: Equatable {
@@ -75,8 +69,6 @@ struct AppState: Equatable {
     var isPresentingSheet = false
     var details: DetailsState = .init()
 }
-
-
 
 // MARK: Event
 
@@ -89,15 +81,11 @@ enum AppEvent {
     case details(DetailsEvent)
 }
 
-
-
 // MARK: Environment
 
 struct AppEnvironment {
     static var mock: AppEnvironment { .init() }
 }
-
-
 
 // MARK: Middleware
 

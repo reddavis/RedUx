@@ -1,11 +1,9 @@
 import XCTest
-import RedUxTestUtilities
 @testable import Example
-
 
 class RootScreenTests: XCTestCase {
     func testStateChange() async {
-        let store = RootScreen.LocalStore.make()
+        let store = RootScreen.LocalStore.main()
         
         XCTAssertStateChange(
             store: store,

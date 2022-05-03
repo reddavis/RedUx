@@ -1,8 +1,7 @@
 import SwiftUI
-import RedUx
+import Quoin
 
-
-struct DetailsScreen: View, RedUxable {
+struct DetailsScreen: View, Quoinable {
     typealias LocalState = DetailsState
     typealias LocalEvent = DetailsEvent
     typealias LocalEnvironment = AppEnvironment
@@ -39,10 +38,9 @@ struct DetailsScreen: View, RedUxable {
     }
 }
 
-
-
 // MARK: Preview
 
+#if DEBUG
 struct DetailsScreen_Previews: PreviewProvider {
     static var previews: some View {
         DetailsScreen.mock(
@@ -53,3 +51,4 @@ struct DetailsScreen_Previews: PreviewProvider {
         )
     }
 }
+#endif

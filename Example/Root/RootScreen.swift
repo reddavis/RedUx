@@ -1,8 +1,7 @@
 import SwiftUI
-import RedUx
+import Quoin
 
-
-struct RootScreen: View, RedUxable {
+struct RootScreen: View, Quoinable {
     typealias LocalState = AppState
     typealias LocalEvent = AppEvent
     typealias LocalEnvironment = AppEnvironment
@@ -53,7 +52,7 @@ struct RootScreen: View, RedUxable {
             ),
             onDismiss: nil,
             content: {
-                DetailsScreen.make(
+                DetailsScreen.main(
                     store: self.store.scope(
                         state: \.details,
                         event: AppEvent.details,
@@ -65,10 +64,9 @@ struct RootScreen: View, RedUxable {
     }
 }
 
-
-
 // MARK: Preview
 
+#if DEBUG
 struct RootScreen_Previews: PreviewProvider {
     static var previews: some View {
         RootScreen.mock(
@@ -79,3 +77,4 @@ struct RootScreen_Previews: PreviewProvider {
         )
     }
 }
+#endif

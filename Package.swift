@@ -3,17 +3,16 @@
 
 import PackageDescription
 
-
 let package = Package(
-    name: "RedUx",
+    name: "Quoin",
     platforms: [
         .iOS("15.0"),
         .macOS("12.0")
     ],
     products: [
         .library(
-            name: "RedUx",
-            targets: ["RedUx"]
+            name: "Quoin",
+            targets: ["Quoin"]
         )
     ],
     dependencies: [
@@ -21,15 +20,15 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "RedUx",
+            name: "Quoin",
             dependencies: ["Asynchrone"],
-            path: "RedUx",
-            exclude: ["Supporting Files/RedUx.docc"]
+            path: "Quoin",
+            exclude: []
         ),
         .testTarget(
-            name: "RedUxTests",
-            dependencies: ["RedUx"],
-            path: "RedUxTests"
+            name: "QuoinTests",
+            dependencies: ["Quoin"],
+            path: "QuoinTests"
         )
     ]
 )

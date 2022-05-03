@@ -1,7 +1,6 @@
 import Asynchrone
-import RedUx
+import Quoin
 import XCTest
-
 
 /// Assert that a store's state changes match expectation after sending
 /// a collection of events.
@@ -39,8 +38,6 @@ func XCTAssertStateChange<State: Equatable, Event, Environment>(
         line: line
     )
 }
-
-
 
 // MARK: XCTAssertEventuallyEqualStates
 

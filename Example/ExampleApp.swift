@@ -1,12 +1,11 @@
 import SwiftUI
 
-
 @main
 struct ExampleApp: App {
     var body: some Scene {
         WindowGroup {
-            RootScreen.make(
-                store: AppStore.make()
+            RootScreen.main(
+                store: AppStore.main()
             )
         }
     }

@@ -1,6 +1,6 @@
-# RedUx
+# Quoin
 
-A super simple Swift implementation of the redux pattern making use of Swift 5.5's new async await API's. 
+Quoin (pronounced coin) is simple Swift implementation of the redux pattern making use of Swift 5.5's async await API's. 
 
 ## Requirements
 
@@ -16,8 +16,8 @@ In Xcode:
 1. Click `Project`.
 2. Click `Package Dependencies`.
 3. Click `+`.
-4. Enter package URL: `https://github.com/reddavis/Redux`.
-5. Add `RedUx` to your app target.
+4. Enter package URL: `https://github.com/reddavis/Quoin`.
+5. Add `Quoin` to your app target.
 
 ## Documentation
 
@@ -29,11 +29,9 @@ Documentation can be found [here](https://determined-dubinsky-ed15d5.netlify.app
 
 ```
 import Asynchrone
-import RedUx
+import Quoin
 
-
-typealias AppStore = RedUx.Store<AppState, AppEvent, AppEnvironment>
-
+typealias AppStore = Store<AppState, AppEvent, AppEnvironment>
 
 extension AppStore {
     static func make() -> AppStore {
@@ -58,8 +56,6 @@ extension AppStore {
         )
     }
 }
-
-
 
 // MARK: Reducer
 
@@ -96,8 +92,6 @@ detailsReducer.pull(
     environment: { $0 }
 )
 
-
-
 // MARK: State
 
 struct AppState: Equatable {
@@ -105,8 +99,6 @@ struct AppState: Equatable {
     var isPresentingSheet = false
     var details: DetailsState = .init()
 }
-
-
 
 // MARK: Event
 
@@ -119,15 +111,11 @@ enum AppEvent {
     case details(DetailsEvent)
 }
 
-
-
 // MARK: Environment
 
 struct AppEnvironment {
     static var mock: AppEnvironment { .init() }
 }
-
-
 
 // MARK: Middleware
 
@@ -159,10 +147,9 @@ struct HighlyComplicatedIncrementMiddleware: Middlewareable {
 
 ```swift
 import SwiftUI
-import RedUx
+import Quoin
 
-
-struct RootScreen: View, RedUxable {
+struct RootScreen: View, Quoinable {
     typealias LocalState = AppState
     typealias LocalEvent = AppEvent
     typealias LocalEnvironment = AppEnvironment
@@ -225,8 +212,6 @@ struct RootScreen: View, RedUxable {
     }
 }
 
-
-
 // MARK: Preview
 
 struct RootScreen_Previews: PreviewProvider {
@@ -236,36 +221,6 @@ struct RootScreen_Previews: PreviewProvider {
                 count: 0
             ),
             environment: .mock
-        )
-    }
-}
-```
-
-### Tests
-
-```swift
-import XCTest
-import RedUxTestUtilities
-@testable import Example
-
-
-class RootScreenTests: XCTestCase {
-    func testStateChange() async {
-        let store = RootScreen.LocalStore.make()
-        
-        await XCTAssertStateChange(
-            store: store,
-            events: [
-                .increment,
-                .decrement,
-                .incrementWithDelay
-            ],
-            matches: [
-                .init(),
-                .init(count: 1),
-                .init(count: 0),
-                .init(count: 1)
-            ]
         )
     }
 }

@@ -1,11 +1,8 @@
-import RedUx
-
+import Quoin
 
 struct DetailsState: Equatable {
     var isPresentingActionSheet: Bool = false
 }
-
-
 
 // MARK: Reducer
 
@@ -16,8 +13,6 @@ let detailsReducer: Reducer<DetailsState, DetailsEvent, AppEnvironment> = Reduce
         return .none
     }
 }
-
-
 
 // MARK: Event
 
