@@ -56,13 +56,15 @@ public final class ViewModel<State: Equatable, Event>: ObservableObject {
         self.state = store.state
         self._send = { store.send($0) }
         self.stateTask = Task { [weak self] in
+            guard let self = self else { return }
+            
             do {
-                self?.state = store.state
+                await MainActor.run {
+                    self.state = store.state
+                }
                 
                 for try await state in store.stateSequence.removeDuplicates() {
-                    guard
-                        let self = self,
-                        !Task.isCancelled else { break }
+                    guard !Task.isCancelled else { break }
                     
                     await MainActor.run {
                         self.state = state
