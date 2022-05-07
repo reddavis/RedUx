@@ -3,7 +3,6 @@
 
 import PackageDescription
 
-
 let package = Package(
     name: "RedUx",
     platforms: [
@@ -24,7 +23,7 @@ let package = Package(
             name: "RedUx",
             dependencies: ["Asynchrone"],
             path: "RedUx",
-            exclude: ["Supporting Files/RedUx.docc"]
+            exclude: []
         ),
         .testTarget(
             name: "RedUxTests",
