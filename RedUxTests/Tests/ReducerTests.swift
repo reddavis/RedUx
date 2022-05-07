@@ -1,7 +1,6 @@
 import XCTest
 @testable import RedUx
 
-
 final class ReducerTests: XCTestCase {
     private var state: AppState!
     

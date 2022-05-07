@@ -1,8 +1,6 @@
 import SwiftUI
 
-
-public struct UnwrapStore<State, Event, Environment, Content: View>: View {
-    // Private
+public struct UnwrapStore<State, Event, Environment, Content>: View where Content: View {
     private let content: (Store<State?, Event, Environment>) -> Content
     private let store: Store<State?, Event, Environment>
     
@@ -33,10 +31,9 @@ public struct UnwrapStore<State, Event, Environment, Content: View>: View {
     }
 }
 
-
-
 // MARK: Preview
 
+#if DEBUG
 struct UnwrapStore_Previews: PreviewProvider {
     enum Event { }
     struct Environment { }
@@ -69,3 +66,4 @@ struct UnwrapStore_Previews: PreviewProvider {
         }
     }
 }
+#endif

@@ -2,13 +2,11 @@ import Asynchrone
 import Foundation
 import SwiftUI
 
-
 /// A Store is the core of the application. It is used to manage state and handle events sent to it.
 ///
 /// Generally an application will have one store and then use the scope function to create sub stores for
 /// different components of the app.
-public final class Store<State, Event, Environment> {
-    
+public final class Store<State, Event, Environment> {    
     /// The state of the store.
     public private(set) var state: State {
         didSet {

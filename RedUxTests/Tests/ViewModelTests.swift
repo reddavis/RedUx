@@ -1,7 +1,6 @@
 import XCTest
 @testable import RedUx
 
-
 final class ViewModelTests: XCTestCase {
     private var store: Store<AppState, AppEvent, AppEnvironment>!
     private var viewModel: ViewModel<AppState, AppEvent>!

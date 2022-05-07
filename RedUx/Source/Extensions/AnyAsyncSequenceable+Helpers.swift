@@ -1,10 +1,6 @@
 import Asynchrone
 
-
 extension AnyAsyncSequenceable {
-    
-    // MARK: Builders
-    
     /// Create a simple effect that emits a single event.
     /// - Parameter closure: An async closure that returns an event.
     /// - Returns: A type erased async sequence.

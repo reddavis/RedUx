@@ -1,13 +1,9 @@
 import Asynchrone
 import Foundation
 
-
 /// A reducer is responsible for taking an event and deciding how the state should be changed and
 /// whether any effects should be executed.
 public struct Reducer<State, Event, Environment> {
-    
-    // Static
-    
     /// An empty reducer. Useful for SwiftUI's previews.
     /// - Returns: A reducer.
     public static var empty: Reducer<State, Event, Environment> {

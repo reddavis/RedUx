@@ -2,7 +2,6 @@ import Asynchrone
 import XCTest
 @testable import RedUx
 
-
 final class AnyAsyncSequenceableExtensionTests: XCTestCase {
     func testEffectBuilder() async {
         let event = AppEvent.setValue("a")
