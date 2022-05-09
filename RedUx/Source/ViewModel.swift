@@ -1,6 +1,5 @@
 import SwiftUI
 
-
 /// A view model wraps a store and observes state changes that can be used
 /// within a view.
 ///
@@ -40,7 +39,6 @@ import SwiftUI
 /// ```
 @dynamicMemberLookup
 public final class ViewModel<State: Equatable, Event>: ObservableObject {
-    
     /// The state of the store.
     @Published public var state: State
     

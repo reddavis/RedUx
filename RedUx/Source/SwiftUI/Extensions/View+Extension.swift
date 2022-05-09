@@ -1,6 +1,5 @@
 import SwiftUI
 
-
 public extension View {
     /// Synchronize a `Binding` and a `FocusState.Binding`'s value.
     /// [🙌 Pointfree](https://twitter.com/pointfreeco/status/1423340276098031619/photo/1)

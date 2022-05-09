@@ -1,6 +1,5 @@
 import XCTest
 
-
 /// Assert two async expressions are eventually equal.
 /// - Parameters:
 ///   - expressionA: Expression A
@@ -132,8 +131,6 @@ func XCTAsyncAssertEqual<T: Equatable>(
         line: line
     )
 }
-
-
 
 // MARK: XCTAssertEventuallyEqualError
 

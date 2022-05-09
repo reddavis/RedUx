@@ -1,6 +1,5 @@
 import Asynchrone
 
-
 /// Middleware provides a way to build more complicated application logic that doesn't belong inside
 /// the reducer.
 ///
@@ -31,11 +30,9 @@ public protocol Middlewareable {
     func execute(event: InputEvent, state: () -> State) async
 }
 
-
 // MARK: Pull
 
 extension Middlewareable {
-    
     /// Transforms or "Pulls" a scoped middleware into a global middleware.
     ///
     /// Similar to reducers, it may make sense to scope a middleware. For example,

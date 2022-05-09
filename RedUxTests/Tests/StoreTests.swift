@@ -1,7 +1,6 @@
 import XCTest
 @testable import RedUx
 
-
 final class StoreTests: XCTestCase {
     private var store: Store<AppState, AppEvent, AppEnvironment>!
     

@@ -1,6 +1,5 @@
 import SwiftUI
 
-
 /// A protocol to help guide structuring a SwiftUI view to use RedUx.
 ///
 /// The use of this protocol isn't required in order to use RedUx. It can be used as a
@@ -117,7 +116,6 @@ public protocol RedUxable {
 // MAKR: Default implementation
 
 extension RedUxable {
-    
     /// Create a "live" RedUxable view with a store.
     /// - Parameter store: The store
     /// - Returns: A view.
