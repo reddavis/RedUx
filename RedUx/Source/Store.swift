@@ -85,6 +85,7 @@ public final class Store<State, Event, Environment> {
         while !self.eventBacklog.isEmpty {
             let event = self.eventBacklog.removeFirst()
             let eventStream = self.reducer(&state, event, self.environment)
+            self.state = state
             
             Task { [state] in
                 for middleware in self.middlewares {
