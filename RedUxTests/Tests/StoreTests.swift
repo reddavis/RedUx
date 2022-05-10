@@ -80,54 +80,86 @@ final class StoreTests: XCTestCase {
         // Check parent store's value changes
         XCTAssertEventuallyEqual(
             self.store.state.eventsReceived,
-            [.subEvent(.setValueViaEffect(value)), .setValue(value)]
+            [.subEvent(.setValueViaEffect(value)), .subEvent(.setValue(value))]
         )
     }
     
     // MARK: Effects
     
-    func testSendingEventThatTriggersAnEffect() async {
-        XCTAssertNil(self.store.state.value)
-        self.store.send(.setValueViaEffect("a"))
-        
-        XCTAssertEventuallyEqual(
-            self.store.state,
-            .init(
-                value: "a",
-                eventsReceived: [
-                    .subEvent(.setValueViaEffect("a")),
-                    .subEvent(.setValue("a"))
-                ]
-            )
+    func testSendingEventThatTriggersAnEffect() {
+        XCTAssertStateChange(
+            store: self.store,
+            events: [.setValueViaEffect("a")],
+            matches: [
+                .init(),
+                .init(
+                    eventsReceived: [
+                        .setValueViaEffect("a")
+                    ]
+                ),
+                .init(
+                    value: "a",
+                    eventsReceived: [
+                        .setValueViaEffect("a"),
+                        .setValue("a")
+                    ]
+                )
+            ]
         )
     }
     
     // MARK: Middleware
     
-    func testMiddleware() async {
-        XCTAssertNil(self.store.state.value)
-        self.store.send(.setValueViaMiddleware("a"))
-        
-        XCTAssertEventuallyEqual(self.store.state.value, "a")
-        
-        XCTAssertEventuallyEqual(
-            self.store.state.eventsReceived,
-            [.setValueViaMiddleware("a"), .setValue("a")]
+    func testMiddleware() {
+        XCTAssertStateChange(
+            store: self.store,
+            events: [.setValueViaMiddleware("a")],
+            matches: [
+                .init(),
+                .init(
+                    eventsReceived: [
+                        .setValueViaMiddleware("a")
+                    ]
+                ),
+                .init(
+                    value: "a",
+                    eventsReceived: [
+                        .setValueViaMiddleware("a"),
+                        .setValue("a")
+                    ]
+                )
+            ]
         )
     }
     
-    func testScopedMiddleware() async {
-        XCTAssertNil(self.store.state.value)
-        self.store.send(.subEvent(.setValueViaMiddleware("a")))
-        
-        XCTAssertEventuallyEqual(
-            self.store.state.subState.value,
-            "a"
-        )
-        
-        XCTAssertEventuallyEqual(
-            self.store.state.eventsReceived,
-            [.subEvent(.setValueViaMiddleware("a")), .subEvent(.setValue("a"))]
+    func testScopedMiddleware() {
+        XCTAssertStateChange(
+            store: self.store,
+            events: [.subEvent(.setValueViaMiddleware("a"))],
+            matches: [
+                .init(),
+                .init(
+                    eventsReceived: [
+                        .subEvent(.setValueViaMiddleware("a"))
+                    ],
+                    subState: .init(
+                        eventsReceived: [.setValueViaMiddleware("a")]
+                    )
+                ),
+                .init(
+                    eventsReceived: [
+                        .subEvent(.setValueViaMiddleware("a")),
+                        .subEvent(.setValue("a"))
+                    ],
+                    subState: .init(
+                        value: "a",
+                        eventsReceived: [
+                            .setValueViaMiddleware("a"),
+                            .setValue("a")
+                        ]
+                    )
+                )
+            ]
         )
     }
 }

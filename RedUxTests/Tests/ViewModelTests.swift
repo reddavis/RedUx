@@ -3,7 +3,7 @@ import XCTest
 
 final class ViewModelTests: XCTestCase {
     private var store: Store<AppState, AppEvent, AppEnvironment>!
-    private var viewModel: ViewModel<AppState, AppEvent>!
+    private var viewModel: ViewModel<AppState, AppEvent, AppEnvironment>!
     private let value = "a"
     
     // MARK: Setup
@@ -41,7 +41,7 @@ final class ViewModelTests: XCTestCase {
             self.store.state.eventsReceived,
             [.setValue(self.value)]
         )
-        
+
         XCTAssertEventuallyEqual(
             self.viewModel.state.eventsReceived,
             [.setValue(self.value)]
@@ -64,12 +64,12 @@ final class ViewModelTests: XCTestCase {
         
         XCTAssertEventuallyEqual(
             self.store.state.eventsReceived,
-            [.setValueViaMiddleware(self.value), .setValue(self.value)]
+            [.setValueViaEffect(self.value), .setValue(self.value)]
         )
         
         XCTAssertEventuallyEqual(
             self.viewModel.state.eventsReceived,
-            [.setValueViaMiddleware(self.value), .setValue(self.value)]
+            [.setValueViaEffect(self.value), .setValue(self.value)]
         )
     }
     
@@ -154,7 +154,7 @@ final class ViewModelTests: XCTestCase {
             self.store.state.eventsReceived,
             [.setValueToA]
         )
-        
+
         XCTAssertEventuallyEqual(
             self.viewModel.state.eventsReceived,
             [.setValueToA]
