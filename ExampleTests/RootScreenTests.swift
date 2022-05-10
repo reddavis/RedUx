@@ -1,7 +1,5 @@
 import XCTest
-import RedUxTestUtilities
 @testable import Example
-
 
 class RootScreenTests: XCTestCase {
     func testStateChange() async {
