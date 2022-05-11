@@ -58,7 +58,8 @@ public final class ViewModel<State: Equatable, Event, Environment>: ObservableOb
             guard let self = self else { return }
             
             do {
-                Task { @MainActor in
+                Task { @MainActor [weak self] in
+                    guard let self = self else { return }
                     self.state = self.store.state
                 }
                 
