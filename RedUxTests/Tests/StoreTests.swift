@@ -36,7 +36,7 @@ final class StoreTests: XCTestCase {
     
     // MARK: Scoped store
     
-    func testScopedStore() {
+    func testScopedStore() async {
         let scopedStore = self.store.scope(
             state: \.subState,
             event: AppEvent.subEvent,
@@ -48,16 +48,16 @@ final class StoreTests: XCTestCase {
         scopedStore.send(.setValue(value))
         
         // Check scoped store's value changes
-        XCTAssertEventuallyEqual(scopedStore.state.value, value)
+        await XCTAssertEventuallyEqual(scopedStore.state.value, value)
         
         // Check scoped store's received event
-        XCTAssertEventuallyEqual(scopedStore.state.eventsReceived, [.setValue(value)])
+        await XCTAssertEventuallyEqual(scopedStore.state.eventsReceived, [.setValue(value)])
 
         // Check parent store's value changes
-        XCTAssertEventuallyEqual(self.store.state.eventsReceived, [.subEvent(.setValue(value))])
+        await XCTAssertEventuallyEqual(self.store.state.eventsReceived, [.subEvent(.setValue(value))])
     }
     
-    func testSendingEffectTriggeringEventToScopedStore() {
+    func testSendingEffectTriggeringEventToScopedStore() async {
         let scopedStore = self.store.scope(
             state: \.subState,
             event: AppEvent.subEvent,
@@ -69,16 +69,16 @@ final class StoreTests: XCTestCase {
         scopedStore.send(.setValueViaEffect(value))
         
         // Check scoped store's value changes
-        XCTAssertEventuallyEqual(scopedStore.state.value, value)
+        await XCTAssertEventuallyEqual(scopedStore.state.value, value)
         
         // Check scoped store's received event
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             scopedStore.state.eventsReceived,
             [.setValueViaEffect(value), .setValue(value)]
         )
 
         // Check parent store's value changes
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             self.store.state.eventsReceived,
             [.subEvent(.setValueViaEffect(value)), .subEvent(.setValue(value))]
         )
@@ -86,8 +86,8 @@ final class StoreTests: XCTestCase {
     
     // MARK: Effects
     
-    func testSendingEventThatTriggersAnEffect() {
-        XCTAssertStateChange(
+    func testSendingEventThatTriggersAnEffect() async {
+        await XCTAssertStateChange(
             store: self.store,
             events: [.setValueViaEffect("a")],
             matches: [
@@ -110,8 +110,8 @@ final class StoreTests: XCTestCase {
     
     // MARK: Middleware
     
-    func testMiddleware() {
-        XCTAssertStateChange(
+    func testMiddleware() async {
+        await XCTAssertStateChange(
             store: self.store,
             events: [.setValueViaMiddleware("a")],
             matches: [
@@ -132,8 +132,8 @@ final class StoreTests: XCTestCase {
         )
     }
     
-    func testScopedMiddleware() {
-        XCTAssertStateChange(
+    func testScopedMiddleware() async {
+        await XCTAssertStateChange(
             store: self.store,
             events: [.subEvent(.setValueViaMiddleware("a"))],
             matches: [

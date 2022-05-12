@@ -23,76 +23,76 @@ final class ViewModelTests: XCTestCase {
 
     // MARK: Tests
     
-    func testStateChangesFromEventPropagateToViewModel() {
+    func testStateChangesFromEventPropagateToViewModel() async {
         XCTAssertNil(self.viewModel.state.value)
         self.viewModel.send(.setValue(self.value))
         
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             self.store.state.value,
             self.value
         )
         
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             self.viewModel.state.value,
             self.value
         )
         
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             self.store.state.eventsReceived,
             [.setValue(self.value)]
         )
 
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             self.viewModel.state.eventsReceived,
             [.setValue(self.value)]
         )
     }
     
-    func testStateChangesFromEventViaMiddlewarePropagateToViewModel() {
+    func testStateChangesFromEventViaMiddlewarePropagateToViewModel() async {
         XCTAssertNil(self.store.state.value)
         self.store.send(.setValueViaEffect(self.value))
         
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             self.store.state.value,
             self.value
         )
         
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             self.viewModel.state.value,
             self.value
         )
         
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             self.store.state.eventsReceived,
             [.setValueViaEffect(self.value), .setValue(self.value)]
         )
         
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             self.viewModel.state.eventsReceived,
             [.setValueViaEffect(self.value), .setValue(self.value)]
         )
     }
     
-    func testStateChangesFromEventViaEffectPropagateToViewModel() {
+    func testStateChangesFromEventViaEffectPropagateToViewModel() async {
         XCTAssertNil(self.store.state.value)
         self.store.send(.setValueViaEffect(self.value))
         
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             self.store.state.value,
             self.value
         )
         
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             self.viewModel.state.value,
             self.value
         )
         
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             self.store.state.eventsReceived,
             [.setValueViaEffect(self.value), .setValue(self.value)]
         )
         
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             self.viewModel.state.eventsReceived,
             [.setValueViaEffect(self.value), .setValue(self.value)]
         )
@@ -100,7 +100,7 @@ final class ViewModelTests: XCTestCase {
     
     // MARK: Bindings
     
-    func testBindingWithValue() {
+    func testBindingWithValue() async {
         let binding = self.viewModel.binding(
             value: \.value,
             event: { .setValue($0 ?? "") }
@@ -109,28 +109,28 @@ final class ViewModelTests: XCTestCase {
         XCTAssertNil(self.store.state.value)
         binding.wrappedValue = self.value
 
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             self.store.state.value,
             self.value
         )
         
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             self.viewModel.state.value,
             self.value
         )
         
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             self.store.state.eventsReceived,
             [.setValue(self.value)]
         )
         
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             self.viewModel.state.eventsReceived,
             [.setValue(self.value)]
         )
     }
     
-    func testBindingEmitsEventOnWrappedValueChange() {
+    func testBindingEmitsEventOnWrappedValueChange() async {
         let binding = self.viewModel.binding(
             value: \.value,
             event: .setValueToA
@@ -140,28 +140,28 @@ final class ViewModelTests: XCTestCase {
         // trigger the .setValueToA event.
         binding.wrappedValue = "whatever"
         
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             self.store.state.value,
             self.value
         )
         
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             self.viewModel.state.value,
             self.value
         )
         
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             self.store.state.eventsReceived,
             [.setValueToA]
         )
 
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             self.viewModel.state.eventsReceived,
             [.setValueToA]
         )
     }
     
-    func testBindingRemovesDuplicateSetterCalls() {
+    func testBindingRemovesDuplicateSetterCalls() async {
         let binding = self.viewModel.binding(
             value: \.value,
             event: AppEvent.setValue
@@ -171,41 +171,41 @@ final class ViewModelTests: XCTestCase {
         // trigger the .setValue event.
         binding.wrappedValue = self.value
         
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             self.store.state.value,
             self.value
         )
         
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             self.viewModel.state.value,
             self.value
         )
         
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             self.store.state.eventsReceived,
             [.setValue(self.value)]
         )
         
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             self.viewModel.state.eventsReceived,
             [.setValue(self.value)]
         )
     }
     
-    func testReadonlyBindingReceivesValueChange() {
+    func testReadonlyBindingReceivesValueChange() async {
         let binding = self.viewModel.binding(
             value: \.value
         )
         
         XCTAssertNil(binding.wrappedValue)
         self.viewModel.send(.setValue(self.value))
-        XCTAssertEventuallyEqual(
+        await XCTAssertEventuallyEqual(
             binding.wrappedValue,
             self.value
         )
     }
     
-    func testReadonlyBindingDoesNotEmitsEventOnWrappedValueChange() {
+    func testReadonlyBindingDoesNotEmitsEventOnWrappedValueChange() async {
         let binding = self.viewModel.binding(
             value: \.value
         )

@@ -84,7 +84,7 @@ public protocol RedUxable {
     typealias LocalStore = Store<LocalState, LocalEvent, LocalEnvironment>
     
     /// The local view model
-    typealias LocalViewModel = ViewModel<LocalState, LocalEvent, LocalEnvironment>
+    typealias LocalViewModel = ViewModel<LocalState, LocalEvent>
     
     /// Create a "live" RedUxable view with a store and view model.
     /// - Parameters:

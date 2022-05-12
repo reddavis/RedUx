@@ -38,33 +38,32 @@ import SwiftUI
 /// }
 /// ```
 @dynamicMemberLookup
-public final class ViewModel<State: Equatable, Event, Environment>: ObservableObject {
+public final class ViewModel<State: Equatable, Event>: ObservableObject {
     /// The state of the store.
     @Published public var state: State
     
     // Private
     private var stateTask: Task<Void, Never>?
-    private let store: Store<State, Event, Environment>
+    private let _send: (Event) -> Void
     
     // MARK: Initialization
     
     /// Create a new view model instance.
     /// - Parameter store: The store.
-    public init(_ store: Store<State, Event, Environment>) {
+    public init<Environment>(_ store: Store<State, Event, Environment>) {
         self.state = store.state
-        self.store = store
-
+        self._send = { store.send($0) }
         self.stateTask = Task { [weak self] in
             guard let self = self else { return }
             
             do {
-                Task { @MainActor [weak self] in
-                    guard let self = self else { return }
-                    self.state = self.store.state
+                await MainActor.run {
+                    self.state = store.state
                 }
                 
                 for try await state in store.stateSequence.removeDuplicates() {
                     guard !Task.isCancelled else { break }
+                    
                     await MainActor.run {
                         self.state = state
                     }
@@ -82,7 +81,7 @@ public final class ViewModel<State: Equatable, Event, Environment>: ObservableOb
     /// Send an event to the store.
     /// - Parameter event: The even to send.
     public func send(_ event: Event) {
-        self.store.send(event)
+        self._send(event)
     }
     
     /// Returns the resulting state value of a given key path.
