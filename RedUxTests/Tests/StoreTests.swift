@@ -44,17 +44,17 @@ final class StoreTests: XCTestCase {
         )
         let value = "a"
         
-        XCTAssertNil(scopedStore.state.value)
-        scopedStore.send(.setValue(value))
-        
-        // Check scoped store's value changes
-        await XCTAssertEventuallyEqual(scopedStore.state.value, value)
-        
-        // Check scoped store's received event
-        await XCTAssertEventuallyEqual(scopedStore.state.eventsReceived, [.setValue(value)])
+        await XCTAssertStateChange(
+            store: scopedStore,
+            events: [.setValue(value)],
+            matches: [
+                self.store.state.subState,
+                .init(value: value, eventsReceived: [.setValue(value)])
+            ]
+        )
 
         // Check parent store's value changes
-        await XCTAssertEventuallyEqual(self.store.state.eventsReceived, [.subEvent(.setValue(value))])
+        XCTAssertEqual(self.store.state.eventsReceived, [.subEvent(.setValue(value))])
     }
     
     func testSendingEffectTriggeringEventToScopedStore() async {
@@ -66,19 +66,18 @@ final class StoreTests: XCTestCase {
         let value = "a"
         
         XCTAssertNil(scopedStore.state.value)
-        scopedStore.send(.setValueViaEffect(value))
-        
-        // Check scoped store's value changes
-        await XCTAssertEventuallyEqual(scopedStore.state.value, value)
-        
-        // Check scoped store's received event
-        await XCTAssertEventuallyEqual(
-            scopedStore.state.eventsReceived,
-            [.setValueViaEffect(value), .setValue(value)]
+        await XCTAssertStateChange(
+            store: scopedStore,
+            events: [.setValueViaEffect(value)],
+            matches: [
+                .init(),
+                .init(value: nil, eventsReceived: [.setValueViaEffect(value)]),
+                .init(value: value, eventsReceived: [.setValueViaEffect(value), .setValue(value)])
+            ]
         )
-
+        
         // Check parent store's value changes
-        await XCTAssertEventuallyEqual(
+        XCTAssertEqual(
             self.store.state.eventsReceived,
             [.subEvent(.setValueViaEffect(value)), .subEvent(.setValue(value))]
         )
