@@ -79,14 +79,14 @@ public final class Store<State, Event, Environment> {
         
         defer {
             self.isProcessingEvent = false
-            self.state = state
         }
         
-        while !self.eventBacklog.isEmpty {
+        repeat {
             let event = self.eventBacklog.removeFirst()
             let eventStream = self.reducer(&state, event, self.environment)
+            self.state = state
             
-            Task { [state] in
+            Task(priority: .high) { [state] in
                 for middleware in self.middlewares {
                     await middleware.execute(event: event, state: { state })
                 }
@@ -96,7 +96,7 @@ public final class Store<State, Event, Environment> {
                     self.send(event)
                 }
             }
-        }
+        } while !self.eventBacklog.isEmpty
     }
     
     // MARK: Middleware
