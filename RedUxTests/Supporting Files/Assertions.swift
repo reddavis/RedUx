@@ -179,7 +179,7 @@ Failed To Assert Equality
 ///   - events: The events to send to the store.
 ///   - statesToMatch: An array of state changes expected. These will be asserted
 ///     equal against the store's state changes.
-///   - timeout: Time to wait for store state changes. Defaults to `2`
+///   - timeout: Time to wait for store state changes. Defaults to `5`
 ///   - file: The file where this assertion is being called. Defaults to `#filePath`.
 ///   - line: The line in the file where this assertion is being called. Defaults to `#line`.
 func XCTAssertStateChange<State: Equatable, Event, Environment>(
@@ -205,13 +205,13 @@ func XCTAssertStateChange<State: Equatable, Event, Environment>(
             semaphore.signal()
         }
     
-    Task {
+    Task.detached(priority: .low) {
         semaphore.wait()
         for event in events {
             store.send(event)
         }
     }
-
+        
     while true {
         switch states == statesToMatch {
         // All good!
@@ -231,11 +231,9 @@ func XCTAssertStateChange<State: Equatable, Event, Environment>(
             )
             return
         // False but still within timeout limit.
-        case false:()
+        case false:
+            try? await Task.sleep(nanoseconds: 10000000)
         }
-
-        await Task.yield()
-        try? await Task.sleep(nanoseconds: 1000)
     }
 }
 
@@ -243,18 +241,18 @@ func XCTAssertStateChange<State: Equatable, Event, Environment>(
 /// - Parameters:
 ///   - expressionA: Expression A
 ///   - expressionB: Expression B
-///   - timeout: Time to wait for store state changes. Defaults to `2`
+///   - timeout: Time to wait for store state changes. Defaults to `5`
 ///   - file: The file where this assertion is being called. Defaults to `#filePath`.
 ///   - line: The line in the file where this assertion is being called. Defaults to `#line`.
 func XCTAssertEventuallyEqual<T: Equatable>(
     _ expressionA: @escaping @autoclosure () -> T?,
     _ expressionB: @escaping @autoclosure () -> T?,
-    timeout: TimeInterval = 2.0,
+    timeout: TimeInterval = 5.0,
     file: StaticString = #filePath,
     line: UInt = #line
 ) async {
     let timeoutDate = Date(timeIntervalSinceNow: timeout)
-            
+    
     while true {
         let resultA = expressionA()
         let resultB = expressionB()
@@ -277,10 +275,8 @@ func XCTAssertEventuallyEqual<T: Equatable>(
             )
             return
         // False but still within timeout limit.
-        case false:()
+        case false:
+            try? await Task.sleep(nanoseconds: 10000000)
         }
-        
-        await Task.yield()
-        try? await Task.sleep(nanoseconds: 10000)
     }
 }
