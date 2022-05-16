@@ -1,7 +1,9 @@
+import Asynchrone
 import XCTest
 @testable import RedUx
 
 final class StoreTests: XCTestCase {
+    private let manager = EffectManager()
     private var store: Store<AppState, AppEvent, AppEnvironment>!
     
     // MARK: Setup
@@ -21,7 +23,8 @@ final class StoreTests: XCTestCase {
                     outputEvent: AppEvent.subEvent,
                     state: \.subState
                 )
-            ]
+            ],
+            effectManager: manager
         )
     }
 
@@ -105,6 +108,76 @@ final class StoreTests: XCTestCase {
                 )
             ]
         )
+    }
+    
+    func testTriggeringLongRunningEffect() async {
+        await XCTAssertStateChange(
+            store: self.store,
+            events: [.startLongRunningEffect],
+            matches: [
+                .init(),
+                .init(
+                    eventsReceived: [.startLongRunningEffect]
+                ),
+                .init(
+                    value: "a",
+                    eventsReceived: [
+                        .startLongRunningEffect,
+                        .setValue("a")
+                    ]
+                ),
+                .init(
+                    value: "b",
+                    eventsReceived: [
+                        .startLongRunningEffect,
+                        .setValue("a"),
+                        .setValue("b")
+                    ]
+                ),
+                .init(
+                    value: "c",
+                    eventsReceived: [
+                        .startLongRunningEffect,
+                        .setValue("a"),
+                        .setValue("b"),
+                        .setValue("c")
+                    ]
+                )
+            ]
+        )
+        
+        await XCTAsyncAssertEventuallyEqual(
+            { 0 },
+            { await self.manager.tasks.count }
+        )
+    }
+    
+    func testCancellingEffect() async {
+        let id = "1"
+        let task = Empty(completeImmediately: false)
+            .sink(
+                receiveValue: {},
+                receiveCompletion: { result in }
+            )
+        
+        await self.manager.addTask(
+            task,
+            with: id
+        )
+        
+        await XCTAsyncAssertEqual(
+            { 1 },
+            { await self.manager.tasks.count }
+        )
+        
+        self.store.send(.triggerCancelEffect(id))
+                
+        await XCTAsyncAssertEventuallyEqual(
+            { 0 },
+            { await self.manager.tasks.count }
+        )
+        
+        XCTAssertTrue(task.isCancelled)
     }
     
     // MARK: Middleware

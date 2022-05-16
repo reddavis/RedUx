@@ -11,6 +11,10 @@ enum AppEvent: Equatable {
     case setValueViaEffect(String)
     case setValueToA
     case subEvent(SubEvent)
+    
+    case triggerCancelEffect(String)
+    
+    case startLongRunningEffect
 }
 
 
@@ -93,8 +97,16 @@ let appReducer: Reducer<AppState, AppEvent, AppEnvironment> = .init { state, eve
         // Do nothing, it's handled by the middleware
         return .none
     case .setValueViaEffect(let value):
-        return Just(.setValue(value))
-            .eraseToAnyAsyncSequenceable()
+        return Effect(.setValue(value))
+    case .triggerCancelEffect(let id):
+        return .cancel(id)
+    case .startLongRunningEffect:
+        return AsyncStream {
+            for value in ["a", "b", "c"] {
+                $0.yield(.setValue(value))
+            }
+            $0.finish()
+        }.eraseToEffect()
     }
 }
 
@@ -108,8 +120,7 @@ let subReducer: Reducer<SubState, SubEvent, AppEnvironment> = .init { state, eve
     case .setValueViaMiddleware:
         return .none
     case .setValueViaEffect(let value):
-        return Just(.setValue(value))
-            .eraseToAnyAsyncSequenceable()
+        return Effect(.setValue(value))
     }
 }
 
@@ -123,8 +134,7 @@ let optionalReducer: Reducer<SubState, SubEvent, AppEnvironment> = .init { state
     case .setValueViaMiddleware:
         return .none
     case .setValueViaEffect(let value):
-        return Just(.setValue(value))
-            .eraseToAnyAsyncSequenceable()
+        return Effect(.setValue(value))
     }
 }
 

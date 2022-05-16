@@ -238,7 +238,7 @@ func XCTAssertStateChange<State: Equatable, Event, Environment>(
     }
 }
 
-/// Assert two async expressions are eventually equal.
+/// Assert two expressions are eventually equal.
 /// - Parameters:
 ///   - expressionA: Expression A
 ///   - expressionB: Expression B
@@ -257,6 +257,51 @@ func XCTAssertEventuallyEqual<T: Equatable>(
     while true {
         let resultA = expressionA()
         let resultB = expressionB()
+        
+        switch resultA == resultB {
+        // All good!
+        case true:
+            return
+        // False and timed out.
+        case false where Date.now.compare(timeoutDate) == .orderedDescending:
+            let error = XCTAssertEventuallyEqualError(
+                resultA: resultA,
+                resultB: resultB
+            )
+
+            XCTFail(
+                error.message,
+                file: file,
+                line: line
+            )
+            return
+        // False but still within timeout limit.
+        case false:
+            await Task.yield()
+            try? await Task.sleep(nanoseconds: 5000000)
+        }
+    }
+}
+
+/// Assert two async expressions are eventually equal.
+/// - Parameters:
+///   - expressionA: Expression A
+///   - expressionB: Expression B
+///   - timeout: Time to wait for store state changes. Defaults to `5`
+///   - file: The file where this assertion is being called. Defaults to `#filePath`.
+///   - line: The line in the file where this assertion is being called. Defaults to `#line`.
+func XCTAsyncAssertEventuallyEqual<T: Equatable>(
+    _ expressionA: @escaping () async -> T?,
+    _ expressionB: @escaping () async -> T?,
+    timeout: TimeInterval = 5.0,
+    file: StaticString = #filePath,
+    line: UInt = #line
+) async {
+    let timeoutDate = Date(timeIntervalSinceNow: timeout)
+    
+    while true {
+        let resultA = await expressionA()
+        let resultB = await expressionB()
         
         switch resultA == resultB {
         // All good!
