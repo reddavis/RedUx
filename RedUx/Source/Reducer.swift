@@ -11,7 +11,7 @@ public struct Reducer<State, Event, Environment> {
     }
     
     // Public
-    public typealias Reduce = (inout State, Event, Environment) -> AnyAsyncSequenceable<Event>?
+    public typealias Reduce = (inout State, Event, Environment) -> Effect<Event>?
     
     // Private
     private let reduce: Reduce
@@ -30,7 +30,7 @@ public struct Reducer<State, Event, Environment> {
         state: inout State,
         event: Event,
         environment: Environment
-    ) -> AnyAsyncSequenceable<Event>? {
+    ) -> Effect<Event>? {
         self.reduce(&state, event, environment)
     }
     
@@ -78,7 +78,7 @@ extension Reducer {
             
             return eventStream?.compactMap { event in
                 setAppEvent(event)
-            }.eraseToAnyAsyncSequenceable()
+            }.eraseToEffect()
         }
     }
     
@@ -114,7 +114,7 @@ extension Reducer {
             
             return eventStream?.compactMap { event in
                 setAppEvent(event)
-            }.eraseToAnyAsyncSequenceable()
+            }.eraseToEffect()
         }
     }
 }
@@ -149,7 +149,7 @@ extension Reducer {
                 let eventStreamB = eventStreamB {
                 return eventStreamA
                     .merge(with: eventStreamB)
-                    .eraseToAnyAsyncSequenceable()
+                    .eraseToEffect()
             }
             
             return eventStreamA ?? eventStreamB ?? .none

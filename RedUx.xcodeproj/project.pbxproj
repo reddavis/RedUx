@@ -37,6 +37,8 @@
 		A4A12B5527B51EF30094B270 /* UnwrapStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A12B5427B51EF30094B270 /* UnwrapStore.swift */; };
 		A4A12B5A27B6A77D0094B270 /* Middlewareable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A12B5927B6A77D0094B270 /* Middlewareable.swift */; };
 		A4A12B5C27B6CCC70094B270 /* AnyMiddlewareable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A12B5B27B6CCC70094B270 /* AnyMiddlewareable.swift */; };
+		A4A8B6B1283011F800DF4D4A /* Effect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A8B6B0283011F800DF4D4A /* Effect.swift */; };
+		A4B1E28228313E3100B6FCB8 /* EffectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B1E28128313E3100B6FCB8 /* EffectTests.swift */; };
 		A4B9E5A727A269590000ED07 /* RedUxable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B9E5A627A269590000ED07 /* RedUxable.swift */; };
 		A4C3619A276A086A00511525 /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C36199276A086A00511525 /* AppStore.swift */; };
 		A4D2CFA026C0FC34008D25DE /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D2CF9F26C0FC34008D25DE /* View+Extension.swift */; };
@@ -114,6 +116,8 @@
 		A4A12B5427B51EF30094B270 /* UnwrapStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnwrapStore.swift; sourceTree = "<group>"; };
 		A4A12B5927B6A77D0094B270 /* Middlewareable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Middlewareable.swift; sourceTree = "<group>"; };
 		A4A12B5B27B6CCC70094B270 /* AnyMiddlewareable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyMiddlewareable.swift; sourceTree = "<group>"; };
+		A4A8B6B0283011F800DF4D4A /* Effect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Effect.swift; sourceTree = "<group>"; };
+		A4B1E28128313E3100B6FCB8 /* EffectTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectTests.swift; sourceTree = "<group>"; };
 		A4B9E5A627A269590000ED07 /* RedUxable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedUxable.swift; sourceTree = "<group>"; };
 		A4C36199276A086A00511525 /* AppStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore.swift; sourceTree = "<group>"; };
 		A4D2CF9F26C0FC34008D25DE /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
@@ -246,10 +250,12 @@
 		A47E64BD267A10CB005E265C /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				A4B1E27E2831270000B6FCB8 /* Effect */,
 				A47BE66A27CBED280011ECE6 /* Extensions */,
 				A4A12B5827B661DD0094B270 /* Middleware */,
 				A4773C422827B0F600828A14 /* Status */,
 				A4A12B5327B51EBC0094B270 /* SwiftUI */,
+				A4A8B6B0283011F800DF4D4A /* Effect.swift */,
 				A4E7638C2826D8EE00B99B38 /* Status.swift */,
 				A47E64BF267A10E4005E265C /* Store.swift */,
 				A47E64BE267A10E4005E265C /* Reducer.swift */,
@@ -322,6 +328,13 @@
 			path = Middleware;
 			sourceTree = "<group>";
 		};
+		A4B1E27E2831270000B6FCB8 /* Effect */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Effect;
+			sourceTree = "<group>";
+		};
 		A4D2CF9E26C0FC1F008D25DE /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -335,6 +348,7 @@
 			children = (
 				A4773C482827C44600828A14 /* ActionStatusTests.swift */,
 				A47BE66B27CBED5F0011ECE6 /* AnyAsyncSequenceableExtensionTests.swift */,
+				A4B1E28128313E3100B6FCB8 /* EffectTests.swift */,
 				A425FB6F275F9769002AFD72 /* ReducerTests.swift */,
 				A47E64C4267A10F3005E265C /* StoreTests.swift */,
 				A40EE2A427A044FE00663E6C /* ViewModelTests.swift */,
@@ -545,6 +559,7 @@
 				A4A12B5A27B6A77D0094B270 /* Middlewareable.swift in Sources */,
 				A4E7638D2826D8EE00B99B38 /* Status.swift in Sources */,
 				A40EE2A327A02D7600663E6C /* ViewModel.swift in Sources */,
+				A4A8B6B1283011F800DF4D4A /* Effect.swift in Sources */,
 				A47E64C2267A10E4005E265C /* Store.swift in Sources */,
 				A4D2CFA026C0FC34008D25DE /* View+Extension.swift in Sources */,
 				A47E64C1267A10E4005E265C /* Reducer.swift in Sources */,
@@ -559,6 +574,7 @@
 			files = (
 				A47BE66C27CBED5F0011ECE6 /* AnyAsyncSequenceableExtensionTests.swift in Sources */,
 				A425FB70275F9769002AFD72 /* ReducerTests.swift in Sources */,
+				A4B1E28228313E3100B6FCB8 /* EffectTests.swift in Sources */,
 				A4773C492827C44600828A14 /* ActionStatusTests.swift in Sources */,
 				A40EE2A527A044FE00663E6C /* ViewModelTests.swift in Sources */,
 				A47E64C5267A10F3005E265C /* StoreTests.swift in Sources */,
