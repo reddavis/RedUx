@@ -29,6 +29,8 @@ public final class Store<State, Event, Environment> {
     private var eventBacklog: [Event] = []
     private var isProcessingEvent = false
     
+    private let effectManager: EffectManager
+    
     // MARK: Initialization
     
     /// Construct a Store with state, reducer and environment.
@@ -50,11 +52,33 @@ public final class Store<State, Event, Environment> {
         )
     }
     
+    /// Construct a Store with state, reducer and environment.
+    /// - Parameters:
+    ///   - state: An initial state.
+    ///   - reducer: A reducer.
+    ///   - environment: An environment.
+    convenience init(
+        state: State,
+        reducer: Reducer<State, Event, Environment>,
+        environment: Environment,
+        middlewares: [AnyMiddleware<Event, Event, State>],
+        effectManager: EffectManager
+    ) {
+        self.init(
+            state: state,
+            reducer: { reducer.execute(state: &$0, event: $1, environment: $2) },
+            environment: environment,
+            middlewares: middlewares,
+            effectManager: effectManager
+        )
+    }
+    
     private init(
         state: State,
         reducer: @escaping Reducer<State, Event, Environment>.Reduce,
         environment: Environment,
-        middlewares: [AnyMiddleware<Event, Event, State>]
+        middlewares: [AnyMiddleware<Event, Event, State>],
+        effectManager: EffectManager = .init()
     ) {
         self.state = state
         self.stateSequence = self._stateSequence.shared().eraseToAnyAsyncSequenceable()
@@ -62,6 +86,7 @@ public final class Store<State, Event, Environment> {
         self.reducer = reducer
         self.environment = environment
         self.middlewares = middlewares
+        self.effectManager = effectManager
         
         self.subscribeToMiddlewares()
     }
@@ -83,18 +108,27 @@ public final class Store<State, Event, Environment> {
         
         repeat {
             let event = self.eventBacklog.removeFirst()
-            let eventStream = self.reducer(&state, event, self.environment)
+            let effect = self.reducer(&state, event, self.environment)
             self.state = state
-            
+                        
             Task(priority: .high) { [state] in
                 for middleware in self.middlewares {
                     await middleware.execute(event: event, state: { state })
                 }
                 
-                guard let eventStream = eventStream else { return }
-                for await event in eventStream {
-                    self.send(event)
+                guard let effect = effect else { return }
+                guard !effect.isCancellation else {
+                    await self.effectManager.removeTask(effect.id)
+                    return
                 }
+                
+                let task = effect.sink(
+                    receiveValue: { [weak self] in self?.send($0) },
+                    receiveCompletion: { [weak self] _ in
+                        await self?.effectManager.removeTask(effect.id)
+                    }
+                )
+                await self.effectManager.addTask(task, with: effect.id)
             }
         } while !self.eventBacklog.isEmpty
     }
