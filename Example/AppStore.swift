@@ -44,10 +44,10 @@ fileprivate let reducer: Reducer<AppState, AppEvent, AppEnvironment> = Reducer {
     case .incrementWithDelayViaMiddleware:
         return .none
     case .incrementWithDelayViaEffect:
-        return .effect {
+        return Effect {
             try? await Task.sleep(seconds: 2)
             return .increment
-        }.eraseToAnyAsyncSequenceable()
+        }
     case .toggleIsPresentingSheet:
         state.isPresentingSheet.toggle()
         return .none
