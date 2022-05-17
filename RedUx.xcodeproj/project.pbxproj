@@ -19,7 +19,6 @@
 		A4773C492827C44600828A14 /* ActionStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4773C482827C44600828A14 /* ActionStatusTests.swift */; };
 		A4773C4B2827C86A00828A14 /* ValueStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4773C4A2827C86A00828A14 /* ValueStatusTests.swift */; };
 		A47BE5FB27BC467A0011ECE6 /* Assertions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48E085C2743D1FE008090E5 /* Assertions.swift */; };
-		A47BE66C27CBED5F0011ECE6 /* AnyAsyncSequenceableExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47BE66B27CBED5F0011ECE6 /* AnyAsyncSequenceableExtensionTests.swift */; };
 		A47E64AD267A1054005E265C /* RedUx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A47E64A2267A1054005E265C /* RedUx.framework */; };
 		A47E64B3267A1054005E265C /* RedUx.h in Headers */ = {isa = PBXBuildFile; fileRef = A47E64A5267A1054005E265C /* RedUx.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A47E64C1267A10E4005E265C /* Reducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47E64BE267A10E4005E265C /* Reducer.swift */; };
@@ -92,7 +91,6 @@
 		A4773C452827B12800828A14 /* ValueStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueStatus.swift; sourceTree = "<group>"; };
 		A4773C482827C44600828A14 /* ActionStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionStatusTests.swift; sourceTree = "<group>"; };
 		A4773C4A2827C86A00828A14 /* ValueStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueStatusTests.swift; sourceTree = "<group>"; };
-		A47BE66B27CBED5F0011ECE6 /* AnyAsyncSequenceableExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyAsyncSequenceableExtensionTests.swift; sourceTree = "<group>"; };
 		A47E64A2267A1054005E265C /* RedUx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RedUx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A47E64A5267A1054005E265C /* RedUx.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RedUx.h; sourceTree = "<group>"; };
 		A47E64AC267A1054005E265C /* RedUxTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RedUxTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -325,7 +323,6 @@
 			isa = PBXGroup;
 			children = (
 				A4773C482827C44600828A14 /* ActionStatusTests.swift */,
-				A47BE66B27CBED5F0011ECE6 /* AnyAsyncSequenceableExtensionTests.swift */,
 				A4B1E28128313E3100B6FCB8 /* EffectTests.swift */,
 				A425FB6F275F9769002AFD72 /* ReducerTests.swift */,
 				A47E64C4267A10F3005E265C /* StoreTests.swift */,
@@ -548,7 +545,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A47BE66C27CBED5F0011ECE6 /* AnyAsyncSequenceableExtensionTests.swift in Sources */,
 				A425FB70275F9769002AFD72 /* ReducerTests.swift in Sources */,
 				A4B1E28228313E3100B6FCB8 /* EffectTests.swift in Sources */,
 				A4773C492827C44600828A14 /* ActionStatusTests.swift in Sources */,
