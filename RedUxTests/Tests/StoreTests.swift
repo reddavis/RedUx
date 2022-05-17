@@ -36,7 +36,7 @@ final class StoreTests: XCTestCase {
     
     // MARK: Scoped store
     
-    func testScopedStore() {
+    func testScopedStore() async {
         let scopedStore = self.store.scope(
             state: \.subState,
             event: AppEvent.subEvent,
@@ -44,20 +44,20 @@ final class StoreTests: XCTestCase {
         )
         let value = "a"
         
-        XCTAssertNil(scopedStore.state.value)
-        scopedStore.send(.setValue(value))
-        
-        // Check scoped store's value changes
-        XCTAssertEventuallyEqual(scopedStore.state.value, value)
-        
-        // Check scoped store's received event
-        XCTAssertEventuallyEqual(scopedStore.state.eventsReceived, [.setValue(value)])
+        await XCTAssertStateChange(
+            store: scopedStore,
+            events: [.setValue(value)],
+            matches: [
+                self.store.state.subState,
+                .init(value: value, eventsReceived: [.setValue(value)])
+            ]
+        )
 
         // Check parent store's value changes
-        XCTAssertEventuallyEqual(self.store.state.eventsReceived, [.subEvent(.setValue(value))])
+        XCTAssertEqual(self.store.state.eventsReceived, [.subEvent(.setValue(value))])
     }
     
-    func testSendingEffectTriggeringEventToScopedStore() {
+    func testSendingEffectTriggeringEventToScopedStore() async {
         let scopedStore = self.store.scope(
             state: \.subState,
             event: AppEvent.subEvent,
@@ -66,68 +66,99 @@ final class StoreTests: XCTestCase {
         let value = "a"
         
         XCTAssertNil(scopedStore.state.value)
-        scopedStore.send(.setValueViaEffect(value))
-        
-        // Check scoped store's value changes
-        XCTAssertEventuallyEqual(scopedStore.state.value, value)
-        
-        // Check scoped store's received event
-        XCTAssertEventuallyEqual(
-            scopedStore.state.eventsReceived,
-            [.setValueViaEffect(value), .setValue(value)]
+        await XCTAssertStateChange(
+            store: scopedStore,
+            events: [.setValueViaEffect(value)],
+            matches: [
+                .init(),
+                .init(value: nil, eventsReceived: [.setValueViaEffect(value)]),
+                .init(value: value, eventsReceived: [.setValueViaEffect(value), .setValue(value)])
+            ]
         )
-
+        
         // Check parent store's value changes
-        XCTAssertEventuallyEqual(
+        XCTAssertEqual(
             self.store.state.eventsReceived,
-            [.subEvent(.setValueViaEffect(value)), .setValue(value)]
+            [.subEvent(.setValueViaEffect(value)), .subEvent(.setValue(value))]
         )
     }
     
     // MARK: Effects
     
     func testSendingEventThatTriggersAnEffect() async {
-        XCTAssertNil(self.store.state.value)
-        self.store.send(.setValueViaEffect("a"))
-        
-        XCTAssertEventuallyEqual(
-            self.store.state,
-            .init(
-                value: "a",
-                eventsReceived: [
-                    .subEvent(.setValueViaEffect("a")),
-                    .subEvent(.setValue("a"))
-                ]
-            )
+        await XCTAssertStateChange(
+            store: self.store,
+            events: [.setValueViaEffect("a")],
+            matches: [
+                .init(),
+                .init(
+                    eventsReceived: [
+                        .setValueViaEffect("a")
+                    ]
+                ),
+                .init(
+                    value: "a",
+                    eventsReceived: [
+                        .setValueViaEffect("a"),
+                        .setValue("a")
+                    ]
+                )
+            ]
         )
     }
     
     // MARK: Middleware
     
     func testMiddleware() async {
-        XCTAssertNil(self.store.state.value)
-        self.store.send(.setValueViaMiddleware("a"))
-        
-        XCTAssertEventuallyEqual(self.store.state.value, "a")
-        
-        XCTAssertEventuallyEqual(
-            self.store.state.eventsReceived,
-            [.setValueViaMiddleware("a"), .setValue("a")]
+        await XCTAssertStateChange(
+            store: self.store,
+            events: [.setValueViaMiddleware("a")],
+            matches: [
+                .init(),
+                .init(
+                    eventsReceived: [
+                        .setValueViaMiddleware("a")
+                    ]
+                ),
+                .init(
+                    value: "a",
+                    eventsReceived: [
+                        .setValueViaMiddleware("a"),
+                        .setValue("a")
+                    ]
+                )
+            ]
         )
     }
     
     func testScopedMiddleware() async {
-        XCTAssertNil(self.store.state.value)
-        self.store.send(.subEvent(.setValueViaMiddleware("a")))
-        
-        XCTAssertEventuallyEqual(
-            self.store.state.subState.value,
-            "a"
-        )
-        
-        XCTAssertEventuallyEqual(
-            self.store.state.eventsReceived,
-            [.subEvent(.setValueViaMiddleware("a")), .subEvent(.setValue("a"))]
+        await XCTAssertStateChange(
+            store: self.store,
+            events: [.subEvent(.setValueViaMiddleware("a"))],
+            matches: [
+                .init(),
+                .init(
+                    eventsReceived: [
+                        .subEvent(.setValueViaMiddleware("a"))
+                    ],
+                    subState: .init(
+                        eventsReceived: [.setValueViaMiddleware("a")]
+                    )
+                ),
+                .init(
+                    eventsReceived: [
+                        .subEvent(.setValueViaMiddleware("a")),
+                        .subEvent(.setValue("a"))
+                    ],
+                    subState: .init(
+                        value: "a",
+                        eventsReceived: [
+                            .setValueViaMiddleware("a"),
+                            .setValue("a")
+                        ]
+                    )
+                )
+            ]
         )
     }
 }

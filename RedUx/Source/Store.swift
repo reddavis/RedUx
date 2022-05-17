@@ -79,14 +79,14 @@ public final class Store<State, Event, Environment> {
         
         defer {
             self.isProcessingEvent = false
-            self.state = state
         }
         
-        while !self.eventBacklog.isEmpty {
+        repeat {
             let event = self.eventBacklog.removeFirst()
             let eventStream = self.reducer(&state, event, self.environment)
+            self.state = state
             
-            Task { [state] in
+            Task(priority: .high) { [state] in
                 for middleware in self.middlewares {
                     await middleware.execute(event: event, state: { state })
                 }
@@ -96,7 +96,7 @@ public final class Store<State, Event, Environment> {
                     self.send(event)
                 }
             }
-        }
+        } while !self.eventBacklog.isEmpty
     }
     
     // MARK: Middleware
@@ -143,13 +143,12 @@ extension Store {
         )
         
         // Propagate changes to state to scoped store.
-        scopedStore.parentStatePropagationTask = Task(priority: .high) { [stateSequence, weak scopedStore] in
-            scopedStore?.state = toScopedState(self.state)
-
-            for await state in stateSequence {
-                scopedStore?.state = toScopedState(state)
+        scopedStore.parentStatePropagationTask = Just(self.state)
+            .eraseToAnyAsyncSequenceable()
+            .chain(with: self.stateSequence)
+            .sink { [weak scopedStore] in
+                scopedStore?.state = toScopedState($0)
             }
-        }
 
         return scopedStore
     }

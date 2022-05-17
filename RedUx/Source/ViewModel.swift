@@ -1,3 +1,4 @@
+import Asynchrone
 import SwiftUI
 
 /// A view model wraps a store and observes state changes that can be used
@@ -43,8 +44,8 @@ public final class ViewModel<State: Equatable, Event>: ObservableObject {
     @Published public var state: State
     
     // Private
-    private var stateTask: Task<Void, Never>?
     private let _send: (Event) -> Void
+    private var stateTask: Task<Void, Error>?
     
     // MARK: Initialization
     
@@ -53,23 +54,15 @@ public final class ViewModel<State: Equatable, Event>: ObservableObject {
     public init<Environment>(_ store: Store<State, Event, Environment>) {
         self.state = store.state
         self._send = { store.send($0) }
-        self.stateTask = Task { [weak self] in
-            guard let self = self else { return }
-            
-            do {
+        
+        self.stateTask = store
+            .stateSequence
+            .removeDuplicates()
+            .sink(priority: .userInitiated) { state in
                 await MainActor.run {
-                    self.state = store.state
+                    self.state = state
                 }
-                
-                for try await state in store.stateSequence.removeDuplicates() {
-                    guard !Task.isCancelled else { break }
-                    
-                    await MainActor.run {
-                        self.state = state
-                    }
-                }
-            } catch { }
-        }
+            }
     }
     
     deinit {

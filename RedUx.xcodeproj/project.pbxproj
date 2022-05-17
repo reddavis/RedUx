@@ -12,6 +12,7 @@
 		A40EE2A1279F344100663E6C /* Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40EE2A0279F344100663E6C /* Details.swift */; };
 		A40EE2A327A02D7600663E6C /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40EE2A227A02D7600663E6C /* ViewModel.swift */; };
 		A40EE2A527A044FE00663E6C /* ViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40EE2A427A044FE00663E6C /* ViewModelTests.swift */; };
+		A410A72E282D48700035A40D /* Assertions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48E085C2743D1FE008090E5 /* Assertions.swift */; };
 		A425FB70275F9769002AFD72 /* ReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A425FB6F275F9769002AFD72 /* ReducerTests.swift */; };
 		A4773C442827B10800828A14 /* ActionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4773C432827B10800828A14 /* ActionStatus.swift */; };
 		A4773C462827B12800828A14 /* ValueStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4773C452827B12800828A14 /* ValueStatus.swift */; };
@@ -114,8 +115,6 @@
 		A4A12B5927B6A77D0094B270 /* Middlewareable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Middlewareable.swift; sourceTree = "<group>"; };
 		A4A12B5B27B6CCC70094B270 /* AnyMiddlewareable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyMiddlewareable.swift; sourceTree = "<group>"; };
 		A4B9E5A627A269590000ED07 /* RedUxable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedUxable.swift; sourceTree = "<group>"; };
-		A4C06ADF27AA8EBA00C3B5D7 /* XCTAssertStatesEventuallyEqualError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTAssertStatesEventuallyEqualError.swift; sourceTree = "<group>"; };
-		A4C06AE827AAACC600C3B5D7 /* StateAssertions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateAssertions.swift; sourceTree = "<group>"; };
 		A4C36199276A086A00511525 /* AppStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore.swift; sourceTree = "<group>"; };
 		A4D2CF9F26C0FC34008D25DE /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
 		A4D2CFA526C16A69008D25DE /* Package.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
@@ -182,15 +181,6 @@
 				A4773C452827B12800828A14 /* ValueStatus.swift */,
 			);
 			path = Status;
-			sourceTree = "<group>";
-		};
-		A47BE5FC27BC46DD0011ECE6 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				A4C06AE827AAACC600C3B5D7 /* StateAssertions.swift */,
-				A4C06ADF27AA8EBA00C3B5D7 /* XCTAssertStatesEventuallyEqualError.swift */,
-			);
-			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		A47BE66A27CBED280011ECE6 /* Extensions */ = {
@@ -310,7 +300,6 @@
 			isa = PBXGroup;
 			children = (
 				A48E08642743D463008090E5 /* RootScreenTests.swift */,
-				A47BE5FC27BC46DD0011ECE6 /* Supporting Files */,
 			);
 			path = ExampleTests;
 			sourceTree = "<group>";
@@ -595,6 +584,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A410A72E282D48700035A40D /* Assertions.swift in Sources */,
 				A48E08652743D463008090E5 /* RootScreenTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1028,7 +1018,7 @@
 			repositoryURL = "https://github.com/reddavis/Asynchrone";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.14.0;
+				minimumVersion = 0.16.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

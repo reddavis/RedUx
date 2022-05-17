@@ -118,7 +118,7 @@ struct HighlyComplicatedIncrementMiddleware: Middlewareable {
     func execute(event: AppEvent, state: () -> AppState) async {
         guard case .incrementWithDelayViaMiddleware = event else { return }
         
-        try? await Task.sleep(seconds: 2)
+        try? await Task.sleep(seconds: 0.5)
         self._outputStream.yield(.increment)
     }
 }

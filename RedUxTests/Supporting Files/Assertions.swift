@@ -1,52 +1,6 @@
+@testable import RedUx
+import Asynchrone
 import XCTest
-
-/// Assert two async expressions are eventually equal.
-/// - Parameters:
-///   - expressionA: Expression A
-///   - expressionB: Expression B
-///   - timeout: Time to wait for store state changes. Defaults to `5`
-///   - file: The file where this assertion is being called. Defaults to `#filePath`.
-///   - line: The line in the file where this assertion is being called. Defaults to `#line`.
-func XCTAssertEventuallyEqual<T: Equatable>(
-    _ expressionA: @escaping @autoclosure () -> T?,
-    _ expressionB: @escaping @autoclosure () -> T?,
-    timeout: TimeInterval = 5.0,
-    file: StaticString = #filePath,
-    line: UInt = #line
-) {
-    Task.detached(priority: .low) {
-        let timeoutDate = Date(timeIntervalSinceNow: timeout)
-        
-        while true {
-            let resultA = expressionA()
-            let resultB = expressionB()
-            
-            switch resultA == resultB {
-            // All good!
-            case true:
-                return
-            // False and timed out.
-            case false where Date.now.compare(timeoutDate) == .orderedDescending:
-                let error = XCTAssertEventuallyEqualError(
-                    resultA: resultA,
-                    resultB: resultB
-                )
-                
-                XCTFail(
-                    error.message,
-                    file: file,
-                    line: line
-                )
-                return
-            // False but still within timeout limit.
-            case false:()
-            }
-            
-            try? await Task.sleep(nanoseconds: 50_000_000)
-            await Task.yield()
-        }
-    }
-}
 
 /// Assert an async closure thorws an error.
 /// - Parameters:
@@ -132,7 +86,7 @@ func XCTAsyncAssertEqual<T: Equatable>(
     )
 }
 
-// MARK: XCTAssertEventuallyEqualError
+// MARK: await XCTAssertEventuallyEqualError
 
 struct XCTAssertEventuallyEqualError: Error {
     let message: String
@@ -172,3 +126,157 @@ Failed To Assert Equality
     }
 }
 
+// MARK: XCTAssertStatesEventuallyEqualError
+
+struct XCTAssertStatesEventuallyEqualError: Error {
+    let message: String
+
+    var localizedDescription: String {
+        message
+    }
+
+    // MARK: Initialization
+
+    init(_ message: String) {
+        self.message = message
+    }
+
+    init<State: Equatable>(stateChanges: [State], stateChangesExpected: [State]) {
+        self.init(
+            """
+
+---------------------------
+Failed To Assert Equality
+---------------------------
+
+# State Changes
+\(
+    stateChanges.enumerated().map {
+        "\($0)) \(String(describing: $1))"
+    }.joined(separator: "\n")
+)
+
+
+# States Changes Expected
+\(
+    stateChangesExpected.enumerated().map {
+        "\($0)) \(String(describing: $1))"
+    }.joined(separator: "\n")
+)
+
+---------------------------
+"""
+        )
+    }
+}
+
+// MARK: XCTestCase
+
+/// Assert that a store's state changes match expectation after sending
+/// a collection of events.
+/// - Parameters:
+///   - store: The store to test state changes against.
+///   - events: The events to send to the store.
+///   - statesToMatch: An array of state changes expected. These will be asserted
+///     equal against the store's state changes.
+///   - timeout: Time to wait for store state changes. Defaults to `5`
+///   - file: The file where this assertion is being called. Defaults to `#filePath`.
+///   - line: The line in the file where this assertion is being called. Defaults to `#line`.
+func XCTAssertStateChange<State: Equatable, Event, Environment>(
+    store: Store<State, Event, Environment>,
+    events: [Event],
+    matches statesToMatch: [State],
+    timeout: TimeInterval = 5.0,
+    file: StaticString = #filePath,
+    line: UInt = #line
+) async {
+    let timeoutDate = Date(timeIntervalSinceNow: timeout)
+    var states: [State] = []
+    
+    // We use the semaphore in order to guarantee the sink task has started.
+    // This is to ensure we collect all events.
+    let semaphore = DispatchSemaphore(value: 0)
+    Just(store.state)
+        .eraseToAnyAsyncSequenceable()
+        .chain(with: store.stateSequence)
+        .removeDuplicates()
+        .sink {
+            states.append($0)
+            semaphore.signal()
+        }
+    
+    Task.detached(priority: .low) {
+        semaphore.wait()
+        for event in events {
+            store.send(event)
+        }
+    }
+        
+    while true {
+        switch states == statesToMatch {
+        // All good!
+        case true:
+            return
+        // False and timed out.
+        case false where Date.now.compare(timeoutDate) == .orderedDescending:
+            let error = XCTAssertStatesEventuallyEqualError(
+                stateChanges: states,
+                stateChangesExpected: statesToMatch
+            )
+
+            XCTFail(
+                error.message,
+                file: file,
+                line: line
+            )
+            return
+        // False but still within timeout limit.
+        case false:
+            try? await Task.sleep(nanoseconds: 50000000)
+        }
+    }
+}
+
+/// Assert two async expressions are eventually equal.
+/// - Parameters:
+///   - expressionA: Expression A
+///   - expressionB: Expression B
+///   - timeout: Time to wait for store state changes. Defaults to `5`
+///   - file: The file where this assertion is being called. Defaults to `#filePath`.
+///   - line: The line in the file where this assertion is being called. Defaults to `#line`.
+func XCTAssertEventuallyEqual<T: Equatable>(
+    _ expressionA: @escaping @autoclosure () -> T?,
+    _ expressionB: @escaping @autoclosure () -> T?,
+    timeout: TimeInterval = 5.0,
+    file: StaticString = #filePath,
+    line: UInt = #line
+) async {
+    let timeoutDate = Date(timeIntervalSinceNow: timeout)
+    
+    while true {
+        let resultA = expressionA()
+        let resultB = expressionB()
+        
+        switch resultA == resultB {
+        // All good!
+        case true:
+            return
+        // False and timed out.
+        case false where Date.now.compare(timeoutDate) == .orderedDescending:
+            let error = XCTAssertEventuallyEqualError(
+                resultA: resultA,
+                resultB: resultB
+            )
+
+            XCTFail(
+                error.message,
+                file: file,
+                line: line
+            )
+            return
+        // False but still within timeout limit.
+        case false:
+            try? await Task.sleep(nanoseconds: 50000000)
+        }
+    }
+}
