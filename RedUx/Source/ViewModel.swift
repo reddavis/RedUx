@@ -58,7 +58,7 @@ public final class ViewModel<State: Equatable, Event>: ObservableObject {
         self.stateTask = store
             .stateSequence
             .removeDuplicates()
-            .sink { state in
+            .sink(priority: .userInitiated) { state in
                 await MainActor.run {
                     self.state = state
                 }

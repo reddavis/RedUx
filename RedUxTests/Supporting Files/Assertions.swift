@@ -232,7 +232,7 @@ func XCTAssertStateChange<State: Equatable, Event, Environment>(
             return
         // False but still within timeout limit.
         case false:
-            try? await Task.sleep(nanoseconds: 10000000)
+            try? await Task.sleep(nanoseconds: 50000000)
         }
     }
 }
@@ -276,7 +276,7 @@ func XCTAssertEventuallyEqual<T: Equatable>(
             return
         // False but still within timeout limit.
         case false:
-            try? await Task.sleep(nanoseconds: 10000000)
+            try? await Task.sleep(nanoseconds: 50000000)
         }
     }
 }
