@@ -70,4 +70,13 @@ final class EffectTests: XCTestCase {
         let value = await effect.collect()
         XCTAssertTrue(value.isEmpty)
     }
+    
+    func testFireAndForgetBuilder() async {
+        let effect = Effect<AppEvent>.fireAndForget {}
+        
+        XCTAssertFalse(effect.isCancellation)
+        
+        let value = await effect.collect()
+        XCTAssertTrue(value.isEmpty)
+    }
 }
