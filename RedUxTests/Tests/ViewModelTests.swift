@@ -23,53 +23,42 @@ final class ViewModelTests: XCTestCase {
 
     // MARK: Tests
     
+    func testEventsAreForwardedToStore() async {
+        XCTAssertNil(self.viewModel.state.value)
+        self.viewModel.send(.setValue(self.value))
+        
+        await XCTAssertEventuallyEqual(
+            self.store.state,
+            .init(
+                value: self.value,
+                eventsReceived: [.setValue(self.value)]
+            )
+        )
+    }
+    
     func testStateChangesFromEventPropagateToViewModel() async {
         XCTAssertNil(self.viewModel.state.value)
         self.viewModel.send(.setValue(self.value))
         
         await XCTAssertEventuallyEqual(
-            self.store.state.value,
-            self.value
-        )
-        
-        await XCTAssertEventuallyEqual(
-            self.viewModel.state.value,
-            self.value
-        )
-        
-        await XCTAssertEventuallyEqual(
-            self.store.state.eventsReceived,
-            [.setValue(self.value)]
-        )
-
-        await XCTAssertEventuallyEqual(
-            self.viewModel.state.eventsReceived,
-            [.setValue(self.value)]
+            self.viewModel.state,
+            .init(
+                value: self.value,
+                eventsReceived: [.setValue(self.value)]
+            )
         )
     }
     
     func testStateChangesFromEventViaMiddlewarePropagateToViewModel() async {
         XCTAssertNil(self.store.state.value)
-        self.store.send(.setValueViaEffect(self.value))
+        self.viewModel.send(.setValueViaMiddleware(self.value))
         
         await XCTAssertEventuallyEqual(
-            self.store.state.value,
-            self.value
-        )
-        
-        await XCTAssertEventuallyEqual(
-            self.viewModel.state.value,
-            self.value
-        )
-        
-        await XCTAssertEventuallyEqual(
-            self.store.state.eventsReceived,
-            [.setValueViaEffect(self.value), .setValue(self.value)]
-        )
-        
-        await XCTAssertEventuallyEqual(
-            self.viewModel.state.eventsReceived,
-            [.setValueViaEffect(self.value), .setValue(self.value)]
+            self.viewModel.state,
+            .init(
+                value: self.value,
+                eventsReceived: [.setValueViaMiddleware(self.value), .setValue(self.value)]
+            )
         )
     }
     
@@ -78,23 +67,11 @@ final class ViewModelTests: XCTestCase {
         self.store.send(.setValueViaEffect(self.value))
         
         await XCTAssertEventuallyEqual(
-            self.store.state.value,
-            self.value
-        )
-        
-        await XCTAssertEventuallyEqual(
-            self.viewModel.state.value,
-            self.value
-        )
-        
-        await XCTAssertEventuallyEqual(
-            self.store.state.eventsReceived,
-            [.setValueViaEffect(self.value), .setValue(self.value)]
-        )
-        
-        await XCTAssertEventuallyEqual(
-            self.viewModel.state.eventsReceived,
-            [.setValueViaEffect(self.value), .setValue(self.value)]
+            self.viewModel.state,
+            .init(
+                value: self.value,
+                eventsReceived: [.setValueViaEffect(self.value), .setValue(self.value)]
+            )
         )
     }
     
@@ -103,61 +80,18 @@ final class ViewModelTests: XCTestCase {
     func testBindingWithValue() async {
         let binding = self.viewModel.binding(
             value: \.value,
-            event: { .setValue($0 ?? "") }
+            event: AppEvent.setValue
         )
 
         XCTAssertNil(self.store.state.value)
         binding.wrappedValue = self.value
-
-        await XCTAssertEventuallyEqual(
-            self.store.state.value,
-            self.value
-        )
         
         await XCTAssertEventuallyEqual(
-            self.viewModel.state.value,
-            self.value
-        )
-        
-        await XCTAssertEventuallyEqual(
-            self.store.state.eventsReceived,
-            [.setValue(self.value)]
-        )
-        
-        await XCTAssertEventuallyEqual(
-            self.viewModel.state.eventsReceived,
-            [.setValue(self.value)]
-        )
-    }
-    
-    func testBindingEmitsEventOnWrappedValueChange() async {
-        let binding = self.viewModel.binding(
-            value: \.value,
-            event: .setValueToA
-        )
-        XCTAssertNil(self.store.state.value)
-        
-        // trigger the .setValueToA event.
-        binding.wrappedValue = "whatever"
-        
-        await XCTAssertEventuallyEqual(
-            self.store.state.value,
-            self.value
-        )
-        
-        await XCTAssertEventuallyEqual(
-            self.viewModel.state.value,
-            self.value
-        )
-        
-        await XCTAssertEventuallyEqual(
-            self.store.state.eventsReceived,
-            [.setValueToA]
-        )
-
-        await XCTAssertEventuallyEqual(
-            self.viewModel.state.eventsReceived,
-            [.setValueToA]
+            self.viewModel.state,
+            .init(
+                value: self.value,
+                eventsReceived: [.setValue(self.value)]
+            )
         )
     }
     
@@ -168,27 +102,16 @@ final class ViewModelTests: XCTestCase {
         )
         XCTAssertNil(self.store.state.value)
         
-        // trigger the .setValue event.
+        // trigger the .setValue event twice.
+        binding.wrappedValue = self.value
         binding.wrappedValue = self.value
         
         await XCTAssertEventuallyEqual(
-            self.store.state.value,
-            self.value
-        )
-        
-        await XCTAssertEventuallyEqual(
-            self.viewModel.state.value,
-            self.value
-        )
-        
-        await XCTAssertEventuallyEqual(
-            self.store.state.eventsReceived,
-            [.setValue(self.value)]
-        )
-        
-        await XCTAssertEventuallyEqual(
-            self.viewModel.state.eventsReceived,
-            [.setValue(self.value)]
+            self.viewModel.state,
+            .init(
+                value: self.value,
+                eventsReceived: [.setValue(self.value)]
+            )
         )
     }
     
