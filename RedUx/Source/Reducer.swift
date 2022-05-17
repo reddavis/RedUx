@@ -19,6 +19,7 @@ public struct Reducer<State, Event, Environment> {
     // MARK: Initialization
     
     /// Construct a Reducer.
+    /// 
     /// - Parameter reduce: Reduce closure.
     public init(_ reduce: @escaping Reduce) {
         self.reduce = reduce

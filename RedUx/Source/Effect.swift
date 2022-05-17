@@ -2,8 +2,10 @@ import Asynchrone
 import Foundation
 
 public struct Effect<Event> {
-    public typealias Closure = () async -> Event?
+    /// The ID of the effect.
     let id: String
+    
+    /// Indicate whether this effect is a cancellation effect.
     let isCancellation: Bool
     
     // Private
@@ -11,9 +13,14 @@ public struct Effect<Event> {
     
     // MARK: Initialization
     
+    /// Initialize an effect that will emit a single event.
+    ///
+    /// - Parameters:
+    ///   - id: The ID of the efect. Defaults value: `UUID().uuidString`.
+    ///   - closure: The effect's function.
     public init(
         id: String = UUID().uuidString,
-        closure: @escaping Closure
+        closure: @escaping () async -> Event?
     ) {
         self.id = id
         self.isCancellation = false
@@ -28,6 +35,36 @@ public struct Effect<Event> {
         .eraseToAnyAsyncSequenceable()
     }
     
+    /// Initialize an effect that can emit unlimited events.
+    ///
+    /// Use this initializer if your effect can emit multiple events. For example:
+    ///     - Location monitor.
+    ///     - Streaming values (e.g. websockets)
+    ///     - Audio player position monitoring.
+    ///
+    /// - Parameters:
+    ///   - id: The ID of the efect. Defaults value: `UUID().uuidString`.
+    ///   - closure: The effect's function. The closure provides you with
+    ///   two closures. The first one, `emit`, should be used to emit events.
+    ///   The second `finish`, should be called when/if the effect finishes.
+    public init(
+        id: String = UUID().uuidString,
+        closure: @escaping (_ emit: (Event) -> Void, _ finish: () -> Void) async -> Void
+    ) {
+        self.id = id
+        self.isCancellation = false
+        self.sequence = AsyncStream { continuation in
+            await closure(
+                { continuation.yield($0) },
+                continuation.finish
+            )
+        }
+        .eraseToAnyAsyncSequenceable()
+    }
+    
+    /// Initialize an effect that emits a single event.
+    ///
+    /// - Parameter event: The event to emit.
     public init(_ event: Event) {
         self.id = UUID().uuidString
         self.isCancellation = false
@@ -60,8 +97,9 @@ extension Effect: AsyncSequence {
 extension Effect {
     /// Creates a fire and forget effect. This effect will not emit any events
     /// and will finish as soon as the provided closure has been executed.
+    ///
     /// - Parameter closure: An async closure.
-    /// - Returns: A type erased async sequence.
+    /// - Returns: An effect.
     public static func fireAndForget(_ closure: @escaping () async -> Void) -> Self {
         .init {
             await closure()
@@ -69,6 +107,10 @@ extension Effect {
         }
     }
     
+    /// Create a cancel effect that can be used to cancel a long running effect.
+    ///
+    /// - Parameter id: The ID of the effect to cancel.
+    /// - Returns: An effect.
     public static func cancel(_ id: String) -> Self {
         .init(
             id: id,
@@ -81,6 +123,9 @@ extension Effect {
 // MARK: AsyncSequence
 
 extension AsyncSequence {
+    /// Type erase any async sequence into an effect.
+    ///
+    /// - Returns: An effect.
     public func eraseToEffect() -> Effect<Self.Element> {
         .init(sequence: self)
     }

@@ -101,12 +101,12 @@ let appReducer: Reducer<AppState, AppEvent, AppEnvironment> = .init { state, eve
     case .triggerCancelEffect(let id):
         return .cancel(id)
     case .startLongRunningEffect:
-        return AsyncStream {
+        return Effect { emit, finish in
             for value in ["a", "b", "c"] {
-                $0.yield(.setValue(value))
+                emit(.setValue(value))
             }
-            $0.finish()
-        }.eraseToEffect()
+            finish()
+        }
     }
 }
 
