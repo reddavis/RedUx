@@ -16,7 +16,7 @@ public struct Effect<Event> {
     /// Initialize an effect that will emit a single event.
     ///
     /// - Parameters:
-    ///   - id: The ID of the efect. Defaults value: `UUID().uuidString`.
+    ///   - id: The ID of the efect. Default value: `UUID().uuidString`.
     ///   - closure: The effect's function.
     public init(
         id: String = UUID().uuidString,
@@ -43,7 +43,7 @@ public struct Effect<Event> {
     ///     - Audio player position monitoring.
     ///
     /// - Parameters:
-    ///   - id: The ID of the efect. Defaults value: `UUID().uuidString`.
+    ///   - id: The ID of the efect. Default value: `UUID().uuidString`.
     ///   - closure: The effect's function. The closure provides you with
     ///   two closures. The first one, `emit`, should be used to emit events.
     ///   The second `finish`, should be called when/if the effect finishes.
@@ -125,8 +125,10 @@ extension Effect {
 extension AsyncSequence {
     /// Type erase any async sequence into an effect.
     ///
+    /// - Parameters:
+    ///   - id: The ID of the efect. Default value: `UUID().uuidString`.
     /// - Returns: An effect.
-    public func eraseToEffect() -> Effect<Self.Element> {
-        .init(sequence: self)
+    public func eraseToEffect(id: String = UUID().uuidString) -> Effect<Self.Element> {
+        .init(id: id, sequence: self)
     }
 }
