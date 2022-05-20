@@ -12,10 +12,7 @@ final class ViewModelTests: XCTestCase {
         self.store = .init(
             state: .init(),
             reducer: reducer,
-            environment: .init(),
-            middlewares: [
-                TestMiddleware().eraseToAnyMiddleware()
-            ]
+            environment: .init()
         )
         
         self.viewModel = .init(self.store)
@@ -45,19 +42,6 @@ final class ViewModelTests: XCTestCase {
             .init(
                 value: self.value,
                 eventsReceived: [.setValue(self.value)]
-            )
-        )
-    }
-    
-    func testStateChangesFromEventViaMiddlewarePropagateToViewModel() async {
-        XCTAssertNil(self.store.state.value)
-        self.viewModel.send(.setValueViaMiddleware(self.value))
-        
-        await XCTAssertEventuallyEqual(
-            self.viewModel.state,
-            .init(
-                value: self.value,
-                eventsReceived: [.setValueViaMiddleware(self.value), .setValue(self.value)]
             )
         )
     }

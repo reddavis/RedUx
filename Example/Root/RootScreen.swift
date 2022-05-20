@@ -36,7 +36,7 @@ struct RootScreen: View, RedUxable {
                 .buttonStyle(.bordered)
                 
                 Button("Delayed increment") {
-                    self.viewModel.send(.incrementWithDelayViaMiddleware)
+                    self.viewModel.send(.incrementWithDelayViaEffect)
                 }
                 .buttonStyle(.bordered)
             }

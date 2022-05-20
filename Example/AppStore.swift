@@ -1,19 +1,14 @@
 import Asynchrone
 import RedUx
 
-
-typealias AppStore = RedUx.Store<AppState, AppEvent, AppEnvironment>
-
+typealias AppStore = Store<AppState, AppEvent, AppEnvironment>
 
 extension AppStore {
     static func make() -> AppStore {
         Store(
             state: .init(),
             reducer: reducer,
-            environment: .init(),
-            middlewares: [
-                HighlyComplicatedIncrementMiddleware().eraseToAnyMiddleware()
-            ]
+            environment: .init()
         )
     }
     
@@ -23,13 +18,10 @@ extension AppStore {
         Store(
             state: state,
             reducer: .empty,
-            environment: .init(),
-            middlewares: []
+            environment: .init()
         )
     }
 }
-
-
 
 // MARK: Reducer
 
@@ -41,13 +33,10 @@ fileprivate let reducer: Reducer<AppState, AppEvent, AppEnvironment> = Reducer {
     case .decrement:
         state.count -= 1
         return .none
-    case .incrementWithDelayViaMiddleware:
-        return .none
     case .incrementWithDelayViaEffect:
-        return Effect {
-            try? await Task.sleep(seconds: 2)
-            return .increment
-        }
+        return Effect(.increment)
+            .delay(for: 2)
+            .eraseToEffect()
     case .toggleIsPresentingSheet:
         state.isPresentingSheet.toggle()
         return .none
@@ -66,8 +55,6 @@ detailsReducer.pull(
     environment: { $0 }
 )
 
-
-
 // MARK: State
 
 struct AppState: Equatable {
@@ -76,49 +63,18 @@ struct AppState: Equatable {
     var details: DetailsState = .init()
 }
 
-
-
 // MARK: Event
 
 enum AppEvent {
     case increment
     case decrement
-    case incrementWithDelayViaMiddleware
     case incrementWithDelayViaEffect
     case toggleIsPresentingSheet
     case details(DetailsEvent)
 }
 
-
-
 // MARK: Environment
 
 struct AppEnvironment {
     static var mock: AppEnvironment { .init() }
-}
-
-
-
-// MARK: Middleware
-
-struct HighlyComplicatedIncrementMiddleware: Middlewareable {
-    let outputStream: AnyAsyncSequenceable<AppEvent>
-    
-    // Private
-    private let _outputStream: PassthroughAsyncSequence<AppEvent> = .init()
-    
-    // MARK: Initialization
-    
-    init() {
-        self.outputStream = self._outputStream.eraseToAnyAsyncSequenceable()
-    }
-    
-    // MARK: Middlewareable
-    
-    func execute(event: AppEvent, state: () -> AppState) async {
-        guard case .incrementWithDelayViaMiddleware = event else { return }
-        
-        try? await Task.sleep(seconds: 0.5)
-        self._outputStream.yield(.increment)
-    }
 }

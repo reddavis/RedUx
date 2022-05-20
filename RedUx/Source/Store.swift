@@ -23,13 +23,9 @@ public final class Store<State, Event, Environment> {
     private var parentStatePropagationTask: Task<Void, Error>?
     private let _stateSequence: PassthroughAsyncSequence<State> = .init()
     
-    private let middlewares: [AnyMiddleware<Event, Event, State>]
-    private var middlewareTasks: [Task<Void, Error>] = []
-    
+    private let effectManager: EffectManager
     private var eventBacklog: [Event] = []
     private var isProcessingEvent = false
-    
-    private let effectManager: EffectManager
     
     // MARK: Initialization
     
@@ -41,14 +37,12 @@ public final class Store<State, Event, Environment> {
     public convenience init(
         state: State,
         reducer: Reducer<State, Event, Environment>,
-        environment: Environment,
-        middlewares: [AnyMiddleware<Event, Event, State>]
+        environment: Environment
     ) {
         self.init(
             state: state,
             reducer: { reducer.execute(state: &$0, event: $1, environment: $2) },
-            environment: environment,
-            middlewares: middlewares
+            environment: environment
         )
     }
     
@@ -61,14 +55,12 @@ public final class Store<State, Event, Environment> {
         state: State,
         reducer: Reducer<State, Event, Environment>,
         environment: Environment,
-        middlewares: [AnyMiddleware<Event, Event, State>],
         effectManager: EffectManager
     ) {
         self.init(
             state: state,
             reducer: { reducer.execute(state: &$0, event: $1, environment: $2) },
             environment: environment,
-            middlewares: middlewares,
             effectManager: effectManager
         )
     }
@@ -77,7 +69,6 @@ public final class Store<State, Event, Environment> {
         state: State,
         reducer: @escaping Reducer<State, Event, Environment>.Reduce,
         environment: Environment,
-        middlewares: [AnyMiddleware<Event, Event, State>],
         effectManager: EffectManager = .init()
     ) {
         self.state = state
@@ -85,10 +76,7 @@ public final class Store<State, Event, Environment> {
         
         self.reducer = reducer
         self.environment = environment
-        self.middlewares = middlewares
         self.effectManager = effectManager
-        
-        self.subscribeToMiddlewares()
     }
     
     // MARK: Events
@@ -110,13 +98,10 @@ public final class Store<State, Event, Environment> {
             let event = self.eventBacklog.removeFirst()
             let effect = self.reducer(&state, event, self.environment)
             self.state = state
-                        
-            Task(priority: .high) { [state] in
-                for middleware in self.middlewares {
-                    await middleware.execute(event: event, state: { state })
-                }
-                
-                guard let effect = effect else { return }
+            
+            guard let effect = effect else { return }
+            
+            Task(priority: .high) {
                 guard !effect.isCancellation else {
                     await self.effectManager.removeTask(effect.id)
                     return
@@ -131,19 +116,6 @@ public final class Store<State, Event, Environment> {
                 await self.effectManager.addTask(task, with: effect.id)
             }
         } while !self.eventBacklog.isEmpty
-    }
-    
-    // MARK: Middleware
-    
-    private func subscribeToMiddlewares() {
-        self.middlewareTasks
-        = self.middlewares.reduce(into: [Task<Void, Error>]()) { [weak self] results, middleware in
-            results.append(
-                middleware.outputStream.sink { event in
-                    self?.send(event)
-                }
-            )
-        }
     }
 }
 
@@ -172,8 +144,7 @@ extension Store {
                 state = toScopedState(self.state)
                 return .none
             },
-            environment: toScopedEnvironment(self.environment),
-            middlewares: []
+            environment: toScopedEnvironment(self.environment)
         )
         
         // Propagate changes to state to scoped store.

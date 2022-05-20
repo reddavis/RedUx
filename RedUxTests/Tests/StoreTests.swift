@@ -13,17 +13,6 @@ final class StoreTests: XCTestCase {
             state: .init(),
             reducer: reducer,
             environment: .init(),
-            middlewares: [
-                TestMiddleware().eraseToAnyMiddleware(),
-                ScopedMiddleware().pull(
-                    inputEvent: {
-                        guard case let AppEvent.subEvent(localEvent) = $0 else { return nil }
-                        return localEvent
-                    },
-                    outputEvent: AppEvent.subEvent,
-                    state: \.subState
-                )
-            ],
             effectManager: manager
         )
     }
@@ -178,60 +167,5 @@ final class StoreTests: XCTestCase {
         )
         
         XCTAssertTrue(task.isCancelled)
-    }
-    
-    // MARK: Middleware
-    
-    func testMiddleware() async {
-        await XCTAssertStateChange(
-            store: self.store,
-            events: [.setValueViaMiddleware("a")],
-            matches: [
-                .init(),
-                .init(
-                    eventsReceived: [
-                        .setValueViaMiddleware("a")
-                    ]
-                ),
-                .init(
-                    value: "a",
-                    eventsReceived: [
-                        .setValueViaMiddleware("a"),
-                        .setValue("a")
-                    ]
-                )
-            ]
-        )
-    }
-    
-    func testScopedMiddleware() async {
-        await XCTAssertStateChange(
-            store: self.store,
-            events: [.subEvent(.setValueViaMiddleware("a"))],
-            matches: [
-                .init(),
-                .init(
-                    eventsReceived: [
-                        .subEvent(.setValueViaMiddleware("a"))
-                    ],
-                    subState: .init(
-                        eventsReceived: [.setValueViaMiddleware("a")]
-                    )
-                ),
-                .init(
-                    eventsReceived: [
-                        .subEvent(.setValueViaMiddleware("a")),
-                        .subEvent(.setValue("a"))
-                    ],
-                    subState: .init(
-                        value: "a",
-                        eventsReceived: [
-                            .setValueViaMiddleware("a"),
-                            .setValue("a")
-                        ]
-                    )
-                )
-            ]
-        )
     }
 }

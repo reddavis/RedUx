@@ -141,8 +141,7 @@ extension RedUxable {
         let store = LocalStore(
             state: state,
             reducer: .empty,
-            environment: environment,
-            middlewares: []
+            environment: environment
         )
         
         return .init(
