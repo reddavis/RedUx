@@ -176,7 +176,7 @@ Failed To Assert Equality
 /// a collection of events.
 /// - Parameters:
 ///   - store: The store to test state changes against.
-///   - events: The events to send to the store.
+///   - event: The event to send to the store.
 ///   - statesToMatch: An array of state changes expected. These will be asserted
 ///     equal against the store's state changes.
 ///   - timeout: Time to wait for store state changes. Defaults to `5`
@@ -184,7 +184,7 @@ Failed To Assert Equality
 ///   - line: The line in the file where this assertion is being called. Defaults to `#line`.
 func XCTAssertStateChange<State: Equatable, Event, Environment>(
     store: Store<State, Event, Environment>,
-    events: [Event],
+    event: Event,
     matches statesToMatch: [State],
     timeout: TimeInterval = 5.0,
     file: StaticString = #filePath,
@@ -205,11 +205,9 @@ func XCTAssertStateChange<State: Equatable, Event, Environment>(
             semaphore.signal()
         }
     
-    Task {
+    Task.detached(priority: .low) {
         semaphore.wait()
-        for event in events {
-            store.send(event)
-        }
+        store.send(event)
     }
         
     while true {
@@ -232,7 +230,7 @@ func XCTAssertStateChange<State: Equatable, Event, Environment>(
             return
         // False but still within timeout limit.
         case false:
-            try? await Task.sleep(nanoseconds: 5000000)
+            try? await Task.sleep(nanoseconds: 50000000)
         }
     }
 }

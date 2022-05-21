@@ -38,7 +38,7 @@ final class StoreTests: XCTestCase {
         
         await XCTAssertStateChange(
             store: scopedStore,
-            events: [.setValue(value)],
+            event: .setValue(value),
             matches: [
                 self.store.state.subState,
                 .init(value: value, eventsReceived: [.setValue(value)])
@@ -60,7 +60,7 @@ final class StoreTests: XCTestCase {
         XCTAssertNil(scopedStore.state.value)
         await XCTAssertStateChange(
             store: scopedStore,
-            events: [.setValueViaEffect(value)],
+            event: .setValueViaEffect(value),
             matches: [
                 .init(),
                 .init(value: nil, eventsReceived: [.setValueViaEffect(value)]),
@@ -80,7 +80,7 @@ final class StoreTests: XCTestCase {
     func testSendingEventThatTriggersAnEffect() async {
         await XCTAssertStateChange(
             store: self.store,
-            events: [.setValueViaEffect("a")],
+            event: .setValueViaEffect("a"),
             matches: [
                 .init(),
                 .init(
@@ -102,7 +102,7 @@ final class StoreTests: XCTestCase {
     func testTriggeringLongRunningEffect() async {
         await XCTAssertStateChange(
             store: self.store,
-            events: [.startLongRunningEffect],
+            event: .startLongRunningEffect,
             matches: [
                 .init(),
                 .init(
