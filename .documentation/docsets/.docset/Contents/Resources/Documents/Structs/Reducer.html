@@ -17,7 +17,7 @@
     <a title="Reducer Structure Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html"> Docs</a> (95% documented)</p>
+        <p><a href="../index.html"> Docs</a> (100% documented)</p>
         <div class="header-right">
           <form role="search" action="../search.json">
             <input type="text" placeholder="Search documentation" data-typeahead>
@@ -47,10 +47,21 @@
             </ul>
           </li>
           <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/ActionStatus.html">ActionStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/ValueStatus.html">ValueStatus</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
             <a href="../Extensions.html">Extensions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Extensions/AnyAsyncSequenceable.html">AnyAsyncSequenceable</a>
+                <a href="../Extensions/AsyncSequence.html">AsyncSequence</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Extensions/View.html">View</a>
@@ -61,9 +72,6 @@
             <a href="../Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Protocols/Middlewareable.html">Middlewareable</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Protocols/RedUxable.html">RedUxable</a>
               </li>
             </ul>
@@ -72,7 +80,7 @@
             <a href="../Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Structs/AnyMiddleware.html">AnyMiddleware</a>
+                <a href="../Structs/Effect.html">Effect</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/Reducer.html">Reducer</a>
@@ -146,14 +154,13 @@ whether any effects should be executed.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">Reduce</span> <span class="o">=</span> <span class="p">(</span><span class="k">inout</span> <span class="kt">State</span><span class="p">,</span> <span class="kt">Event</span><span class="p">,</span> <span class="kt">Environment</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">AnyAsyncSequenceable</span><span class="o">&lt;</span><span class="kt">Event</span><span class="o">&gt;</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">Reduce</span> <span class="o">=</span> <span class="p">(</span><span class="k">inout</span> <span class="kt">State</span><span class="p">,</span> <span class="kt">Event</span><span class="p">,</span> <span class="kt">Environment</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/Effect.html">Effect</a></span><span class="o">&lt;</span><span class="kt">Event</span><span class="o">&gt;</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -176,9 +183,9 @@ whether any effects should be executed.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:5RedUx7ReducerVyACyxq_q0_G10Asynchrone20AnyAsyncSequenceableVyq_GSgxz_q_q0_tccfc"></a>
+                    <a name="/s:5RedUx7ReducerVyACyxq_q0_GAA6EffectVyq_GSgxz_q_q0_tccfc"></a>
                     <a name="//apple_ref/swift/Method/init(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:5RedUx7ReducerVyACyxq_q0_G10Asynchrone20AnyAsyncSequenceableVyq_GSgxz_q_q0_tccfc">init(_:<wbr>)</a>
+                    <a class="token" href="#/s:5RedUx7ReducerVyACyxq_q0_GAA6EffectVyq_GSgxz_q_q0_tccfc">init(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -562,8 +569,8 @@ Both reducer&rsquo;s event streams will be merged.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2022 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2022-02-28)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+          <p>&copy; 2022 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2022-05-21)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
     </div>

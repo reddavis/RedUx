@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Structures  Reference</title>
+    <title>Enumerations  Reference</title>
     <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="css/highlight.css" />
     <meta charset='utf-8'>
@@ -13,8 +13,8 @@
     <script src="js/jazzy.search.js" defer></script>
   </head>
   <body>
-    <a name="//apple_ref/swift/Section/Structures" class="dashAnchor"></a>
-    <a title="Structures  Reference"></a>
+    <a name="//apple_ref/swift/Section/Enumerations" class="dashAnchor"></a>
+    <a title="Enumerations  Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="index.html"> Docs</a> (100% documented)</p>
@@ -29,7 +29,7 @@
       <p id="breadcrumbs">
         <a href="index.html"> Reference</a>
         <img id="carat" src="img/carat.png" alt=""/>
-        Structures  Reference
+        Enumerations  Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -95,8 +95,8 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>Structures</h1>
-            <p>The following structures are available globally.</p>
+            <h1>Enumerations</h1>
+            <p>The following enumerations are available globally.</p>
 
           </section>
           <section class="section task-group-section">
@@ -105,9 +105,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:5RedUx6EffectV"></a>
-                    <a name="//apple_ref/swift/Struct/Effect" class="dashAnchor"></a>
-                    <a class="token" href="#/s:5RedUx6EffectV">Effect</a>
+                    <a name="/s:5RedUx12ActionStatusO"></a>
+                    <a name="//apple_ref/swift/Enum/ActionStatus" class="dashAnchor"></a>
+                    <a class="token" href="#/s:5RedUx12ActionStatusO">ActionStatus</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -115,15 +115,23 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        
-                        <a href="Structs/Effect.html" class="slightly-smaller">See more</a>
+                        <p><code>ActionStatus</code> is a helpful enum which can be used to describe the state of a
+long running action such as; submitting a form, manipulating data, running migrations,
+executing API requests etc.</p>
+
+<p>An example of what this could look like being used.</p>
+<pre class="highlight swift"><code><span class="kd">struct</span> <span class="kt">AppState</span><span class="p">:</span> <span class="kt">Equatable</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">migrationStatus</span><span class="p">:</span> <span class="kt">ActionStatus</span><span class="o">&lt;</span><span class="kt">MigrationError</span><span class="o">&gt;</span> <span class="o">=</span> <span class="o">.</span><span class="n">idle</span>
+<span class="p">}</span>
+</code></pre>
+
+                        <a href="Enums/ActionStatus.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Effect</span><span class="o">&lt;</span><span class="kt">Event</span><span class="o">&gt;</span></code></pre>
-<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">Effect</span><span class="p">:</span> <span class="kt">AsyncSequence</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ActionStatus</span><span class="o">&lt;</span><span class="kt">ErrorType</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt">Equatable</span> <span class="k">where</span> <span class="kt">ErrorType</span> <span class="p">:</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">ErrorType</span> <span class="p">:</span> <span class="kt">Error</span></code></pre>
 
                         </div>
                       </div>
@@ -133,9 +141,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:5RedUx7ReducerV"></a>
-                    <a name="//apple_ref/swift/Struct/Reducer" class="dashAnchor"></a>
-                    <a class="token" href="#/s:5RedUx7ReducerV">Reducer</a>
+                    <a name="/s:5RedUx11ValueStatusO"></a>
+                    <a name="//apple_ref/swift/Enum/ValueStatus" class="dashAnchor"></a>
+                    <a class="token" href="#/s:5RedUx11ValueStatusO">ValueStatus</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -143,43 +151,23 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A reducer is responsible for taking an event and deciding how the state should be changed and
-whether any effects should be executed.</p>
+                        <p><code>ValueStatus</code> is a helpful enum which can be used to describe the state of a
+long running action that involves a value such as; fetching data from an API.</p>
 
-                        <a href="Structs/Reducer.html" class="slightly-smaller">See more</a>
+<p>An example of what this could look like being used.</p>
+<pre class="highlight swift"><code><span class="kd">struct</span> <span class="kt">AppState</span><span class="p">:</span> <span class="kt">Equatable</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">blogPosts</span><span class="p">:</span> <span class="kt">ValueStatus</span><span class="o">&lt;</span><span class="p">[</span><span class="kt">BlogPost</span><span class="p">],</span> <span class="kt">APIError</span><span class="o">&gt;</span> <span class="o">=</span> <span class="o">.</span><span class="n">idle</span>
+<span class="p">}</span>
+</code></pre>
+
+                        <a href="Enums/ValueStatus.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Reducer</span><span class="o">&lt;</span><span class="kt">State</span><span class="p">,</span> <span class="kt">Event</span><span class="p">,</span> <span class="kt">Environment</span><span class="o">&gt;</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:5RedUx11UnwrapStoreV"></a>
-                    <a name="//apple_ref/swift/Struct/UnwrapStore" class="dashAnchor"></a>
-                    <a class="token" href="#/s:5RedUx11UnwrapStoreV">UnwrapStore</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        
-                        <a href="Structs/UnwrapStore.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">UnwrapStore</span><span class="o">&lt;</span><span class="kt">State</span><span class="p">,</span> <span class="kt">Event</span><span class="p">,</span> <span class="kt">Environment</span><span class="p">,</span> <span class="kt">Content</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt">View</span> <span class="k">where</span> <span class="kt">Content</span> <span class="p">:</span> <span class="kt">View</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ValueStatus</span><span class="o">&lt;</span><span class="kt">Value</span><span class="p">,</span> <span class="kt">ErrorType</span><span class="o">&gt;</span><span class="p">:</span> <span class="kt">Equatable</span>
+<span class="k">where</span> <span class="kt">Value</span><span class="p">:</span> <span class="kt">Equatable</span><span class="p">,</span> <span class="kt">ErrorType</span><span class="p">:</span> <span class="kt">Error</span> <span class="o">&amp;</span> <span class="kt">Equatable</span></code></pre>
 
                         </div>
                       </div>
