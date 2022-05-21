@@ -1,0 +1,54 @@
+# Store
+
+The store's job is to bring all the pieces together and provide an interface for us to send [events]() to.
+
+## Setup
+
+Here is a simple example of how the store could look. Similar to the envionment, it's recommended to have `main` and `mock` versions of your store. Having a mock version will make it super easy to manage your SwiftUI previews and snapshot tests.
+
+```swift
+import RedUx
+
+typealias AppStore = Store<AppState, AppEvent, AppEnvironment>
+
+extension AppStore {
+    static func main(
+        state: AppState = .init(),
+        reducer: Reducer<State, Event, Environment> = AppReducer.main,
+        environment: AppEnvironment = .main()
+    ) -> AppStore {
+        Store(
+            state: state,
+            reducer: reducer,
+            environment: environment
+        )
+    }
+    
+    static func mock(
+        state: AppState = .init(),
+        environment: AppEnvironment = .mock()
+    ) -> AppStore {
+        Store(
+            state: state,
+            reducer: .empty,
+            environment: environment
+        )
+    }
+}
+```
+
+## Sending events
+
+The only way to mutate the state is by sending [events](./events) which get passed to the reducer, which then mutates the state.
+
+Events are sent to the store. 
+
+```swift
+store.send(.login)
+```
+
+The store will then process the event and update the state. It will also process any [effects](./effects) produced by the reducer.
+
+## Scoping stores
+
+TODO

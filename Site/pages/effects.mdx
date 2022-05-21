@@ -1,0 +1,100 @@
+# Effects
+
+Effects are essentially a way for the reducer to perform, what would otherwise be, blocking code. Effects are very versatile, they can be used to encapsulate an API request and then produce an event based off the result, they can run for the entirety of your applications timeframe and product events when it requires (think location tracking), or they can simply be "fire and forget".
+
+## Initializers
+
+Effect has a few useful initializers for the most common ways of using an effect.
+
+### Closure with event return
+
+```swift
+Effect {
+    let results = try await environment.apiClient.search(value)
+    return .didFetchResults(results)
+}
+```
+
+This initializer will be the most commonly used. It gives you ability to run any code and then return with an event.
+
+### Single event return
+
+```swift
+Effect(.fetchResults)
+```
+
+Sometimes, you'll want the reducer to trigger a new event without the need to run any other code. This initializer is simply shorthand for:
+
+```swift
+Effect {
+    .didFetchResults
+}
+```
+
+### Yielding multiple events
+
+```swift
+Effect { emit, finish in
+    for await location in environment.locationService.streamLocation() {
+        emit(.didReceiveLocation(location))
+    }
+
+    finish()
+}
+```
+
+This initializer gives a lot of control over event emission and when the effect comes to an end. Use the emit closure to emit events and call the finish closure when the effect is complete.
+
+### Fire and forget
+
+```swift
+Effect.fireAndForget { 
+    environment.apiClient.callHome()
+}
+```
+
+Use this initializer to perform actions that don't require to emit any events.
+
+## Effect cancellation and identification
+
+It is also possible to cancel an effect. All of the initializers can take an ID as a parameter. This ID can then be used to cancel the effect.
+
+```swift
+Effect(id: "my-effect") {
+    let results = try await environment.apiClient.search(value)
+    return .didFetchResults(results)
+}
+```
+To then cancel the effect:
+
+```swift
+Effect.cancel("my-effect")
+```
+
+> **Note**
+>
+> If an effect is emitted and has the same ID as an already running effect,
+> the already running effect will be cancelled and the new effect will take it's place.
+
+## AsyncSequence
+
+In RedUx, the Effect struct conforms to [`AsyncSequence`](https://developer.apple.com/documentation/swift/asyncsequence) and there is a useful erasure function (`eraseToEffect()`) that lets you type erase any `AsyncSequence` into an effect.
+
+RedUx includes the `Asynchrone` framework which can be used to open a world of possibilities.
+
+Imagine a user can type into a textfield and we want the app to perform an API request that will search for what they type. Because the user can type really fast, we want to use debounce to avoid making un-needed requests.
+
+```swift
+let reducer: Reducer<AppState, AppEvent, AppEnvironment> = Reducer { state, event, environment in
+    switch event {
+    case .setSearchValue(let value):
+        return Effect {
+            let results = try await environment.apiClient.search(value)
+            return .didFetchResults(results)
+        }
+        .debounce(0.2)
+        .eraseToEffect(id: "search")
+    // Other code...
+    }
+}
+```

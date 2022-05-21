@@ -1,0 +1,32 @@
+# Environment
+
+The environment is used to hold things such as API clients, data stores and utility objects. It is then passed through to the reducer.
+
+For example, our Twitter app could have an environment that looked like this:
+
+```swift
+struct AppEnvironment {
+    static func make(
+        apiClient: TwitterAPIClient = .main()
+    ) -> Self {
+        .init(
+            apiClient: apiClient
+        )
+    }
+
+    #if DEBUG
+    static func mock(
+        apiClient: TwitterAPIClient = .mock()
+    ) -> Self {
+        .init(
+            apiClient: apiClient
+        )
+    }
+    #endif
+
+    // Internal
+    let apiClient: TwitterAPIClient
+}
+```
+
+It's good practice to have a mocked version of your environment and any objects it holds. This will make testing a breeze.
