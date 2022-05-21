@@ -50,6 +50,7 @@ public final class ViewModel<State: Equatable, Event>: ObservableObject {
     // MARK: Initialization
     
     /// Create a new view model instance.
+    ///
     /// - Parameter store: The store.
     public init<Environment>(_ store: Store<State, Event, Environment>) {
         self.state = store.state
@@ -58,7 +59,7 @@ public final class ViewModel<State: Equatable, Event>: ObservableObject {
         self.stateTask = store
             .stateSequence
             .removeDuplicates()
-            .sink(priority: .userInitiated) { state in
+            .sink { state in
                 await MainActor.run {
                     self.state = state
                 }
@@ -72,6 +73,7 @@ public final class ViewModel<State: Equatable, Event>: ObservableObject {
     // MARK: API
     
     /// Send an event to the store.
+    ///
     /// - Parameter event: The even to send.
     public func send(_ event: Event) {
         self._send(event)
@@ -102,6 +104,7 @@ extension ViewModel {
     ///     )
     /// )
     /// ```
+    ///
     /// - Parameters:
     ///   - value: A function to extract the value from the state.
     ///   - event: A function to build the event that is sent to the store.
@@ -152,6 +155,7 @@ extension ViewModel {
     ///         }
     ///     )
     /// ```
+    ///
     /// - Parameters:
     ///   - value: A function to extract the value from the state.
     ///   - event: An event that is sent to the store.
@@ -183,6 +187,7 @@ extension ViewModel {
     ///     }
     /// )
     /// ```
+    /// 
     /// - Parameters:
     ///   - value: A function to extract the value from the state.
     /// - Returns: A readonly binding.

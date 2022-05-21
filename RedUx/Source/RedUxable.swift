@@ -94,6 +94,7 @@ public protocol RedUxable {
     
     
     /// Create a "mock" RedUxable view.
+    ///
     /// - Parameters:
     ///     - state: The state.
     ///     - environment: The environment.
@@ -117,6 +118,7 @@ public protocol RedUxable {
 
 extension RedUxable {
     /// Create a "live" RedUxable view with a store.
+    ///
     /// - Parameter store: The store
     /// - Returns: A view.
     public static func make(store: LocalStore) -> Self {
@@ -127,6 +129,7 @@ extension RedUxable {
     ///
     /// This function will create a store that uses the state and environment object passed
     /// and an `empty` reducer.
+    /// 
     /// - Parameters:
     ///   - state: The state.
     ///   - environment: The environment. Generally, this would be a mocked environment.
@@ -138,8 +141,7 @@ extension RedUxable {
         let store = LocalStore(
             state: state,
             reducer: .empty,
-            environment: environment,
-            middlewares: []
+            environment: environment
         )
         
         return .init(
