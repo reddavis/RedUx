@@ -97,12 +97,20 @@
             
             <h1 id='redux' class='heading'>RedUx</h1>
 
-<p>A super simple Swift implementation of the redux pattern making use of Swift 5.5&rsquo;s new async await API&rsquo;s. </p>
+<p><strong>RedUx</strong> is a modern Swift implementation of the redux pattern that takes advantage of Swift&rsquo;s newer asyns/await APIs.</p>
+
+<p>It enables your app to have a centralised state store of which your app&rsquo;s UI can mirror and react to; leading to predictable, debuggable, modular and easy to test apps. </p>
 <h2 id='requirements' class='heading'>Requirements</h2>
 
 <ul>
 <li>iOS 15.0+</li>
 <li>macOS 12.0+</li>
+</ul>
+<h2 id='resources' class='heading'>Resources</h2>
+
+<ul>
+<li><a href="https://red-ux.vercel.app">Documentation</a></li>
+<li><a href="https://redux-documentation.vercel.app">API reference</a></li>
 </ul>
 <h2 id='installation' class='heading'>Installation</h2>
 <h3 id='swift-package-manager' class='heading'>Swift Package Manager</h3>
@@ -116,247 +124,6 @@
 <li>Enter package URL: <code>https://github.com/reddavis/Redux</code>.</li>
 <li>Add <code>RedUx</code> to your app target.</li>
 </ol>
-<h2 id='documentation' class='heading'>Documentation</h2>
-
-<p>Documentation can be found <a href="https://determined-dubinsky-ed15d5.netlify.app/">here</a>.</p>
-<h2 id='usage' class='heading'>Usage</h2>
-<h3 id='app-store' class='heading'>App store</h3>
-<pre class="highlight plaintext"><code>import Asynchrone
-import RedUx
-
-
-typealias AppStore = RedUx.Store&lt;AppState, AppEvent, AppEnvironment&gt;
-
-
-extension AppStore {
-    static func make() -&gt; AppStore {
-        Store(
-            state: .init(),
-            reducer: reducer,
-            environment: .init(),
-            middlewares: [
-                HighlyComplicatedIncrementMiddleware().eraseToAnyMiddleware()
-            ]
-        )
-    }
-
-    static func mock(
-        state: AppState
-    ) -&gt; AppStore {
-        Store(
-            state: state,
-            reducer: .empty,
-            environment: .init(),
-            middlewares: []
-        )
-    }
-}
-
-
-
-// MARK: Reducer
-
-fileprivate let reducer: Reducer&lt;AppState, AppEvent, AppEnvironment&gt; = Reducer { state, event, environment in
-    switch event {
-    case .increment:
-        state.count += 1
-        return .none
-    case .decrement:
-        state.count -= 1
-        return .none
-    case .incrementWithDelayViaMiddleware:
-        return .none
-    case .incrementWithDelayViaEffect:
-        return .effect {
-            try? await Task.sleep(seconds: 2)
-            return .increment
-        }.eraseToAnyAsyncSequenceable()
-    case .toggleIsPresentingSheet:
-        state.isPresentingSheet.toggle()
-        return .none
-    case .details:
-        return .none
-    }
-}
-&lt;&gt;
-detailsReducer.pull(
-    state: \.details,
-    event: {
-        guard case AppEvent.details(let localEvent) = $0 else { return nil }
-        return localEvent
-    },
-    appEvent: AppEvent.details,
-    environment: { $0 }
-)
-
-
-
-// MARK: State
-
-struct AppState: Equatable {
-    var count = 0
-    var isPresentingSheet = false
-    var details: DetailsState = .init()
-}
-
-
-
-// MARK: Event
-
-enum AppEvent {
-    case increment
-    case decrement
-    case incrementWithDelayViaMiddleware
-    case incrementWithDelayViaEffect
-    case toggleIsPresentingSheet
-    case details(DetailsEvent)
-}
-
-
-
-// MARK: Environment
-
-struct AppEnvironment {
-    static var mock: AppEnvironment { .init() }
-}
-
-
-
-// MARK: Middleware
-
-struct HighlyComplicatedIncrementMiddleware: Middlewareable {
-    let outputStream: AnyAsyncSequenceable&lt;AppEvent&gt;
-
-    // Private
-    private let _outputStream: PassthroughAsyncSequence&lt;AppEvent&gt; = .init()
-
-    // MARK: Initialization
-
-    init() {
-        self.outputStream = self._outputStream.eraseToAnyAsyncSequenceable()
-    }
-
-    // MARK: Middlewareable
-
-    func execute(event: AppEvent, state: () -&gt; AppState) async {
-        guard case .incrementWithDelayViaMiddleware = event else { return }
-
-        try? await Task.sleep(seconds: 2)
-        self._outputStream.yield(.increment)
-    }
-}
-
-</code></pre>
-<h3 id='root-screen' class='heading'>Root screen</h3>
-<pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">SwiftUI</span>
-<span class="kd">import</span> <span class="kt">RedUx</span>
-
-
-<span class="kd">struct</span> <span class="kt">RootScreen</span><span class="p">:</span> <span class="kt">View</span><span class="p">,</span> <span class="kt">RedUxable</span> <span class="p">{</span>
-    <span class="kd">typealias</span> <span class="kt">LocalState</span> <span class="o">=</span> <span class="kt">AppState</span>
-    <span class="kd">typealias</span> <span class="kt">LocalEvent</span> <span class="o">=</span> <span class="kt">AppEvent</span>
-    <span class="kd">typealias</span> <span class="kt">LocalEnvironment</span> <span class="o">=</span> <span class="kt">AppEnvironment</span>
-
-    <span class="k">let</span> <span class="nv">store</span><span class="p">:</span> <span class="kt">LocalStore</span>
-    <span class="kd">@StateObject</span> <span class="k">var</span> <span class="nv">viewModel</span><span class="p">:</span> <span class="kt">LocalViewModel</span>
-
-    <span class="c1">// MARK: Initialization</span>
-
-    <span class="nf">init</span><span class="p">(</span><span class="nv">store</span><span class="p">:</span> <span class="kt">LocalStore</span><span class="p">,</span> <span class="nv">viewModel</span><span class="p">:</span> <span class="kt">LocalViewModel</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">self</span><span class="o">.</span><span class="n">store</span> <span class="o">=</span> <span class="n">store</span>
-        <span class="k">self</span><span class="o">.</span><span class="n">_viewModel</span> <span class="o">=</span> <span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="nv">wrappedValue</span><span class="p">:</span> <span class="n">viewModel</span><span class="p">)</span>
-    <span class="p">}</span>
-
-    <span class="c1">// MARK: Body</span>
-
-    <span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
-        <span class="kt">VStack</span><span class="p">(</span><span class="nv">alignment</span><span class="p">:</span> <span class="o">.</span><span class="n">center</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kt">Text</span><span class="p">(</span><span class="nv">verbatim</span><span class="p">:</span> <span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="k">self</span><span class="o">.</span><span class="n">viewModel</span><span class="o">.</span><span class="n">count</span><span class="p">))</span>
-                <span class="o">.</span><span class="nf">font</span><span class="p">(</span><span class="o">.</span><span class="n">largeTitle</span><span class="p">)</span>
-
-            <span class="kt">HStack</span> <span class="p">{</span>
-                <span class="kt">Button</span><span class="p">(</span><span class="s">"Decrement"</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="k">self</span><span class="o">.</span><span class="n">viewModel</span><span class="o">.</span><span class="nf">send</span><span class="p">(</span><span class="o">.</span><span class="n">decrement</span><span class="p">)</span>
-                <span class="p">}</span>
-                <span class="o">.</span><span class="nf">buttonStyle</span><span class="p">(</span><span class="o">.</span><span class="n">bordered</span><span class="p">)</span>
-
-                <span class="kt">Button</span><span class="p">(</span><span class="s">"Increment"</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="k">self</span><span class="o">.</span><span class="n">viewModel</span><span class="o">.</span><span class="nf">send</span><span class="p">(</span><span class="o">.</span><span class="n">increment</span><span class="p">)</span>
-                <span class="p">}</span>
-                <span class="o">.</span><span class="nf">buttonStyle</span><span class="p">(</span><span class="o">.</span><span class="n">bordered</span><span class="p">)</span>
-
-                <span class="kt">Button</span><span class="p">(</span><span class="s">"Delayed increment"</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="k">self</span><span class="o">.</span><span class="n">viewModel</span><span class="o">.</span><span class="nf">send</span><span class="p">(</span><span class="o">.</span><span class="n">incrementWithDelayViaMiddleware</span><span class="p">)</span>
-                <span class="p">}</span>
-                <span class="o">.</span><span class="nf">buttonStyle</span><span class="p">(</span><span class="o">.</span><span class="n">bordered</span><span class="p">)</span>
-            <span class="p">}</span>
-
-            <span class="kt">Button</span><span class="p">(</span><span class="s">"Present sheet"</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">self</span><span class="o">.</span><span class="n">viewModel</span><span class="o">.</span><span class="nf">send</span><span class="p">(</span><span class="o">.</span><span class="n">toggleIsPresentingSheet</span><span class="p">)</span>
-            <span class="p">}</span>
-            <span class="o">.</span><span class="nf">buttonStyle</span><span class="p">(</span><span class="o">.</span><span class="n">bordered</span><span class="p">)</span>
-        <span class="p">}</span>
-        <span class="o">.</span><span class="nf">sheet</span><span class="p">(</span>
-            <span class="nv">isPresented</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">viewModel</span><span class="o">.</span><span class="nf">binding</span><span class="p">(</span>
-                <span class="nv">value</span><span class="p">:</span> <span class="p">\</span><span class="o">.</span><span class="n">isPresentingSheet</span><span class="p">,</span>
-                <span class="nv">event</span><span class="p">:</span> <span class="o">.</span><span class="n">toggleIsPresentingSheet</span>
-            <span class="p">),</span>
-            <span class="nv">onDismiss</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span>
-            <span class="nv">content</span><span class="p">:</span> <span class="p">{</span>
-                <span class="kt">DetailsScreen</span><span class="o">.</span><span class="nf">make</span><span class="p">(</span>
-                    <span class="nv">store</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="nf">scope</span><span class="p">(</span>
-                        <span class="nv">state</span><span class="p">:</span> <span class="p">\</span><span class="o">.</span><span class="n">details</span><span class="p">,</span>
-                        <span class="nv">event</span><span class="p">:</span> <span class="kt">AppEvent</span><span class="o">.</span><span class="n">details</span><span class="p">,</span>
-                        <span class="nv">environment</span><span class="p">:</span> <span class="p">{</span> <span class="nv">$0</span> <span class="p">}</span>
-                    <span class="p">)</span>
-                <span class="p">)</span>
-            <span class="p">}</span>
-        <span class="p">)</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-
-
-<span class="c1">// MARK: Preview</span>
-
-<span class="kd">struct</span> <span class="kt">RootScreen_Previews</span><span class="p">:</span> <span class="kt">PreviewProvider</span> <span class="p">{</span>
-    <span class="kd">static</span> <span class="k">var</span> <span class="nv">previews</span><span class="p">:</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
-        <span class="kt">RootScreen</span><span class="o">.</span><span class="nf">mock</span><span class="p">(</span>
-            <span class="nv">state</span><span class="p">:</span> <span class="o">.</span><span class="nf">init</span><span class="p">(</span>
-                <span class="nv">count</span><span class="p">:</span> <span class="mi">0</span>
-            <span class="p">),</span>
-            <span class="nv">environment</span><span class="p">:</span> <span class="o">.</span><span class="n">mock</span>
-        <span class="p">)</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre>
-<h3 id='tests' class='heading'>Tests</h3>
-<pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">XCTest</span>
-<span class="kd">import</span> <span class="kt">RedUxTestUtilities</span>
-<span class="kd">@testable</span> <span class="kd">import</span> <span class="kt">Example</span>
-
-
-<span class="kd">class</span> <span class="kt">RootScreenTests</span><span class="p">:</span> <span class="kt">XCTestCase</span> <span class="p">{</span>
-    <span class="kd">func</span> <span class="nf">testStateChange</span><span class="p">()</span> <span class="k">async</span> <span class="p">{</span>
-        <span class="k">let</span> <span class="nv">store</span> <span class="o">=</span> <span class="kt">RootScreen</span><span class="o">.</span><span class="kt">LocalStore</span><span class="o">.</span><span class="nf">make</span><span class="p">()</span>
-
-        <span class="k">await</span> <span class="kt">XCTAssertStateChange</span><span class="p">(</span>
-            <span class="nv">store</span><span class="p">:</span> <span class="n">store</span><span class="p">,</span>
-            <span class="nv">events</span><span class="p">:</span> <span class="p">[</span>
-                <span class="o">.</span><span class="n">increment</span><span class="p">,</span>
-                <span class="o">.</span><span class="n">decrement</span><span class="p">,</span>
-                <span class="o">.</span><span class="n">incrementWithDelay</span>
-            <span class="p">],</span>
-            <span class="nv">matches</span><span class="p">:</span> <span class="p">[</span>
-                <span class="o">.</span><span class="nf">init</span><span class="p">(),</span>
-                <span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="nv">count</span><span class="p">:</span> <span class="mi">1</span><span class="p">),</span>
-                <span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="nv">count</span><span class="p">:</span> <span class="mi">0</span><span class="p">),</span>
-                <span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="nv">count</span><span class="p">:</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="p">]</span>
-        <span class="p">)</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre>
 <h2 id='other-libraries' class='heading'>Other libraries</h2>
 
 <ul>
@@ -371,7 +138,7 @@ struct HighlyComplicatedIncrementMiddleware: Middlewareable {
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2022 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2022-05-21)</p>
+          <p>&copy; 2022 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2022-05-22)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
