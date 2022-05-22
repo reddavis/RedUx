@@ -141,8 +141,8 @@ extension Store {
         let scopedStore = Store<ScopedState, ScopedEvent, ScopedEnvironment>(
             state: toScopedState(self.state),
             reducer: .init { state, event, _ in
-                self.send(fromScopedEvent(event))
                 state = toScopedState(self.state)
+                self.send(fromScopedEvent(event))
                 return .none
             },
             environment: toScopedEnvironment(self.environment)
