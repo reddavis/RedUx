@@ -2,6 +2,7 @@ import Asynchrone
 import XCTest
 @testable import RedUx
 
+@MainActor
 final class StoreTests: XCTestCase {
     private let manager = EffectManager()
     private var store: Store<AppState, AppEvent, AppEnvironment>!
@@ -9,7 +10,7 @@ final class StoreTests: XCTestCase {
     // MARK: Setup
     
     @MainActor
-    override func setUpWithError() throws {
+    override func setUp() async throws {
         self.store = .init(
             state: .init(),
             reducer: reducer,
@@ -21,22 +22,16 @@ final class StoreTests: XCTestCase {
     // MARK: Tests
     
     func testSendingEvent() async {
-        await XCTAsyncAssertNil { await self.store.state.value }
-        await self.store.send(.setValue("a"))
-        await XCTAsyncAssertEqual(
-            { await self.store.state.value },
-            { "a" }
-        )
-        await XCTAsyncAssertEqual(
-            { await self.store.state.eventsReceived },
-            { [.setValue("a")] }
-        )
+        XCTAssertNil(self.store.state.value)
+        self.store.send(.setValue("a"))
+        XCTAssertEqual(self.store.state.value, "a")
+        XCTAssertEqual(self.store.state.eventsReceived, [.setValue("a")])
     }
     
     // MARK: Scoped store
     
     func testScopedStore() async {
-        let scopedStore = await self.store.scope(
+        let scopedStore = self.store.scope(
             state: \.subState,
             event: AppEvent.subEvent,
             environment: { $0 }
@@ -53,21 +48,18 @@ final class StoreTests: XCTestCase {
         )
 
         // Check parent store's value changes
-        await XCTAsyncAssertEqual(
-            { await self.store.state.eventsReceived },
-            { [.subEvent(.setValue(value))] }
-        )
+        XCTAssertEqual(self.store.state.eventsReceived, [.subEvent(.setValue(value))])
     }
     
     func testSendingEffectTriggeringEventToScopedStore() async {
-        let scopedStore = await self.store.scope(
+        let scopedStore = self.store.scope(
             state: \.subState,
             event: AppEvent.subEvent,
             environment: { $0 }
         )
         let value = "a"
         
-        await XCTAsyncAssertNil { await scopedStore.state.value }
+        XCTAssertNil(scopedStore.state.value)
         await XCTAssertStateChange(
             store: scopedStore,
             event: .setValueViaEffect(value),
@@ -79,9 +71,9 @@ final class StoreTests: XCTestCase {
         )
         
         // Check parent store's value changes
-        await XCTAsyncAssertEqual(
-            { await self.store.state.eventsReceived },
-            { [.subEvent(.setValueViaEffect(value)), .subEvent(.setValue(value))] }
+        XCTAssertEqual(
+            self.store.state.eventsReceived,
+            [.subEvent(.setValueViaEffect(value)), .subEvent(.setValue(value))]
         )
     }
     
@@ -169,7 +161,7 @@ final class StoreTests: XCTestCase {
             { await self.manager.tasks.count }
         )
         
-        await self.store.send(.triggerCancelEffect(id))
+        self.store.send(.triggerCancelEffect(id))
                 
         await XCTAsyncAssertEventuallyEqual(
             { 0 },
