@@ -1,13 +1,14 @@
 import XCTest
 @testable import RedUx
 
+@MainActor
 final class ViewModelTests: XCTestCase {
     private var store: Store<AppState, AppEvent, AppEnvironment>!
     private var viewModel: ViewModel<AppState, AppEvent>!
     private let value = "a"
     
     // MARK: Setup
-    
+    @MainActor
     override func setUpWithError() throws {
         self.store = .init(
             state: .init(),

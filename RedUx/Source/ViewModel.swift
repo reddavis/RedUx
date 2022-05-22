@@ -38,6 +38,7 @@ import SwiftUI
 ///     }
 /// }
 /// ```
+@MainActor
 @dynamicMemberLookup
 public final class ViewModel<State: Equatable, Event>: ObservableObject {
     /// The state of the store.

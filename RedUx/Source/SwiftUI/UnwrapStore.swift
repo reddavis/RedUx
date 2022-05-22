@@ -1,5 +1,6 @@
 import SwiftUI
 
+@MainActor
 public struct UnwrapStore<State, Event, Environment, Content>: View where Content: View {
     private let content: (Store<State?, Event, Environment>) -> Content
     private let store: Store<State?, Event, Environment>
