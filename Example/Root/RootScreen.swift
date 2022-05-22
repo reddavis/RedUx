@@ -42,16 +42,15 @@ struct RootScreen: View, RedUxable {
             }
             
             Button("Present sheet") {
-                self.viewModel.send(.toggleIsPresentingSheet)
+                self.viewModel.send(.presentSheet)
             }
             .buttonStyle(.bordered)
         }
         .sheet(
             isPresented: self.viewModel.binding(
-                value: \.isPresentingSheet,
-                event: .toggleIsPresentingSheet
+                value: \.isPresentingSheet
             ),
-            onDismiss: nil,
+            onDismiss: { self.viewModel.send(.dismissSheet) },
             content: {
                 DetailsScreen.make(
                     store: self.store.scope(

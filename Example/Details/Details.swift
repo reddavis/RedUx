@@ -1,18 +1,18 @@
 import RedUx
 
-
 struct DetailsState: Equatable {
     var isPresentingActionSheet: Bool = false
 }
-
-
 
 // MARK: Reducer
 
 let detailsReducer: Reducer<DetailsState, DetailsEvent, AppEnvironment> = Reducer { state, event, environment in
     switch event {
-    case .toggleActionSheet:
-        state.isPresentingActionSheet.toggle()
+    case .presentActionSheet:
+        state.isPresentingActionSheet = true
+        return .none
+    case .dismissActionSheet:
+        state.isPresentingActionSheet = false
         return .none
     }
 }
@@ -22,5 +22,6 @@ let detailsReducer: Reducer<DetailsState, DetailsEvent, AppEnvironment> = Reduce
 // MARK: Event
 
 enum DetailsEvent {
-    case toggleActionSheet
+    case presentActionSheet
+    case dismissActionSheet
 }

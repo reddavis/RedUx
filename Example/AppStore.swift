@@ -37,8 +37,11 @@ fileprivate let reducer: Reducer<AppState, AppEvent, AppEnvironment> = Reducer {
         return Effect(.increment)
             .delay(for: 2)
             .eraseToEffect()
-    case .toggleIsPresentingSheet:
-        state.isPresentingSheet.toggle()
+    case .presentSheet:
+        state.isPresentingSheet = true
+        return .none
+    case .dismissSheet:
+        state.isPresentingSheet = false
         return .none
     case .details:
         return .none
@@ -69,7 +72,8 @@ enum AppEvent {
     case increment
     case decrement
     case incrementWithDelayViaEffect
-    case toggleIsPresentingSheet
+    case presentSheet
+    case dismissSheet
     case details(DetailsEvent)
 }
 
