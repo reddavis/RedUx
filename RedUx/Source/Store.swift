@@ -83,6 +83,7 @@ public final class Store<State, Event, Environment> {
     
     /// Send an event through the store's reducer.
     /// - Parameter event: The event.
+    @MainActor
     public func send(_ event: Event) {
         self.eventBacklog.append(event)
         guard !self.isProcessingEvent else { return }
@@ -101,14 +102,14 @@ public final class Store<State, Event, Environment> {
             
             guard let effect = effect else { return }
             
-            Task(priority: .high) {
+            Task.detached(priority: .high) {
                 guard !effect.isCancellation else {
                     await self.effectManager.removeTask(effect.id)
                     return
                 }
                 
                 let task = effect.sink(
-                    receiveValue: { [weak self] in self?.send($0) },
+                    receiveValue: { [weak self] in await self?.send($0) },
                     receiveCompletion: { [weak self] _ in
                         await self?.effectManager.removeTask(effect.id)
                     }
@@ -140,7 +141,9 @@ extension Store {
         let scopedStore = Store<ScopedState, ScopedEvent, ScopedEnvironment>(
             state: toScopedState(self.state),
             reducer: .init { state, event, _ in
-                self.send(fromScopedEvent(event))
+                Task(priority: .high) {
+                    await self.send(fromScopedEvent(event))
+                }
                 state = toScopedState(self.state)
                 return .none
             },
@@ -151,7 +154,7 @@ extension Store {
         scopedStore.parentStatePropagationTask = Just(self.state)
             .eraseToAnyAsyncSequenceable()
             .chain(with: self.stateSequence)
-            .sink { [weak scopedStore] in
+            .sink(priority: .high) { [weak scopedStore] in
                 scopedStore?.state = toScopedState($0)
             }
 
