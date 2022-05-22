@@ -17,7 +17,7 @@
     <a title="Protocols  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html"> Docs</a> (95% documented)</p>
+        <p><a href="index.html"> Docs</a> (100% documented)</p>
         <div class="header-right">
           <form role="search" action="search.json">
             <input type="text" placeholder="Search documentation" data-typeahead>
@@ -47,10 +47,21 @@
             </ul>
           </li>
           <li class="nav-group-name">
+            <a href="Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Enums/ActionStatus.html">ActionStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/ValueStatus.html">ValueStatus</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
             <a href="Extensions.html">Extensions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Extensions/AnyAsyncSequenceable.html">AnyAsyncSequenceable</a>
+                <a href="Extensions/AsyncSequence.html">AsyncSequence</a>
               </li>
               <li class="nav-group-task">
                 <a href="Extensions/View.html">View</a>
@@ -61,9 +72,6 @@
             <a href="Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Protocols/Middlewareable.html">Middlewareable</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="Protocols/RedUxable.html">RedUxable</a>
               </li>
             </ul>
@@ -72,7 +80,7 @@
             <a href="Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Structs/AnyMiddleware.html">AnyMiddleware</a>
+                <a href="Structs/Effect.html">Effect</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/Reducer.html">Reducer</a>
@@ -94,41 +102,6 @@
           <section class="section task-group-section">
             <div class="task-group">
               <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:5RedUx14MiddlewareableP"></a>
-                    <a name="//apple_ref/swift/Protocol/Middlewareable" class="dashAnchor"></a>
-                    <a class="token" href="#/s:5RedUx14MiddlewareableP">Middlewareable</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Middleware provides a way to build more complicated application logic that doesn&rsquo;t belong inside
-the reducer.</p>
-
-<p>A middleware will receive all events that are sent to a store along with the store&rsquo;s
-current state. The middleware can then emit events to the store via it&rsquo;s <code>outputStream</code>.</p>
-
-<p>A middleware might be used for location monitoring, making requests to an API, downloading data or
-observing application state.</p>
-
-                        <a href="Protocols/Middlewareable.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">Middlewareable</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
                 <li class="item">
                   <div>
                     <code>
@@ -216,7 +189,7 @@ guide on how to setup RedUx.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">RedUxable</span> <span class="p">:</span> <span class="kt">View</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">RedUxable</span></code></pre>
 
                         </div>
                       </div>
@@ -228,8 +201,8 @@ guide on how to setup RedUx.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2022 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2022-02-28)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+          <p>&copy; 2022 <a class="link" href="" target="_blank" rel="external noopener"></a>. All rights reserved. (Last updated: 2022-05-21)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
     </div>

@@ -1,0 +1,17 @@
+# Events
+
+One of the core concepts of the redux pattern is that it is not possible mutate the state directly. This is where events come in. Events are objects that describe what happened in the app and by describing what happened in the app, the [reducer](./reducer) can then determine how the state should be mutated.
+
+An event can be anything; a class, struct, enum, string, integer...whatever. If you're unsure what to use or have no special requirements an enum is always a solid option.
+
+The events for our example mini app could look like:
+
+```swift
+enum AppEvent {
+    case viewDidAppear
+
+    case fetchTimeline
+    case didFetchTimeline([Tweet])
+    case failedFetchingTimeline(Error)
+}
+```

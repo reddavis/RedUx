@@ -1,0 +1,11 @@
+{
+    "index": "Introduction",
+    "get-started": "Get Started",
+    "store": "Store",
+    "environment": "Environment",
+    "events": "Events",
+    "reducer": "Reducer",
+    "effects": "Effects",
+    "xcode-templates": "Xcode templates",
+    "style-guide": "Style guide"
+}

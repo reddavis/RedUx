@@ -1,0 +1,86 @@
+# RedUx
+
+**RedUx** is a modern Swift implementation of the redux pattern that takes advantage of Swift's newer asyns/await APIs.
+
+It enables your app to have a centralised state store of which your app's UI can mirror and react to; leading to predictable, debuggable, modular and easy to test apps.
+
+## Concept
+
+The concept of redux revolves around the three pillars of state, event and reducer.
+
+### State
+
+> "One state to rule them all" - Someone
+
+Imagine we're building the "hello world" of apps: a Twitter client. If we were to describe the state of this app, it might look something like this:
+
+```swift
+struct AppState {
+    var timeline: [Tweet] = []
+    var followers: [User] = []
+    var following: [User] = []
+}
+
+extension AppState: Equatable {}
+```
+
+In redux, you should **never** mutate the state directly. Why? If anything can mutate the state this leads to difficult reproduce bugs.
+
+To mutate a state you can an event to the store. Firstly, what is a store? A store is simply a class that holds the state and the reducer (more on this later) and accepts events, which it forwards to the reducer. 
+
+### Event
+
+We're getting ahead of ourselves here, but I thought it might be a good idea to sketch out the diagram before we colour it in. So firstly, what is an event?
+
+In order to mutate a state we must do so by sending an event to the store. At the core, an event is simply an enum. Generally you would name the event to describe what has happened.
+
+To put this into the context of our Twitter client, let us imagine when the view appears we want to trigger an API request to fetch the tweets for the user's timeline and then update the state. We should also be able to handle any errors that may occur when fetching the user's timeline.
+
+Let's map out how our event enum could look like.
+
+```swift
+enum AppEvent {
+    case viewDidAppear
+
+    case fetchTimeline
+    case didFetchTimeline([Tweet])
+    case failedFetchingTimeline(Error)
+}
+```
+
+To give a summary of how these events work together:
+
+- View appears which sends the `viewDidAppear` event.
+- `viewDidAppear` event sends the `fetchTimeline` event.
+- `fetchTimeline` executes an API request.
+- If `fetchTimeline` is successfull it sends the `didFetchTimeline` event.
+- If `fetchTimeline` fails it sends the `failedFetchingTimeline` event.
+
+### Reducer
+
+We've got the state and we have the events, but what is going to "do" the event? Let me introduce you to the reducer.
+
+The reducer is simply a function that takes a reference to the state, the event and an environment (more on the environments later). Based on the event, the reducer's job is to mutate the state.
+
+Focusing on our `didFetchTimeline` event, let's have a look at what this could look like.
+
+```swift
+let appReducer: Reducer<AppState, AppEvent, AppEnvironment> = Reducer { state, event, environment in
+    switch event {
+    case .didFetchTimeline(let tweets):
+        state.timeline = tweets // Update state
+        return .none
+    // ... Other events
+    }
+}
+```
+
+You can see here, the reducer receiving the `didFetchTimeline` event and updating the state with the new tweets.
+
+### Conclusion
+
+This is the very core of the redux pattern. You'll notice how all three components (state, event and reducer) and very plain Swift constructs: struct, enum and a function. This simplicity is one of the many things that makes redux great.
+
+It's very likely you now have more questions: "how do I perform long running tasks like executing API requests?" or "are you ever going to tell me what the environment is for?" or this is all great and all, but how do I actually use this is my app?"
+
+You will find the answers to these questions in the "Using RedUx" section on the left hand side.

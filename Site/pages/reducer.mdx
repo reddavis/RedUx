@@ -1,0 +1,61 @@
+# Reducer
+
+A reducer is a function that is passed the current state, an event and the environment and can return an optional [effect](./effects). The reducer's role is to act upon (or not) the event.
+
+The reducer should be as performant as possible, any long running task should performed by an [effect](./effects). 
+
+These are the events from our example Twitter app.
+
+```swift
+enum AppEvent {
+    case viewDidAppear
+
+    case fetchTimeline
+    case didFetchTimeline([Tweet])
+    case failedFetchingTimeline(Error)
+}
+```
+
+and this is the state:
+
+```swift
+struct AppState {
+    var timeline: [Tweet] = []
+    var followers: [User] = []
+    var following: [User] = []
+}
+
+extension AppState: Equatable {}
+```
+
+Focussing on the timeline events, the plan here is that `fetchTimeline` will trigger an API request and then on success or fail the events `didFetchTimeline` or `failedFetchingTimeline` will be called. On `didFetchTimeline` the reducer will update the states `timeline` value.
+
+```swift
+let reducer: Reducer<AppState, AppEvent, AppEnvironment> = Reducer { state, event, environment in
+    switch event {
+    case .fetchTimeline:
+        return Effect {
+            do {
+                let tweets = try await environment.apiClient.fetchTweets()
+                return .didFetchTimeline(tweets)
+            } catch {
+                return .failedFetchingTimeline(error)
+            }
+        }
+    case .didFetchTimeline(let tweets):
+        state.timeline = tweets
+        return .none
+    case .failedFetchingTimeline(let error):
+        // Do something with the error...
+        return .none
+    }
+}
+```
+
+## Combining reducers
+
+TODO
+
+## Optional reducers
+
+TODO
