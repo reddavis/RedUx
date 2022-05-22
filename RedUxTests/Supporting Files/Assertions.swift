@@ -195,7 +195,7 @@ func XCTAssertStateChange<State: Equatable, Event, Environment>(
     // We use the semaphore in order to guarantee the sink task has started.
     // This is to ensure we collect all events.
     let semaphore = DispatchSemaphore(value: 0)
-    Just(store.state)
+    Just(await store.state)
         .eraseToAnyAsyncSequenceable()
         .chain(with: store.stateSequence)
         .removeDuplicates()

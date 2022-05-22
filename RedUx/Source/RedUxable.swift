@@ -69,6 +69,7 @@ import SwiftUI
 ///     }
 /// }
 /// ```
+@MainActor
 public protocol RedUxable {
     
     /// The local state type.
