@@ -8,6 +8,7 @@ import SwiftUI
 /// different components of the app.
 public final class Store<State, Event, Environment> {    
     /// The state of the store.
+    @MainActor
     public private(set) var state: State {
         didSet {
             self._stateSequence.yield(self.state)
@@ -133,6 +134,7 @@ extension Store {
     ///   - event: A reducer.
     ///   - environment: An environment.
     /// - Returns: A `Store` instance.
+    @MainActor
     public func scope<ScopedState, ScopedEvent, ScopedEnvironment>(
         state toScopedState: @escaping (_ state: State) -> ScopedState,
         event fromScopedEvent: @escaping (_ event: ScopedEvent) -> Event,

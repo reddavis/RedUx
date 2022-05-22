@@ -8,6 +8,7 @@ final class StoreTests: XCTestCase {
     
     // MARK: Setup
     
+    @MainActor
     override func setUpWithError() throws {
         self.store = .init(
             state: .init(),
@@ -20,16 +21,22 @@ final class StoreTests: XCTestCase {
     // MARK: Tests
     
     func testSendingEvent() async {
-        XCTAssertNil(self.store.state.value)
+        await XCTAsyncAssertNil { await self.store.state.value }
         await self.store.send(.setValue("a"))
-        XCTAssertEqual(self.store.state.value, "a")
-        XCTAssertEqual(self.store.state.eventsReceived, [.setValue("a")])
+        await XCTAsyncAssertEqual(
+            { await self.store.state.value },
+            { "a" }
+        )
+        await XCTAsyncAssertEqual(
+            { await self.store.state.eventsReceived },
+            { [.setValue("a")] }
+        )
     }
     
     // MARK: Scoped store
     
     func testScopedStore() async {
-        let scopedStore = self.store.scope(
+        let scopedStore = await self.store.scope(
             state: \.subState,
             event: AppEvent.subEvent,
             environment: { $0 }
@@ -46,18 +53,21 @@ final class StoreTests: XCTestCase {
         )
 
         // Check parent store's value changes
-        XCTAssertEqual(self.store.state.eventsReceived, [.subEvent(.setValue(value))])
+        await XCTAsyncAssertEqual(
+            { await self.store.state.eventsReceived },
+            { [.subEvent(.setValue(value))] }
+        )
     }
     
     func testSendingEffectTriggeringEventToScopedStore() async {
-        let scopedStore = self.store.scope(
+        let scopedStore = await self.store.scope(
             state: \.subState,
             event: AppEvent.subEvent,
             environment: { $0 }
         )
         let value = "a"
         
-        XCTAssertNil(scopedStore.state.value)
+        await XCTAsyncAssertNil { await scopedStore.state.value }
         await XCTAssertStateChange(
             store: scopedStore,
             event: .setValueViaEffect(value),
@@ -69,9 +79,9 @@ final class StoreTests: XCTestCase {
         )
         
         // Check parent store's value changes
-        XCTAssertEqual(
-            self.store.state.eventsReceived,
-            [.subEvent(.setValueViaEffect(value)), .subEvent(.setValue(value))]
+        await XCTAsyncAssertEqual(
+            { await self.store.state.eventsReceived },
+            { [.subEvent(.setValueViaEffect(value)), .subEvent(.setValue(value))] }
         )
     }
     
