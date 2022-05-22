@@ -21,7 +21,7 @@ final class StoreTests: XCTestCase {
     
     func testSendingEvent() async {
         XCTAssertNil(self.store.state.value)
-        self.store.send(.setValue("a"))
+        await self.store.send(.setValue("a"))
         XCTAssertEqual(self.store.state.value, "a")
         XCTAssertEqual(self.store.state.eventsReceived, [.setValue("a")])
     }
@@ -159,7 +159,7 @@ final class StoreTests: XCTestCase {
             { await self.manager.tasks.count }
         )
         
-        self.store.send(.triggerCancelEffect(id))
+        await self.store.send(.triggerCancelEffect(id))
                 
         await XCTAsyncAssertEventuallyEqual(
             { 0 },

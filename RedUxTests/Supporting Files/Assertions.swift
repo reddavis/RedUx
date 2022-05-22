@@ -190,7 +190,6 @@ func XCTAssertStateChange<State: Equatable, Event, Environment>(
     file: StaticString = #filePath,
     line: UInt = #line
 ) async {
-    let timeoutDate = Date(timeIntervalSinceNow: timeout)
     var states: [State] = []
     
     // We use the semaphore in order to guarantee the sink task has started.
@@ -200,16 +199,15 @@ func XCTAssertStateChange<State: Equatable, Event, Environment>(
         .eraseToAnyAsyncSequenceable()
         .chain(with: store.stateSequence)
         .removeDuplicates()
-        .sink {
+        .sink(priority: .low) {
             states.append($0)
             semaphore.signal()
         }
     
-    Task.detached(priority: .low) {
-        semaphore.wait()
-        store.send(event)
-    }
-        
+    semaphore.wait()
+    await store.send(event)
+    
+    let timeoutDate = Date(timeIntervalSinceNow: timeout)
     while true {
         switch states == statesToMatch {
         // All good!
@@ -230,7 +228,7 @@ func XCTAssertStateChange<State: Equatable, Event, Environment>(
             return
         // False but still within timeout limit.
         case false:
-            try? await Task.sleep(nanoseconds: 50000000)
+            try? await Task.sleep(nanoseconds: 10000000)
         }
     }
 }
@@ -274,7 +272,7 @@ func XCTAssertEventuallyEqual<T: Equatable>(
             return
         // False but still within timeout limit.
         case false:
-            try? await Task.sleep(nanoseconds: 50000000)
+            try? await Task.sleep(nanoseconds: 10000000)
         }
     }
 }
@@ -318,7 +316,7 @@ func XCTAsyncAssertEventuallyEqual<T: Equatable>(
             return
         // False but still within timeout limit.
         case false:
-            try? await Task.sleep(nanoseconds: 50000000)
+            try? await Task.sleep(nanoseconds: 10000000)
         }
     }
 }
