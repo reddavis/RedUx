@@ -6,9 +6,9 @@ import SwiftUI
 ///
 /// Generally an application will have one store and then use the scope function to create sub stores for
 /// different components of the app.
+@MainActor
 public final class Store<State, Event, Environment> {    
     /// The state of the store.
-    @MainActor
     public private(set) var state: State {
         didSet {
             self._stateSequence.yield(self.state)
@@ -84,7 +84,6 @@ public final class Store<State, Event, Environment> {
     
     /// Send an event through the store's reducer.
     /// - Parameter event: The event.
-    @MainActor
     public func send(_ event: Event) {
         self.eventBacklog.append(event)
         guard !self.isProcessingEvent else { return }
@@ -134,7 +133,6 @@ extension Store {
     ///   - event: A reducer.
     ///   - environment: An environment.
     /// - Returns: A `Store` instance.
-    @MainActor
     public func scope<ScopedState, ScopedEvent, ScopedEnvironment>(
         state toScopedState: @escaping (_ state: State) -> ScopedState,
         event fromScopedEvent: @escaping (_ event: ScopedEvent) -> Event,
@@ -143,9 +141,7 @@ extension Store {
         let scopedStore = Store<ScopedState, ScopedEvent, ScopedEnvironment>(
             state: toScopedState(self.state),
             reducer: .init { state, event, _ in
-                Task(priority: .high) {
-                    await self.send(fromScopedEvent(event))
-                }
+                self.send(fromScopedEvent(event))
                 state = toScopedState(self.state)
                 return .none
             },
