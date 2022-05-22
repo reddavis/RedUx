@@ -102,14 +102,14 @@ public final class Store<State, Event, Environment> {
             
             guard let effect = effect else { return }
             
-            Task.detached(priority: .high) {
+            Task(priority: .high) {
                 guard !effect.isCancellation else {
                     await self.effectManager.removeTask(effect.id)
                     return
                 }
                 
                 let task = effect.sink(
-                    receiveValue: { [weak self] in await self?.send($0) },
+                    receiveValue: { [weak self] in self?.send($0) },
                     receiveCompletion: { [weak self] _ in
                         await self?.effectManager.removeTask(effect.id)
                     }
@@ -141,17 +141,15 @@ extension Store {
         let scopedStore = Store<ScopedState, ScopedEvent, ScopedEnvironment>(
             state: toScopedState(self.state),
             reducer: .init { state, event, _ in
-                state = toScopedState(self.state)
                 self.send(fromScopedEvent(event))
+                state = toScopedState(self.state)
                 return .none
             },
             environment: toScopedEnvironment(self.environment)
         )
         
         // Propagate changes to state to scoped store.
-        scopedStore.parentStatePropagationTask = Just(self.state)
-            .eraseToAnyAsyncSequenceable()
-            .chain(with: self.stateSequence)
+        scopedStore.parentStatePropagationTask = self.stateSequence
             .sink(priority: .high) { [weak scopedStore] in
                 scopedStore?.state = toScopedState($0)
             }

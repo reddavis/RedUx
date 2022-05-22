@@ -4,8 +4,8 @@ import XCTest
 class RootScreenTests: XCTestCase {
     var store: AppStore!
     
-    override func setUpWithError() throws {
-        self.store = .make()
+    override func setUp() async throws {
+        self.store = await .make()
     }
     
     // MARK: Test

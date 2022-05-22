@@ -21,8 +21,8 @@ struct DetailsScreen: View, RedUxable {
     
     var body: some View {
         VStack(alignment: .center) {
-            Button("Toggle dialog") {
-                self.viewModel.send(.toggleActionSheet)
+            Button("Present dialog") {
+                self.viewModel.send(.presentActionSheet)
             }
             .buttonStyle(.bordered)
         }
@@ -30,10 +30,12 @@ struct DetailsScreen: View, RedUxable {
             "",
             isPresented: self.viewModel.binding(
                 value: \.isPresentingActionSheet,
-                event: .toggleActionSheet
+                event: .dismissActionSheet
             ),
             actions: {
-                Button("A") { }
+                Button("A") {
+                    self.viewModel.send(.dismissActionSheet)
+                }
             }
         )
     }
