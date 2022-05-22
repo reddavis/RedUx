@@ -45,7 +45,7 @@ public final class ViewModel<State: Equatable, Event>: ObservableObject {
     @Published public var state: State
     
     // Private
-    private let _send: (Event) async -> Void
+    private let _send: (Event) -> Void
     private var stateTask: Task<Void, Error>?
     
     // MARK: Initialization
@@ -55,7 +55,7 @@ public final class ViewModel<State: Equatable, Event>: ObservableObject {
     /// - Parameter store: The store.
     public init<Environment>(_ store: Store<State, Event, Environment>) {
         self.state = store.state
-        self._send = { await store.send($0) }
+        self._send = { store.send($0) }
         
         self.stateTask = store
             .stateSequence
@@ -77,10 +77,7 @@ public final class ViewModel<State: Equatable, Event>: ObservableObject {
     ///
     /// - Parameter event: The even to send.
     public func send(_ event: Event) {
-        Task(priority: .userInitiated) {
-            await self._send(event)
-        }
-        
+        self._send(event)
     }
     
     /// Returns the resulting state value of a given key path.

@@ -197,7 +197,7 @@ func XCTAssertStateChange<State: Equatable, Event, Environment>(
     let semaphore = DispatchSemaphore(value: 0)
     Just(await store.state)
         .eraseToAnyAsyncSequenceable()
-        .chain(with: store.stateSequence)
+        .chain(with: await store.stateSequence)
         .removeDuplicates()
         .sink(priority: .low) {
             states.append($0)
