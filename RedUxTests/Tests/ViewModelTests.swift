@@ -49,7 +49,7 @@ final class ViewModelTests: XCTestCase {
     
     func testStateChangesFromEventViaEffectPropagateToViewModel() async {
         XCTAssertNil(self.store.state.value)
-        await self.store.send(.setValueViaEffect(self.value))
+        self.store.send(.setValueViaEffect(self.value))
         
         await XCTAssertEventuallyEqual(
             self.viewModel.state,
