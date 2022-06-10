@@ -145,6 +145,7 @@ final class StoreTests: XCTestCase {
     
     func testCancellingEffect() async {
         let id = "1"
+        let internalID = "2"
         let task = Empty(completeImmediately: false)
             .sink(
                 receiveValue: {},
@@ -153,7 +154,8 @@ final class StoreTests: XCTestCase {
         
         await self.manager.addTask(
             task,
-            with: id
+            id: id,
+            uuid: internalID
         )
         
         await XCTAsyncAssertEqual(
