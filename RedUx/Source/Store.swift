@@ -104,17 +104,20 @@ public final class Store<State, Event, Environment> {
             
             Task(priority: .high) {
                 guard !effect.isCancellation else {
-                    await self.effectManager.removeTask(effect.id)
+                    await self.effectManager.cancelTask(effect.id)
                     return
                 }
                 
                 let task = effect.sink(
                     receiveValue: { [weak self] in self?.send($0) },
                     receiveCompletion: { [weak self] _ in
-                        await self?.effectManager.removeTask(effect.id)
+                        await self?.effectManager.taskComplete(
+                            id: effect.id,
+                            uuid: effect.uuid
+                        )
                     }
                 )
-                await self.effectManager.addTask(task, with: effect.id)
+                await self.effectManager.addTask(task, id: effect.id, uuid: effect.uuid)
             }
         } while !self.eventBacklog.isEmpty
     }
