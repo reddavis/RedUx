@@ -5,6 +5,9 @@ public struct Effect<Event> {
     /// The ID of the effect.
     let id: String
     
+    /// The unique ID of the effect.
+    let uuid: String = UUID().uuidString
+    
     /// Indicate whether this effect is a cancellation effect.
     let isCancellation: Bool
     

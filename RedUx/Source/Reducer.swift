@@ -71,15 +71,16 @@ extension Reducer {
     ) -> Reducer<AppState, AppEvent, AppEnvironment> {
         .init { appState, appEvent, appEnvironment in
             guard let event = getEvent(appEvent) else { return .none }
-            let eventStream = self.reduce(
+            guard let effect = self.reduce(
                 &appState[keyPath: state],
                 event,
                 environment(appEnvironment)
-            )
+            ) else { return .none }
             
-            return eventStream?.compactMap { event in
-                setAppEvent(event)
-            }.eraseToEffect()
+            return effect.compactMap {
+                setAppEvent($0)
+            }
+            .eraseToEffect(id: effect.id)
         }
     }
     
@@ -106,16 +107,17 @@ extension Reducer {
             guard let event = getEvent(appEvent) else { return .none }
             
             var state = getState(appState)
-            let eventStream = self.reduce(
+            let effect = self.reduce(
                 &state,
                 event,
                 environment(appEnvironment)
             )
             setAppState(&appState, state)
             
-            return eventStream?.compactMap { event in
+            guard let effect = effect else { return .none }
+            return effect.compactMap { event in
                 setAppEvent(event)
-            }.eraseToEffect()
+            }.eraseToEffect(id: effect.id)
         }
     }
 }
