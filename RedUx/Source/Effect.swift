@@ -52,15 +52,20 @@ public struct Effect<Event> {
     ///   The second `finish`, should be called when/if the effect finishes.
     public init(
         id: String = UUID().uuidString,
-        closure: @escaping (_ emit: (Event) -> Void, _ finish: () -> Void) async -> Void
+        closure: @escaping (_ continuation: AsyncStream<Event>.Continuation) async -> Void
     ) {
         self.id = id
         self.isCancellation = false
         self.sequence = AsyncStream { continuation in
-            await closure(
-                { continuation.yield($0) },
-                continuation.finish
-            )
+            let task = Task {
+                await closure(continuation)
+            }
+            
+            continuation.onTermination = { _ in
+                task.cancel()
+            }
+            
+            await task.value
         }
         .eraseToAnyAsyncSequenceable()
     }

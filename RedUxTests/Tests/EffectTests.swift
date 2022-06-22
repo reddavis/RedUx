@@ -19,12 +19,12 @@ final class EffectTests: XCTestCase {
     func testInitializationWithReturnlessClosure() async {
         let id = "123"
         let values = ["1", "2", "3"]
-        let effect = Effect<AppEvent>(id: id) { emit, finish in
+        let effect = Effect<AppEvent>(id: id) { continuation in
             for value in values {
-                emit(.setValue(value))
+                continuation.yield(.setValue(value))
             }
             
-            finish()
+            continuation.finish()
         }
         
         XCTAssertEqual(effect.id, id)

@@ -96,11 +96,11 @@ let appReducer: Reducer<AppState, AppEvent, AppEnvironment> = .init { state, eve
     case .triggerCancelEffect(let id):
         return .cancel(id)
     case .startLongRunningEffect:
-        return Effect { emit, finish in
+        return Effect { continuation in
             for value in ["a", "b", "c"] {
-                emit(.setValue(value))
+                continuation.yield(.setValue(value))
             }
-            finish()
+            continuation.finish()
         }
     }
 }
