@@ -80,6 +80,11 @@ public final class Store<State, Event, Environment> where State: Equatable {
         self.effectManager = effectManager
     }
     
+    deinit {
+        self.parentStatePropagationTask?.cancel()
+        self.parentStatePropagationTask = nil
+    }
+    
     // MARK: Events
     
     /// Send an event through the store's reducer.
