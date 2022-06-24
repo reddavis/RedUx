@@ -8,6 +8,8 @@ actor EffectManager {
     func addTask(_ task: Task<Void, Never>, id: String, uuid: String) {
         self.cancelTask(id) // Cancel previous task with the same ID.
         self.tasks[id] = .init(id: uuid, task: task)
+        
+        print("TASKS SIZE: \(self.tasks.count)")
     }
     
     func cancelTask(_ id: String) {
