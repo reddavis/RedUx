@@ -27,9 +27,9 @@ final class StoreTests: XCTestCase {
         XCTAssertEqual(self.store.state.value, "a")
         XCTAssertEqual(self.store.state.eventsReceived, [.setValue("a")])
     }
-    
+
     // MARK: Scoped store
-    
+
     func testScopedStore() async {
         let scopedStore = self.store.scope(
             state: \.subState,
@@ -37,7 +37,7 @@ final class StoreTests: XCTestCase {
             environment: { $0 }
         )
         let value = "a"
-        
+
         await XCTAssertStateChange(
             store: scopedStore,
             event: .setValue(value),
@@ -50,7 +50,7 @@ final class StoreTests: XCTestCase {
         // Check parent store's value changes
         XCTAssertEqual(self.store.state.eventsReceived, [.subEvent(.setValue(value))])
     }
-    
+
     func testSendingEffectTriggeringEventToScopedStore() async {
         let scopedStore = self.store.scope(
             state: \.subState,
@@ -58,7 +58,7 @@ final class StoreTests: XCTestCase {
             environment: { $0 }
         )
         let value = "a"
-        
+
         XCTAssertNil(scopedStore.state.value)
         await XCTAssertStateChange(
             store: scopedStore,
@@ -69,14 +69,14 @@ final class StoreTests: XCTestCase {
                 .init(value: value, eventsReceived: [.setValueViaEffect(value), .setValue(value)])
             ]
         )
-        
+
         // Check parent store's value changes
         XCTAssertEqual(
             self.store.state.eventsReceived,
             [.subEvent(.setValueViaEffect(value)), .subEvent(.setValue(value))]
         )
     }
-    
+
     // MARK: Effects
     
     func testSendingEventThatTriggersAnEffect() async {
@@ -136,13 +136,13 @@ final class StoreTests: XCTestCase {
                 )
             ]
         )
-        
+
         await XCTAsyncAssertEventuallyEqual(
             { 0 },
             { await self.manager.tasks.count }
         )
     }
-    
+
     func testCancellingEffect() async {
         let id = "1"
         let internalID = "2"
@@ -151,25 +151,25 @@ final class StoreTests: XCTestCase {
                 receiveValue: {},
                 receiveCompletion: { result in }
             )
-        
+
         await self.manager.addTask(
             task,
             id: id,
             uuid: internalID
         )
-        
+
         await XCTAsyncAssertEqual(
             { 1 },
             { await self.manager.tasks.count }
         )
-        
+
         self.store.send(.triggerCancelEffect(id))
-                
+
         await XCTAsyncAssertEventuallyEqual(
             { 0 },
             { await self.manager.tasks.count }
         )
-        
+
         XCTAssertTrue(task.isCancelled)
     }
 }
