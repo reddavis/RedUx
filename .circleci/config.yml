@@ -14,12 +14,12 @@ jobs:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     macos:
-      xcode: 13.3.1 # Specify the Xcode version to use
+      xcode: 13.4 # Specify the Xcode version to use
     environment:
       HOMEBREW_NO_AUTO_UPDATE: 1
     steps:
       - macos/preboot-simulator:
-          version: "15.4"
+          version: "15.5"
           platform: "iOS"
           device: "iPhone 13 Pro"
       - checkout
@@ -28,7 +28,7 @@ jobs:
           command: gem install xcpretty
       - run: 
           name: Run unit tests
-          command: Scripts/test -d "OS=15.4,name=iPhone 13 Pro" | xcpretty --color --report junit --output ~/test-results/results.xml
+          command: Scripts/test -d "OS=15.5,name=iPhone 13 Pro" | xcpretty --color --report junit --output ~/test-results/results.xml
       - store_test_results:
           path: ~/test-results
       - store_artifacts:
