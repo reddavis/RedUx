@@ -128,11 +128,15 @@ Failed To Assert Equality
 
 // MARK: XCTAssertStatesEventuallyEqualError
 
-struct XCTAssertStatesEventuallyEqualError: Error {
+struct XCTAssertStatesEventuallyEqualError: LocalizedError {
     let message: String
-
+    
+    var errorDescription: String? {
+        self.message
+    }
+    
     var localizedDescription: String {
-        message
+        self.message
     }
 
     // MARK: Initialization
@@ -190,46 +194,59 @@ func XCTAssertStateChange<State: Equatable, Event, Environment>(
     file: StaticString = #filePath,
     line: UInt = #line
 ) async {
-    var states: [State] = []
-    
-    // We use the semaphore in order to guarantee the sink task has started.
-    // This is to ensure we collect all events.
-    let semaphore = DispatchSemaphore(value: 0)
-    Just(await store.state)
-        .eraseToAnyAsyncSequenceable()
-        .chain(with: await store.stateSequence)
-        .removeDuplicates()
-        .sink(priority: .low) {
-            states.append($0)
-            semaphore.signal()
-        }
-    
-    semaphore.wait()
-    await store.send(event)
-    
-    let timeoutDate = Date(timeIntervalSinceNow: timeout)
-    while true {
-        switch states == statesToMatch {
-        // All good!
-        case true:
-            return
-        // False and timed out.
-        case false where Date.now.compare(timeoutDate) == .orderedDescending:
+    let expectationTask = Task {
+        var states: [State] = []
+        let sequence = Just(await store.state)
+            .eraseToAnyAsyncSequenceable()
+            .chain(with: await store.stateSequence)
+            .removeDuplicates()
+        
+        let timeoutDate = Date(timeIntervalSinceNow: timeout)
+        do {
+            for try await state in sequence {
+                states.append(state)
+                
+                if states.count == 1 {
+                    await store.send(event)
+                }
+                
+                if states == statesToMatch {
+                    break
+                } else if Date.now.compare(timeoutDate) == .orderedDescending {
+                    let error = XCTAssertStatesEventuallyEqualError(
+                        stateChanges: states,
+                        stateChangesExpected: statesToMatch
+                    )
+                    
+                    throw error
+                }
+            }
+            
+            // Task cancelled...
+            guard Task.isCancelled else { return }
             let error = XCTAssertStatesEventuallyEqualError(
                 stateChanges: states,
                 stateChangesExpected: statesToMatch
             )
-
-            XCTFail(
-                error.message,
-                file: file,
-                line: line
-            )
-            return
-        // False but still within timeout limit.
-        case false:
-            try? await Task.sleep(nanoseconds: 10000000)
+            throw error
+        } catch {
+            throw error
         }
+    }
+    
+    Task {
+        try? await Task.sleep(seconds: timeout)
+        expectationTask.cancel()
+    }
+    
+    switch await expectationTask.result {
+    case .failure(let error):
+        XCTFail(
+            error.localizedDescription,
+            file: file,
+            line: line
+        )
+    case .success:()
     }
 }
 
