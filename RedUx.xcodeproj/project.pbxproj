@@ -993,7 +993,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/reddavis/Asynchrone";
 			requirement = {
-				branch = refactor/shared;
+				branch = main;
 				kind = branch;
 			};
 		};

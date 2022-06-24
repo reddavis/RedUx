@@ -16,7 +16,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/reddavis/Asynchrone", .branch("refactor/shared"))//from: "0.17.0")
+        .package(url: "https://github.com/reddavis/Asynchrone", .branch("main"))//from: "0.17.0")
     ],
     targets: [
         .target(
