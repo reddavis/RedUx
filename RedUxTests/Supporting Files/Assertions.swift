@@ -194,31 +194,24 @@ func XCTAssertStateChange<State: Equatable, Event, Environment>(
     file: StaticString = #filePath,
     line: UInt = #line
 ) async {
-    let expectationTask = Task {
+    let expectationTask = Task<Void, Error> {
         var states: [State] = []
         let sequence = Just(await store.state)
             .eraseToAnyAsyncSequenceable()
             .chain(with: await store.stateSequence)
             .removeDuplicates()
         
-        let timeoutDate = Date(timeIntervalSinceNow: timeout)
         do {
             for try await state in sequence {
                 states.append(state)
-                
                 if states.count == 1 {
-                    await store.send(event)
+                    Task.detached {
+                        await store.send(event)
+                    }
                 }
                 
                 if states == statesToMatch {
                     break
-                } else if Date.now.compare(timeoutDate) == .orderedDescending {
-                    let error = XCTAssertStatesEventuallyEqualError(
-                        stateChanges: states,
-                        stateChangesExpected: statesToMatch
-                    )
-                    
-                    throw error
                 }
             }
             
@@ -234,9 +227,12 @@ func XCTAssertStateChange<State: Equatable, Event, Environment>(
         }
     }
     
-    Task {
+    Task<Void, Error>.detached {
         try? await Task.sleep(seconds: timeout)
+        guard !Task.isCancelled,
+              !expectationTask.isCancelled else { return }
         expectationTask.cancel()
+        throw TimeoutError()
     }
     
     switch await expectationTask.result {
@@ -249,6 +245,8 @@ func XCTAssertStateChange<State: Equatable, Event, Environment>(
     case .success:()
     }
 }
+
+struct TimeoutError: Error {}
 
 /// Assert two expressions are eventually equal.
 /// - Parameters:
