@@ -21,6 +21,22 @@ struct RootScreen: View, RedUxable {
     
     var body: some View {
         VStack(alignment: .center) {
+            TextEditor(
+                text: self.viewModel.binding(
+                    value: \.text,
+                    event: AppEvent.setText
+                )
+            )
+            .frame(height: 200)
+            
+            TextField(
+                "Text field",
+                text: self.viewModel.binding(
+                    value: \.textFieldText,
+                    event: AppEvent.setTextFieldText
+                )
+            )
+            
             Text(verbatim: .init(self.viewModel.count))
                 .font(.largeTitle)
             
