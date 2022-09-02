@@ -45,6 +45,12 @@ fileprivate let reducer: Reducer<AppState, AppEvent, AppEnvironment> = Reducer {
         return .none
     case .details:
         return .none
+    case .setText(let text):
+        state.text = text
+        return .none
+    case .setTextFieldText(let text):
+        state.textFieldText = text
+        return .none
     }
 }
 <>
@@ -64,6 +70,8 @@ struct AppState: Equatable {
     var count = 0
     var isPresentingSheet = false
     var details: DetailsState = .init()
+    var text = ""
+    var textFieldText = ""
 }
 
 // MARK: Event
@@ -75,6 +83,8 @@ enum AppEvent {
     case presentSheet
     case dismissSheet
     case details(DetailsEvent)
+    case setText(String)
+    case setTextFieldText(String)
 }
 
 // MARK: Environment

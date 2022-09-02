@@ -8,8 +8,9 @@ final class ViewModelTests: XCTestCase {
     private let value = "a"
     
     // MARK: Setup
+    
     @MainActor
-    override func setUpWithError() throws {
+    override func setUp() async throws {
         self.store = .init(
             state: .init(),
             reducer: reducer,

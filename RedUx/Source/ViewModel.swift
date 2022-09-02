@@ -60,10 +60,8 @@ public final class ViewModel<State: Equatable, Event>: ObservableObject {
         self.stateTask = store
             .stateSequence
             .removeDuplicates()
-            .sink(priority: .userInitiated) { [weak self] state in
-                await MainActor.run { [weak self] in
-                    self?.state = state
-                }
+            .sink { @MainActor [weak self] state in
+                self?.state = state
             }
     }
     
@@ -114,23 +112,18 @@ extension ViewModel {
         value: @escaping (State) -> ScopedState,
         event: @escaping (ScopedState) -> Event
     ) -> Binding<ScopedState> where ScopedState: Equatable {
-        var previousState: ScopedState? = nil
+        var scopedState: ScopedState = value(self.state)
         
         return Binding(
-            get: { value(self.state) },
-            set: { scopedState, transaction in
+            get: { scopedState },
+            set: { newState, transaction in
                 // This is a work around where SwiftUI(?) calls the setter on the binding twice.
-                guard previousState != scopedState else { return }
-                previousState = scopedState
-                
-                guard transaction.animation == nil else {
-                    _ = SwiftUI.withTransaction(transaction) {
-                        self.send(event(scopedState))
-                    }
-                    return
+                guard scopedState != newState else { return }
+                scopedState = newState
+                        
+                withTransaction(transaction) {
+                    self.send(event(scopedState))
                 }
-                
-                self.send(event(scopedState))
             }
         )
     }
