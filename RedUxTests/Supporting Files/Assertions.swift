@@ -196,18 +196,16 @@ func XCTAssertStateChange<State: Equatable, Event, Environment>(
 ) async {
     let expectationTask = Task<Void, Error> {
         var states: [State] = []
-        let sequence = Just(await store.state)
+        let sequence = await Just(await store.state)
             .eraseToAnyAsyncSequenceable()
-            .chain(with: await store.stateSequence)
+            .chain(with: store.stateSequence)
             .removeDuplicates()
         
         do {
             for try await state in sequence {
                 states.append(state)
                 if states.count == 1 {
-                    Task.detached {
-                        await store.send(event)
-                    }
+                    await store.send(event)
                 }
                 
                 if states == statesToMatch {
