@@ -52,7 +52,7 @@ public struct Effect<Event> {
     ///   The second `finish`, should be called when/if the effect finishes.
     public init(
         id: String = UUID().uuidString,
-        closure: @escaping (_ continuation: AsyncStream<Event>.Continuation) async -> Void
+        closure: @Sendable @escaping (_ continuation: AsyncStream<Event>.Continuation) async -> Void
     ) {
         self.id = id
         self.isCancellation = false
