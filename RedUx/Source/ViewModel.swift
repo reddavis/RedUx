@@ -114,7 +114,7 @@ extension ViewModel {
         value: @escaping (State) -> ScopedState,
         event: @escaping (ScopedState) -> Event
     ) -> Binding<ScopedState> where ScopedState: Equatable {
-        var previousState: ScopedState? = nil
+        var previousState: ScopedState? = value(self.state)
         
         return Binding(
             get: { value(self.state) },
