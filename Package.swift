@@ -16,7 +16,8 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/reddavis/Asynchrone", from: "0.21.0")
+//        .package(url: "https://github.com/reddavis/Asynchrone", from: "0.21.0")
+        .package(url: "https://github.com/reddavis/Asynchrone", .branch("feature/concurrency"))
     ],
     targets: [
         .target(
