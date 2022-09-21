@@ -3,7 +3,7 @@ import Foundation
 
 /// A reducer is responsible for taking an event and deciding how the state should be changed and
 /// whether any effects should be executed.
-public struct Reducer<State, Event, Environment> {
+public struct Reducer<State, Event, Environment> where Event: Sendable {
     /// An empty reducer. Useful for SwiftUI's previews.
     /// - Returns: A reducer.
     public static var empty: Reducer<State, Event, Environment> {
@@ -68,7 +68,7 @@ extension Reducer {
         event getEvent: @escaping (AppEvent) -> Event?,
         appEvent setAppEvent: @escaping (Event) -> AppEvent?,
         environment: @escaping (AppEnvironment) -> Environment
-    ) -> Reducer<AppState, AppEvent, AppEnvironment> {
+    ) -> Reducer<AppState, AppEvent, AppEnvironment> where Event: Sendable {
         .init { appState, appEvent, appEnvironment in
             guard let event = getEvent(appEvent) else { return .none }
             guard let effect = self.reduce(
@@ -100,7 +100,7 @@ extension Reducer {
         state getState: @escaping (AppState) -> State,
         appState setAppState: @escaping (inout AppState, State) -> Void,
         event getEvent: @escaping (AppEvent) -> Event?,
-        appEvent setAppEvent: @escaping (Event) -> AppEvent?,
+        appEvent setAppEvent: @Sendable @escaping (Event) -> AppEvent?,
         environment: @escaping (AppEnvironment) -> Environment
     ) -> Reducer<AppState, AppEvent, AppEnvironment> {
         .init { appState, appEvent, appEnvironment in

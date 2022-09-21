@@ -73,10 +73,10 @@ import SwiftUI
 public protocol RedUxable {
     
     /// The local state type.
-    associatedtype LocalState: Equatable
+    associatedtype LocalState: Equatable & Sendable
     
     /// The local event type.
-    associatedtype LocalEvent
+    associatedtype LocalEvent: Sendable
     
     /// The local state type.
     associatedtype LocalEnvironment
