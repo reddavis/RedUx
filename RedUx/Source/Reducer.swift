@@ -100,7 +100,7 @@ extension Reducer {
         state getState: @escaping (AppState) -> State,
         appState setAppState: @escaping (inout AppState, State) -> Void,
         event getEvent: @escaping (AppEvent) -> Event?,
-        appEvent setAppEvent: @Sendable @escaping (Event) -> AppEvent?,
+        appEvent setAppEvent: @escaping (Event) -> AppEvent?,
         environment: @escaping (AppEnvironment) -> Environment
     ) -> Reducer<AppState, AppEvent, AppEnvironment> {
         .init { appState, appEvent, appEnvironment in
