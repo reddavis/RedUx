@@ -1,7 +1,3 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine.
-# See: https://circleci.com/docs/2.0/configuration-reference
-# For a detailed guide to building and testing on iOS, read the docs:
-# https://circleci.com/docs/2.0/testing-ios/
 version: 2.1
 
 ## Orbs
@@ -11,13 +7,15 @@ orbs:
 ## Jobs
 jobs:
   unit_test:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     macos:
-      xcode: 13.4 # Specify the Xcode version to use
+      xcode: 14.0.1
     environment:
       HOMEBREW_NO_AUTO_UPDATE: 1
     steps:
+      - macos/preboot-simulator:
+          version: "16.0"
+          platform: "iOS"
+          device: "iPhone 14 Pro"
       - macos/preboot-simulator:
           version: "15.5"
           platform: "iOS"
@@ -27,8 +25,11 @@ jobs:
           name: Install xcpretty
           command: gem install xcpretty
       - run: 
-          name: Run unit tests
-          command: Scripts/test -d "OS=15.5,name=iPhone 13 Pro" | xcpretty --color --report junit --output ~/test-results/results.xml
+          name: Run iOS16 unit tests
+          command: Scripts/test -d "OS=16.0,name=iPhone 14 Pro" | xcpretty --color --report junit --output ~/test-results/ios16-results.xml
+      - run: 
+          name: Run iOS15.5 unit tests
+          command: Scripts/test -d "OS=15.5,name=iPhone 13 Pro" | xcpretty --color --report junit --output ~/test-results/ios15-results.xml
       - store_test_results:
           path: ~/test-results
       - store_artifacts:

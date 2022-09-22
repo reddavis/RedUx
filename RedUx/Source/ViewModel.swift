@@ -58,11 +58,11 @@ public final class ViewModel<State: Equatable, Event>: ObservableObject {
         self._send = { store.send($0) }
         
         self.stateTask = store
-            .stateSequence
-            .removeDuplicates()
-            .sink { @MainActor [weak self] state in
-                self?.state = state
-            }
+           .stateSequence
+           .removeDuplicates()
+           .sink { @MainActor [weak self] state in
+               self?.state = state
+           }
     }
     
     deinit {

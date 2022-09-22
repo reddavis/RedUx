@@ -2,7 +2,11 @@ import SwiftUI
 
 @MainActor
 public struct UnwrapStore<State, Event, Environment, Content>: View
-where Content: View, State: Equatable {
+where
+Content: View,
+State: Equatable,
+State: Sendable,
+Event: Sendable {
     private let content: (Store<State?, Event, Environment>) -> Content
     private let store: Store<State?, Event, Environment>
     

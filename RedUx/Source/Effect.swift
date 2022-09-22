@@ -1,7 +1,7 @@
 import Asynchrone
 import Foundation
 
-public struct Effect<Event> {
+public struct Effect<Event>: Sendable where Event: Sendable {
     /// The ID of the effect.
     let id: String
     
@@ -84,7 +84,7 @@ public struct Effect<Event> {
         id: String = UUID().uuidString,
         sequence: T,
         isCancellation: Bool = false
-    ) where T: AsyncSequence, T.Element == Element {
+    ) where T: AsyncSequence, T: Sendable, T.Element == Element {
         self.id = id
         self.sequence = sequence.eraseToAnyAsyncSequenceable()
         self.isCancellation = isCancellation
@@ -95,7 +95,8 @@ public struct Effect<Event> {
 
 extension Effect: AsyncSequence {
     public typealias Element = Event
-    public func makeAsyncIterator() -> AnyAsyncSequenceable<Element> {
+    
+    public func makeAsyncIterator() -> AnyAsyncSequenceable<Event>.AsyncIterator {
         self.sequence.makeAsyncIterator()
     }
 }
@@ -136,7 +137,7 @@ extension AsyncSequence {
     /// - Parameters:
     ///   - id: The ID of the efect. Default value: `UUID().uuidString`.
     /// - Returns: An effect.
-    public func eraseToEffect(id: String = UUID().uuidString) -> Effect<Self.Element> {
+    public func eraseToEffect(id: String = UUID().uuidString) -> Effect<Element> where Self: Sendable, Element: Sendable {
         .init(id: id, sequence: self)
     }
 }

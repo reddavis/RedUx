@@ -7,7 +7,12 @@ import SwiftUI
 /// Generally an application will have one store and then use the scope function to create sub stores for
 /// different components of the app.
 @MainActor
-public final class Store<State, Event, Environment> where State: Equatable {    
+public final class Store<State, Event, Environment>
+where
+State: Equatable,
+State: Sendable,
+Event: Sendable
+{
     /// The state of the store.
     public private(set) var state: State {
         didSet {
@@ -114,7 +119,7 @@ public final class Store<State, Event, Environment> where State: Equatable {
                 }
                 
                 let task = effect.sink(
-                    receiveValue: { [weak self] in self?.send($0) },
+                    receiveValue: { @MainActor [weak self] in self?.send($0) },
                     receiveCompletion: { [weak self] _ in
                         await self?.effectManager.taskComplete(
                             id: effect.id,
@@ -159,7 +164,7 @@ extension Store {
         // Propagate changes to state to scoped store.
         scopedStore.parentStatePropagationTask = self.stateSequence
             .removeDuplicates()
-            .sink(priority: .high) { [weak scopedStore] in
+            .sink(priority: .high) { @MainActor [weak scopedStore] in
                 scopedStore?.state = toScopedState($0)
             }
 
