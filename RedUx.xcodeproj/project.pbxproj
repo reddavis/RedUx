@@ -1003,7 +1003,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/reddavis/Asynchrone";
 			requirement = {
-				branch = feature/concurrency;
+				branch = main;
 				kind = branch;
 			};
 		};
