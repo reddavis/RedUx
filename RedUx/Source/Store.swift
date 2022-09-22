@@ -160,14 +160,7 @@ extension Store {
             },
             environment: toScopedEnvironment(self.environment)
         )
-        
-        // Propagate changes to state to scoped store.
-//        scopedStore.parentStatePropagationTask = self.stateSequence
-//            .removeDuplicates()
-//            .sink(priority: .high) { @MainActor [weak scopedStore] in
-//                scopedStore?.state = toScopedState($0)
-//            }
-//
+
         scopedStore.parentStatePropagationTask = Task { [weak self, weak scopedStore] in
             guard let self else { return }
             do {
@@ -175,6 +168,7 @@ extension Store {
                     await MainActor.run {
                         scopedStore?.state = toScopedState(state)
                     }
+                    try Task.checkCancellation()
                 }
             } catch {}
         }

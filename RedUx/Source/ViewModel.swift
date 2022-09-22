@@ -62,6 +62,7 @@ public final class ViewModel<State: Equatable, Event>: ObservableObject {
                     await MainActor.run {
                         self?.state = state
                     }
+                    try Task.checkCancellation()
                 }
             } catch {}
         }
