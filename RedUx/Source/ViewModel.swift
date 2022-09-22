@@ -56,16 +56,13 @@ public final class ViewModel<State: Equatable, Event>: ObservableObject {
     public init<Environment>(_ store: Store<State, Event, Environment>) {
         self.state = store.state
         self._send = { store.send($0) }
-        self.stateTask = Task { [weak self] in
-            do {
-                for try await state in store.stateSequence.removeDuplicates() {
-                    await MainActor.run {
-                        self?.state = state
-                    }
-                    try Task.checkCancellation()
-                }
-            } catch {}
-        }
+        
+        self.stateTask = store
+           .stateSequence
+           .removeDuplicates()
+           .sink { @MainActor [weak self] state in
+               self?.state = state
+           }
     }
     
     deinit {
