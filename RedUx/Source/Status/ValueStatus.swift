@@ -98,3 +98,5 @@ where Value: Equatable, ErrorType: Error & Equatable {
         }
     }
 }
+
+extension ValueStatus: Sendable where Value: Sendable {}
